@@ -2158,7 +2158,6 @@ void immediate::PxIntegrateSolverBodiesTGS(PxTGSSolverBodyVel* solverBody, PxTGS
 
 
 #include "PxvGlobals.h"
-#include "PxPhysXGpu.h"
 #include "BpBroadPhase.h"
 #include "PxsHeapMemoryAllocator.h"
 #include "PxsKernelWrangler.h"
@@ -2472,6 +2471,9 @@ namespace
 ///////////////////////////////////////////////////////////////////////////////
 
 #if PX_SUPPORT_GPU_PHYSX
+
+#include "PxPhysXGpu.h"
+
 ImmGPUBP::ImmGPUBP(const PxBroadPhaseDesc& desc) :
 	ImmCPUBP					(desc),
 	mPxGpu						(NULL),
