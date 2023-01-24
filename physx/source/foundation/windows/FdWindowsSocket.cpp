@@ -32,7 +32,7 @@
 #include "foundation/PxThread.h"
 #include "foundation/PxArray.h"
 
-#include <Winsock2.h>
+#include <WinSock2.h>
 #pragma comment(lib, "Ws2_32")
 
 namespace physx
@@ -91,8 +91,8 @@ class SocketImpl
 SocketImpl::SocketImpl(bool isBlocking)
 : mSocket(INVALID_SOCKET)
 , mListenSocket(INVALID_SOCKET)
-, mPort(0)
 , mHost(NULL)
+, mPort(0)
 , mIsConnected(false)
 , mIsBlocking(isBlocking)
 , mListenMode(false)
@@ -196,7 +196,8 @@ bool SocketImpl::listen(uint16_t port)
 
 	mListenMode = true;
 
-	sockaddr_in addr = { 0 };
+	sockaddr_in addr;
+	intrinsics::memSet(&addr, 0, sizeof(sockaddr_in));
 	addr.sin_family = AF_INET;
 	addr.sin_port = htons(port);
 	addr.sin_addr.s_addr = htonl(INADDR_ANY);

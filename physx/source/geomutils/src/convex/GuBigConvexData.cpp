@@ -146,7 +146,6 @@ bool BigConvexData::Load(PxInputStream& stream)
 		return false;
 
 	// Load base gaussmap
-//	if(!GaussMap::Load(stream))	return false;
 
 	// Import header
 	if(!ReadHeader('G', 'A', 'U', 'S', Version, Mismatch, stream))

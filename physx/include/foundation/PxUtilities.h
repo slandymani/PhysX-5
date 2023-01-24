@@ -127,7 +127,7 @@ __attribute__((noreturn))
 #endif
     PX_INLINE void PxDebugBreak()
 {
-#if PX_WINDOWS
+#if PX_WINDOWS && !PX_CLANG
 	__debugbreak();
 #elif PX_LINUX
 	__builtin_trap();

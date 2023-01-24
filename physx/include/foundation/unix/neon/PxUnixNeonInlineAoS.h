@@ -64,39 +64,18 @@ namespace aos
 #define FLOAT_COMPONENTS_EQUAL_THRESHOLD 0.01f
 PX_FORCE_INLINE bool isValidFloatV(const FloatV a)
 {
-	/*
-	PX_ALIGN(16, PxF32) data[4];
-	vst1_f32(reinterpret_cast<float32_t*>(data), a);
-	return 
-	PxU32* intData = reinterpret_cast<PxU32*>(data);
-	return intData[0] == intData[1];
-	*/
 	PX_ALIGN(16, PxF32) data[4];
 	vst1_f32(reinterpret_cast<float32_t*>(data), a);
 	const float32_t x = data[0];
 	const float32_t y = data[1];
 
 	return (x == y);
-	
-	/*if (PxAbs(x - y) < FLOAT_COMPONENTS_EQUAL_THRESHOLD)
-	{
-		return true;
-	}
-
-	if (PxAbs((x - y) / x) < FLOAT_COMPONENTS_EQUAL_THRESHOLD)
-	{
-		return true;
-	}
-
-	return false;*/
 }
 
 PX_FORCE_INLINE bool isValidVec3V(const Vec3V a)
 {
 	const float32_t w = vgetq_lane_f32(a, 3);
 	return (0.0f == w);
-	//const PxU32* intData = reinterpret_cast<const PxU32*>(&w);
-	//return *intData == 0;
 }
 
 PX_FORCE_INLINE bool isAligned16(const void* a)

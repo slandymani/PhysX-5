@@ -77,16 +77,12 @@ bool BigConvexDataBuilder::save(PxOutputStream& stream, bool platformMismatch) c
 	if(!Cm::WriteHeader('S', 'U', 'P', 'M', gSupportVersion, platformMismatch, stream))
 		return false;
 
-	// Save base gaussmap
-//	if(!GaussMapBuilder::Save(stream, platformMismatch))	return false;
 	// Export header
 	if(!Cm::WriteHeader('G', 'A', 'U', 'S', gVersion, platformMismatch, stream))
 		return false;
 
 	// Export basic info
-//	stream.StoreDword(mSubdiv);
 	writeDword(mSVM->mData.mSubdiv, platformMismatch, stream);		// PT: could now write Word here
-//	stream.StoreDword(mNbSamples);
 	writeDword(mSVM->mData.mNbSamples, platformMismatch, stream);	// PT: could now write Word here
 
 	// Save map data

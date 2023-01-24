@@ -31,14 +31,14 @@
 
 #include "foundation/PxPreprocessor.h"
 
-#if PX_WINDOWS
-#include "windows/PxWindowsTrigConstants.h"
-#include "windows/PxWindowsInlineAoS.h"
-#elif(PX_UNIX_FAMILY || PX_SWITCH)
-#include "unix/PxUnixTrigConstants.h"
-#include "unix/PxUnixInlineAoS.h"
+#if PX_WINDOWS && !PX_CLANG
+    #include "windows/PxWindowsTrigConstants.h"
+    #include "windows/PxWindowsInlineAoS.h"
+#elif (PX_UNIX_FAMILY || PX_SWITCH || PX_CLANG)
+    #include "unix/PxUnixTrigConstants.h"
+    #include "unix/PxUnixInlineAoS.h"
 #else
-#error "Platform not supported!"
+    #error "Platform not supported!"
 #endif
 
 #endif

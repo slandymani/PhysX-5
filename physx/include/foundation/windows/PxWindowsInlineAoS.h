@@ -53,25 +53,6 @@ PX_FORCE_INLINE bool isValidFloatV(const FloatV a)
 	const PxF32 w = V4ReadW(a);
 
 	return (!(x != y || x != z || x != w));
-
-	/*if (
-		(PxAbs(x - y) < FLOAT_COMPONENTS_EQUAL_THRESHOLD) &&
-		(PxAbs(x - z) < FLOAT_COMPONENTS_EQUAL_THRESHOLD) &&
-		(PxAbs(x - w) < FLOAT_COMPONENTS_EQUAL_THRESHOLD)
-		)
-	{
-		return true;
-	}
-	
-	if (
-		(PxAbs((x - y) / x) < FLOAT_COMPONENTS_EQUAL_THRESHOLD) &&
-		(PxAbs((x - z) / x) < FLOAT_COMPONENTS_EQUAL_THRESHOLD) &&
-		(PxAbs((x - w) / x) < FLOAT_COMPONENTS_EQUAL_THRESHOLD)
-		)
-	{
-		return true;
-	}
-	return false;*/
 }
 
 PX_FORCE_INLINE bool isValidVec3V(const Vec3V a)
