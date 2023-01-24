@@ -5,12 +5,13 @@ Copyright (c) 2008-2023 NVIDIA Corporation. All rights reserved.
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions
 are met:
- * Redistributions of source code must retain the above copyright
+
+* Redistributions of source code must retain the above copyright
    notice, this list of conditions and the following disclaimer.
- * Redistributions in binary form must reproduce the above copyright
+* Redistributions in binary form must reproduce the above copyright
    notice, this list of conditions and the following disclaimer in the
    documentation and/or other materials provided with the distribution.
- * Neither the name of NVIDIA CORPORATION nor the names of its
+* Neither the name of NVIDIA CORPORATION nor the names of its
    contributors may be used to endorse or promote products derived
    from this software without specific prior written permission.
 
@@ -28,24 +29,6 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 ## Introduction
 
-Welcome to the NVIDIA PhysX source code repository.
+This is Embark's fork of PhysX, which is used as the source for the C++ code backing our [Rust wrapper](https://github.com/EmbarkStudios/physx-rs).
 
-This repository contains source releases of the PhysX, Flow, and Blast SDKs used in NVIDIA Omniverse.
-
-## Documentation
-
-The user guide and API documentation are available on [GitHub Pages](https://nvidia-omniverse.github.io/PhysX). Please create an [Issue](https://github.com/NVIDIA-Omniverse/PhysX/issues/) if you find a documentation issue.
-
-## Instructions
-
-Please see instructions specific to each of the libraries in the respective subfolder.
-
-## Community-Maintained Build Configuration Fork
-
-Please see [the O3DE Fork](https://github.com/o3de/PhysX) for community-maintained additional build configurations.
-
-## Support
-
-* Please use GitHub [Discussions](https://github.com/NVIDIA-Omniverse/PhysX/discussions/) for questions and comments.
-* GitHub [Issues](https://github.com/NVIDIA-Omniverse/PhysX/issues) should only be used for bug reports or documentation issues.
-* You can also ask questions in the NVIDIA Omniverse #physics [Discord Channel](https://discord.com/invite/XWQNJDNuaC).
+This is a hard fork as the upstream rarely/never accepts PRs, thus we can get rid of all of the junk in the repo that we don't use in our bindings. You probably want to use the official repo if you aren't using our wrapper.
