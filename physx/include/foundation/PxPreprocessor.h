@@ -414,7 +414,9 @@ Use these macro definitions to create warnings for deprecated functions
 \#define PX_DEPRECATED __declspec(deprecated) // Microsoft
 \#define PX_DEPRECATED __attribute__((deprecated())) // GCC
 */
-#define PX_DEPRECATED
+#ifndef PX_DEPRECATED
+	#define PX_DEPRECATED
+#endif
 
 /**
 General defines
