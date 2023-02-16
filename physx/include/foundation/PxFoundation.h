@@ -105,9 +105,9 @@ class PX_FOUNDATION_API PxFoundation
 
 	virtual void deregisterErrorCallback(PxErrorCallback& callback) = 0;
 
-	virtual bool error(PxErrorCode::Enum c, const char* file, int line, const char* messageFmt, ...) = 0;
+	PX_DEPRECATED virtual bool error(PxErrorCode::Enum c, const char* file, int line, const char* messageFmt, ...) = 0;
 
-	virtual bool error(PxErrorCode::Enum, const char* file, int line, const char* messageFmt, va_list) = 0;
+	PX_DEPRECATED virtual bool error(PxErrorCode::Enum, const char* file, int line, const char* messageFmt, va_list) = 0;
 
   protected:
 	virtual ~PxFoundation()
