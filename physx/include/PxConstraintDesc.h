@@ -128,6 +128,19 @@ All constraints support limits on the minimum or maximum impulse applied.
 */
 
 PX_ALIGN_PREFIX(16)
+union Px1DConstraintMods {
+	struct SpringModifiers
+	{
+		PxReal	stiffness;			//!< spring parameter, for spring constraints
+		PxReal	damping;			//!< damping parameter, for spring constraints
+	} spring;
+	struct RestitutionModifiers
+	{
+		PxReal	restitution;		//!< restitution parameter for determining additional "bounce"
+		PxReal	velocityThreshold;	//!< minimum impact velocity for bounce
+	} bounce;
+};
+
 struct Px1DConstraint
 {
 	PxVec3			linear0;			//!< linear component of velocity jacobian in world space
@@ -140,19 +153,7 @@ struct Px1DConstraint
 	PxVec3			angular1;			//!< angular component of velocity jacobian in world space
 	PxReal			maxImpulse;			//!< maximum impulse the solver may apply to enforce this constraint
 
-	union
-	{
-		struct SpringModifiers
-		{
-			PxReal	stiffness;			//!< spring parameter, for spring constraints
-			PxReal	damping;			//!< damping parameter, for spring constraints
-		} spring;
-		struct RestitutionModifiers
-		{
-			PxReal	restitution;		//!< restitution parameter for determining additional "bounce"
-			PxReal	velocityThreshold;	//!< minimum impact velocity for bounce
-		} bounce;
-	} mods;
+	Px1DConstraintMods mods;
 
 	PxReal			forInternalUse;		//!< for internal use only
 	PxU16			flags;				//!< a set of Px1DConstraintFlags
