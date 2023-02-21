@@ -478,8 +478,8 @@ struct PxTGSSolverConstraintPrepDescBase
 	PxTransform bodyFrame0;						//!< In: The world-space transform of the first body.
 	PxTransform bodyFrame1;						//!< In: The world-space transform of the second body.
 
-	PxSolverContactDesc::BodyState bodyState0;	//!< In: Defines what kind of actor the first body is
-	PxSolverContactDesc::BodyState bodyState1;	//!< In: Defines what kind of actor the second body is
+	PxSolverConstraintPrepDescBase::BodyState bodyState0;	//!< In: Defines what kind of actor the first body is
+	PxSolverConstraintPrepDescBase::BodyState bodyState1;	//!< In: Defines what kind of actor the second body is
 };
 
 struct PxTGSSolverConstraintPrepDesc : public PxTGSSolverConstraintPrepDescBase

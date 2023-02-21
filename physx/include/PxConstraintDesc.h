@@ -58,8 +58,6 @@ namespace physx
 */
 struct Px1DConstraintFlag
 {
-	PX_CUDA_CALLABLE Px1DConstraintFlag(){}
-
 	enum Type
 	{
 		eSPRING					= 1<<0,	//!< whether the constraint is a spring. Mutually exclusive with eRESTITUTION. If set, eKEEPBIAS is ignored.
