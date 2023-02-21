@@ -33,6 +33,8 @@
 
 #include "foundation/PxSimpleTypes.h"
 
+#if PX_SUPPORT_GPU_PHYSX
+
 #include "PxActor.h"
 #include "PxFiltering.h"
 #include "PxParticleSystemFlag.h"
@@ -445,6 +447,8 @@ protected:
 
 #if !PX_DOXYGEN
 } // namespace physx
+#endif
+
 #endif
 
   /** @} */

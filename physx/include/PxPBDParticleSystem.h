@@ -32,6 +32,9 @@
 @{ */
 
 #include "foundation/PxSimpleTypes.h"
+
+#if PX_SUPPORT_GPU_PHYSX
+
 #include "foundation/PxVec3.h"
 
 #include "PxParticleSystem.h"
@@ -145,5 +148,6 @@ protected:
 } // namespace physx
 #endif
 
+#endif
   /** @} */
 #endif
