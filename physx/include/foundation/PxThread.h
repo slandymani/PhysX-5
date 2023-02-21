@@ -68,7 +68,7 @@ class PxRunnable
 	virtual void execute()	{}
 };
 
-class PX_FOUNDATION_API PxThreadImpl
+class PX_FOUNDATION_API PX_DEPRECATED PxThreadImpl
 {
   public:
 	typedef size_t Id; // space for a pointer or an integer
