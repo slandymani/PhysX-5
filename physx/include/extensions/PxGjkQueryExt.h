@@ -200,7 +200,7 @@ public:
 
 	\return						True if there is a contact.
 	*/
-	static bool generateContacts(const PxGjkQuery::Support& a, const PxGjkQuery::Support& b, const PxTransform& poseA, const PxTransform& poseB,
+	PX_DEPRECATED static bool generateContacts(const PxGjkQuery::Support& a, const PxGjkQuery::Support& b, const PxTransform& poseA, const PxTransform& poseB,
 		PxReal contactDistance, PxReal toleranceLength, PxContactBuffer& contactBuffer);
 
 };

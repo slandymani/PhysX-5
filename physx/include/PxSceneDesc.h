@@ -634,7 +634,7 @@ public:
 
 	@see PxCudaContextManager, PxScene::getCudaContextManager
 	*/
-	PxCudaContextManager* 	cudaContextManager;
+	PX_DEPRECATED PxCudaContextManager* 	cudaContextManager;
 
 	/**
 	\brief Will be copied to PxScene::userData.

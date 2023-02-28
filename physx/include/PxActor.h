@@ -141,54 +141,54 @@ struct PxActorType
 		\brief A FEM-based soft body
 		@see PxSoftBody
 		*/
-		eSOFTBODY,
+		eSOFTBODY PX_DEPRECATED,
 
 		/**
 		\brief A FEM-based cloth
 		\note In development
 		@see PxFEMCloth
 		*/
-		eFEMCLOTH,
+		eFEMCLOTH PX_DEPRECATED,
 
 		/**
 		\brief A PBD ParticleSystem
 		@see PxPBDParticleSystem
 		*/
-		ePBD_PARTICLESYSTEM,
+		ePBD_PARTICLESYSTEM PX_DEPRECATED,
 
 		/**
 		\brief A FLIP ParticleSystem
 		\note In development
 		@see PxFLIPParticleSystem
 		*/
-		eFLIP_PARTICLESYSTEM,
+		eFLIP_PARTICLESYSTEM PX_DEPRECATED,
 
 		/**
 		\brief A MPM ParticleSystem
 		\note In development
 		@see PxMPMParticleSystem
 		*/
-		eMPM_PARTICLESYSTEM,
+		eMPM_PARTICLESYSTEM PX_DEPRECATED,
 
 		/**
 		\brief A CUSTOM ParticleSystem
 		\note In development
 		@see PxCUSTOMParticleSystem
 		*/
-		eCUSTOM_PARTICLESYSTEM,
+		eCUSTOM_PARTICLESYSTEM PX_DEPRECATED,
 
 		/**
 		\brief A HairSystem
 		\note In development
 		@see PxHairSystem
 		*/
-		eHAIRSYSTEM,
+		eHAIRSYSTEM PX_DEPRECATED,
 
 		//! \brief internal use only!
-		eACTOR_COUNT,
+		eACTOR_COUNT PX_DEPRECATED,
 
 		//! \brief internal use only!
-		eACTOR_FORCE_DWORD = 0x7fffffff
+		eACTOR_FORCE_DWORD PX_DEPRECATED = 0x7fffffff
 	};
 };
 

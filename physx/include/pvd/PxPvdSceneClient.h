@@ -131,7 +131,7 @@ class PxPvdSceneClient
 	/**
 	get the underlying client, for advanced users
 	*/
-	virtual physx::pvdsdk::PvdClient* getClientInternal() = 0;
+	PX_DEPRECATED virtual physx::pvdsdk::PvdClient* getClientInternal() = 0;
 
 protected:
 	virtual ~PxPvdSceneClient(){}

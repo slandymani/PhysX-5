@@ -56,7 +56,7 @@ class PxActor;
 \deprecated Use #PxConstraintInvMassScale instead. Deprecated since PhysX version 5.1.
 */
 PX_ALIGN_PREFIX(16)
-struct PX_DEPRECATED PxMassModificationProps
+struct PxMassModificationProps
 {
 	PxReal mInvMassScale0;
 	PxReal mInvInertiaScale0;

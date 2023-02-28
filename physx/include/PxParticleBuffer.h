@@ -77,7 +77,7 @@ A particle buffer is a container that specifies per-particle attributes of a set
 of a particle system. It exposes direct access to the underlying GPU buffers and is independent of the scene and particle system. Particle
 buffers can be added/removed from a particle system at any time between simulation steps, and transferred from one particle system to another.
 */
-class PxParticleBuffer : public PxBase
+class PX_DEPRECATED PxParticleBuffer : public PxBase
 {
 public:
 
@@ -279,7 +279,7 @@ public:
 
 See #PxPhysics::createParticleAndDiffuseBuffer.
 */
-class PxParticleAndDiffuseBuffer : public PxParticleBuffer
+class PX_DEPRECATED PxParticleAndDiffuseBuffer : public PxParticleBuffer
 {
 public:
 
@@ -348,7 +348,7 @@ struct PX_ALIGN_PREFIX(8) PxParticleSpring
 /**
 \brief Particle cloth structure. Holds information about a single piece of cloth that is part of a #PxParticleClothBuffer.
 */
-struct PxParticleCloth
+struct PX_DEPRECATED PxParticleCloth
 {
 	PxU32	startVertexIndex;	//!< Index of the first particle of this cloth in the position/velocity buffers of the parent #PxParticleClothBuffer
 	PxU32	numVertices;		//!< The number of particles of this piece of cloth
@@ -368,7 +368,7 @@ struct PxParticleCloth
 /**
 \brief Structure to describe the set of particle cloths in the same #PxParticleClothBuffer. Used an input for the cloth preprocessing.
 */
-struct PxParticleClothDesc
+struct PX_DEPRECATED PxParticleClothDesc
 {
 	PxParticleClothDesc() : cloths(NULL), triangles(NULL), springs(NULL), restPositions(NULL), 
 		nbCloths(0), nbSprings(0), nbTriangles(0), nbParticles(0)
@@ -391,7 +391,7 @@ All the pointers point to pinned host memory.
 
 See #PxParticleClothPreProcessor
 */
-struct PX_PHYSX_CORE_API PxPartitionedParticleCloth
+struct PX_DEPRECATED PX_PHYSX_CORE_API PxPartitionedParticleCloth
 {
 	PxU32*						accumulatedSpringsPerPartitions;	//!< The number of springs in each partition. Size: numPartitions.
 	PxU32*						accumulatedCopiesPerParticles;		//!< Start index for each particle in the accumulation buffer. Size: numParticles.
@@ -425,7 +425,7 @@ struct PX_PHYSX_CORE_API PxPartitionedParticleCloth
 
 See #PxPhysics::createParticleClothBuffer.
 */
-class PxParticleClothBuffer : public PxParticleBuffer
+class PX_DEPRECATED PxParticleClothBuffer : public PxParticleBuffer
 {
 public:
 
@@ -487,7 +487,7 @@ private:
 
 See #PxPhysics::createParticleRigidBuffer.
 */
-class PxParticleRigidBuffer : public PxParticleBuffer
+class PX_DEPRECATED PxParticleRigidBuffer : public PxParticleBuffer
 {
 public:
 	/**
@@ -565,7 +565,7 @@ any further modifications to #PxParticleClothBuffer::setCloths().
 
 See #PxCreateParticleClothPreprocessor, #PxParticleClothDesc, #PxPartitionedParticleCloth
 */
-class PxParticleClothPreProcessor
+class PX_DEPRECATED PxParticleClothPreProcessor
 {
 public:
 
@@ -601,7 +601,7 @@ protected:
 
 See #PxParticleClothDesc, #PxPartitionedParticleCloth.
 */
-PX_C_EXPORT PX_PHYSX_CORE_API physx::PxParticleClothPreProcessor* PX_CALL_CONV PxCreateParticleClothPreProcessor(physx::PxCudaContextManager* cudaContextManager);
+PX_DEPRECATED PX_C_EXPORT PX_PHYSX_CORE_API physx::PxParticleClothPreProcessor* PX_CALL_CONV PxCreateParticleClothPreProcessor(physx::PxCudaContextManager* cudaContextManager);
 
 
   /** @} */

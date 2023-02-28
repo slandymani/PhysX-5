@@ -62,7 +62,7 @@ struct PxBufferType
 
 @see PxPhysics::createBuffer(), PxParticleSystem
 */
-class PxBuffer
+class PX_DEPRECATED PxBuffer
 {
 public:
 

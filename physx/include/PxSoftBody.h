@@ -100,7 +100,7 @@ namespace physx
 	/**
 	\brief Represents a FEM softbody including everything to calculate its definition like geometry and material properties
 	*/
-	class PxSoftBody : public PxActor
+	class PX_DEPRECATED PxSoftBody : public PxActor
 	{
 	public:
 

@@ -160,7 +160,7 @@ namespace physx
 		PxBroadPhaseType::Enum	mType;							//!< Desired broadphase implementation
 		PxU64					mContextID;						//!< Context ID for profiler. See PxProfilerCallback.
 
-		PxCudaContextManager*	mContextManager;				//!< (GPU) CUDA context manager, must be provided for PxBroadPhaseType::eGPU.
+		PX_DEPRECATED PxCudaContextManager*	mContextManager;				//!< (GPU) CUDA context manager, must be provided for PxBroadPhaseType::eGPU.
 		PxU32					mFoundLostPairsCapacity;		//!< (GPU) Capacity of found and lost buffers allocated in GPU global memory. This is used for the found/lost pair reports in the BP.
 
 		bool					mDiscardStaticVsKinematic;		//!< Static-vs-kinematic filtering flag. Not supported by PxBroadPhaseType::eGPU.

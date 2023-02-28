@@ -477,7 +477,7 @@ public:
 
 	@see PxPhysics.createFEMSoftBodyMaterial() getSoftBodyMaterials() 
 	*/
-	virtual		void	setSoftBodyMaterials(PxFEMSoftBodyMaterial*const* materials, PxU16 materialCount) = 0;
+	PX_DEPRECATED virtual		void	setSoftBodyMaterials(PxFEMSoftBodyMaterial*const* materials, PxU16 materialCount) = 0;
 
 	/**
 	\brief Assigns FEM cloth material(s) to the shape. Will remove existing materials from the shape.
@@ -490,7 +490,7 @@ public:
 
 	@see PxPhysics.createFEMClothMaterial() getClothMaterials() 
 	*/
-	virtual		void	setClothMaterials(PxFEMClothMaterial*const* materials, PxU16 materialCount) = 0;
+	PX_DEPRECATED virtual		void	setClothMaterials(PxFEMClothMaterial*const* materials, PxU16 materialCount) = 0;
 
 	/**
 	\brief Returns the number of materials assigned to the shape.
@@ -533,7 +533,7 @@ public:
 
 	@see PxFEMSoftBodyMaterial getNbMaterials() PxMaterial::release()
 	*/
-	virtual		PxU32	getSoftBodyMaterials(PxFEMSoftBodyMaterial** userBuffer, PxU32 bufferSize, PxU32 startIndex = 0) const = 0;
+	PX_DEPRECATED virtual		PxU32	getSoftBodyMaterials(PxFEMSoftBodyMaterial** userBuffer, PxU32 bufferSize, PxU32 startIndex = 0) const = 0;
 
 	/**
 	\brief Retrieve all the FEM cloth material pointers associated with the shape.
@@ -550,7 +550,7 @@ public:
 
 	@see PxFEMClothMaterial getNbMaterials() PxMaterial::release()
 	*/
-	virtual		PxU32	getClothMaterials(PxFEMClothMaterial** userBuffer, PxU32 bufferSize, PxU32 startIndex = 0) const = 0;
+	PX_DEPRECATED virtual		PxU32	getClothMaterials(PxFEMClothMaterial** userBuffer, PxU32 bufferSize, PxU32 startIndex = 0) const = 0;
 
 	/**
 	\brief Retrieve material from given triangle index.

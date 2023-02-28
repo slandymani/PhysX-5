@@ -69,7 +69,7 @@ struct PxQueryFlag
 		eNO_BLOCK						= (1<<5),	//!< All hits are reported as touching. Overrides eBLOCK returned from user filters with eTOUCH.
 													//!< This is also an optimization hint that may improve query performance.
 		
-		eBATCH_QUERY_LEGACY_BEHAVIOUR	= (1<<6),	//!< Run with legacy batch query filter behavior. Raising this flag ensures that
+		eBATCH_QUERY_LEGACY_BEHAVIOUR PX_DEPRECATED	= (1<<6),	//!< Run with legacy batch query filter behavior. Raising this flag ensures that
 													//!< the hardcoded filter equation is neglected. This guarantees that any provided PxQueryFilterCallback
 													//!< will be utilised, as specified by the ePREFILTER  and ePOSTFILTER flags.
 

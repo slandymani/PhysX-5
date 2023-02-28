@@ -498,7 +498,7 @@ class PxScene : public PxSceneSQSystem
 
 	@see getActors()
 	*/
-	virtual	PxU32				getNbSoftBodies() const = 0;
+	PX_DEPRECATED virtual	PxU32				getNbSoftBodies() const = 0;
 
 	/**
 	\brief Retrieve an array of all the soft bodies in the scene.
@@ -510,7 +510,7 @@ class PxScene : public PxSceneSQSystem
 
 	@see getNbActors()
 	*/
-	virtual	PxU32				getSoftBodies(PxSoftBody** userBuffer, PxU32 bufferSize, PxU32 startIndex = 0) const = 0;
+	PX_DEPRECATED virtual	PxU32				getSoftBodies(PxSoftBody** userBuffer, PxU32 bufferSize, PxU32 startIndex = 0) const = 0;
 
 	/**
 	\brief Retrieve the number of particle systems of the requested type in the scene.
@@ -520,7 +520,7 @@ class PxScene : public PxSceneSQSystem
 
 	See getParticleSystems(), PxParticleSolverType
 	*/
-	virtual PxU32				getNbParticleSystems(PxParticleSolverType::Enum type) const = 0;
+	PX_DEPRECATED virtual PxU32				getNbParticleSystems(PxParticleSolverType::Enum type) const = 0;
 
 	/**
 	\brief Retrieve an array of all the particle systems of the requested type in the scene.
@@ -533,7 +533,7 @@ class PxScene : public PxSceneSQSystem
 
 	See getNbParticleSystems(), PxParticleSolverType
 	*/
-	virtual	PxU32				getParticleSystems(PxParticleSolverType::Enum type, PxParticleSystem** userBuffer, PxU32 bufferSize, PxU32 startIndex = 0) const = 0;
+	PX_DEPRECATED virtual	PxU32				getParticleSystems(PxParticleSolverType::Enum type, PxParticleSystem** userBuffer, PxU32 bufferSize, PxU32 startIndex = 0) const = 0;
 
 	/**
 	\brief Retrieve the number of FEM cloths in the scene.
@@ -543,7 +543,7 @@ class PxScene : public PxSceneSQSystem
 
 	See getFEMCloths()
 	*/
-	virtual PxU32				getNbFEMCloths() const = 0;
+	PX_DEPRECATED virtual PxU32				getNbFEMCloths() const = 0;
 
 	/**
 	\brief Retrieve an array of all the FEM cloths in the scene.
@@ -554,7 +554,7 @@ class PxScene : public PxSceneSQSystem
 	\param[in] startIndex Index of first FEM cloth pointer to be retrieved
 	\return Number of FEM cloths written to the buffer
 	*/
-	virtual PxU32				getFEMCloths(PxFEMCloth** userBuffer, PxU32 bufferSize, PxU32 startIndex = 0) const = 0;
+	PX_DEPRECATED virtual PxU32				getFEMCloths(PxFEMCloth** userBuffer, PxU32 bufferSize, PxU32 startIndex = 0) const = 0;
 
 	/**
 	\brief Retrieve the number of hair systems in the scene.
@@ -562,7 +562,7 @@ class PxScene : public PxSceneSQSystem
 	\return the number of hair systems
 	@see getActors()
 	*/
-	virtual	PxU32				getNbHairSystems() const = 0;
+	PX_DEPRECATED virtual	PxU32				getNbHairSystems() const = 0;
 
 	/**
 	\brief Retrieve an array of all the hair systems in the scene.
@@ -573,7 +573,7 @@ class PxScene : public PxSceneSQSystem
 	\param[in] startIndex Index of first actor pointer to be retrieved
 	\return Number of actors written to the buffer
 	*/
-	virtual	PxU32				getHairSystems(PxHairSystem** userBuffer, PxU32 bufferSize, PxU32 startIndex = 0) const = 0;
+	PX_DEPRECATED virtual	PxU32				getHairSystems(PxHairSystem** userBuffer, PxU32 bufferSize, PxU32 startIndex = 0) const = 0;
 
 	/**
 	\brief Returns the number of articulations in the scene.
@@ -726,7 +726,7 @@ class PxScene : public PxSceneSQSystem
 
 	@see PxSceneDesc::cudaContextManager, PxPhysics::createScene
 	*/
-	virtual PxCudaContextManager* getCudaContextManager() const = 0;
+	PX_DEPRECATED virtual PxCudaContextManager* getCudaContextManager() const = 0;
 
 	//@}
 	/************************************************************************************************/
@@ -878,7 +878,7 @@ class PxScene : public PxSceneSQSystem
 
 	@see PxSceneDesc.filterShader PxSimulationFilterShader
 	*/
-	virtual	PxSimulationFilterShader	getFilterShader() const = 0;
+	PX_DEPRECATED virtual	PxSimulationFilterShader	getFilterShader() const = 0;
 
 	/**
 	\brief Gets the custom collision filter callback in use for this scene.
@@ -887,7 +887,7 @@ class PxScene : public PxSceneSQSystem
 
 	@see PxSceneDesc.filterCallback PxSimulationFilterCallback
 	*/
-	virtual	PxSimulationFilterCallback*	getFilterCallback() const = 0;
+	PX_DEPRECATED virtual	PxSimulationFilterCallback*	getFilterCallback() const = 0;
 
 	/**
 	\brief Marks the object to reset interactions and re-run collision filters in the next simulation step.

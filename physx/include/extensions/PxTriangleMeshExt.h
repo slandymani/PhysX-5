@@ -187,7 +187,7 @@ class PxHeightFieldGeometry;
 	\param[out] isosurfaceVertices The vertices of the extracted isosurface
 	\param[out] isosurfaceTriangleIndices The triangles of the extracted isosurface
 	*/
-	bool PxExtractIsosurfaceFromSDF(const PxTriangleMesh& triangleMesh, PxArray<PxVec3>& isosurfaceVertices, PxArray<PxU32>& isosurfaceTriangleIndices);
+	PX_DEPRECATED bool PxExtractIsosurfaceFromSDF(const PxTriangleMesh& triangleMesh, PxArray<PxVec3>& isosurfaceVertices, PxArray<PxU32>& isosurfaceTriangleIndices);
 
 #if !PX_DOXYGEN
 } // namespace physx

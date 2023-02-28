@@ -177,7 +177,7 @@ struct PxRigidBodyFlag
 		/**
 		\brief Reserved for internal usage
 		*/
-		eRESERVED = (1<<15)
+		eRESERVED PX_DEPRECATED = (1<<15)
 	};
 };
 

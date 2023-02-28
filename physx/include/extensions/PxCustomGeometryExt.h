@@ -61,7 +61,7 @@ public:
 
 		// override PxCustomGeometry::Callbacks
 		virtual PxBounds3 getLocalBounds(const PxGeometry& geometry) const;
-		virtual bool generateContacts(const PxGeometry& geom0, const PxGeometry& geom1, const PxTransform& pose0, const PxTransform& pose1,
+		PX_DEPRECATED virtual bool generateContacts(const PxGeometry& geom0, const PxGeometry& geom1, const PxTransform& pose0, const PxTransform& pose1,
 			const PxReal contactDistance, const PxReal meshContactMargin, const PxReal toleranceLength,
 			PxContactBuffer& contactBuffer) const;
 		virtual PxU32 raycast(const PxVec3& origin, const PxVec3& unitDir, const PxGeometry& geom, const PxTransform& pose,
@@ -107,7 +107,7 @@ public:
 		/// \cond PRIVATE
 		// override PxCustomGeometry::Callbacks
 		DECLARE_CUSTOM_GEOMETRY_TYPE
-		virtual void visualize(const PxGeometry&, PxRenderOutput&, const PxTransform&, const PxBounds3&) const;
+		PX_DEPRECATED virtual void visualize(const PxGeometry&, PxRenderOutput&, const PxTransform&, const PxBounds3&) const;
 		virtual void computeMassProperties(const PxGeometry& geometry, PxMassProperties& massProperties) const;
 
 		// override PxGjkQuery::Support
@@ -148,7 +148,7 @@ public:
 		/// \cond PRIVATE
 		// override PxCustomGeometry::Callbacks
 		DECLARE_CUSTOM_GEOMETRY_TYPE
-		virtual void visualize(const PxGeometry&, PxRenderOutput&, const PxTransform&, const PxBounds3&) const;
+		PX_DEPRECATED virtual void visualize(const PxGeometry&, PxRenderOutput&, const PxTransform&, const PxBounds3&) const;
 		virtual void computeMassProperties(const PxGeometry& geometry, PxMassProperties& massProperties) const;
 
 		// override PxGjkQuery::Support

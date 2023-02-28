@@ -371,14 +371,14 @@ public:
 	/** 
 	\brief this function is called by the SDK to update PVD's view of it
 	*/
-	virtual bool	updatePvdProperties(physx::pvdsdk::PvdDataStream& pvdConnection,
+	PX_DEPRECATED virtual bool	updatePvdProperties(physx::pvdsdk::PvdDataStream& pvdConnection,
 										const PxConstraint* c,
 										PxPvdUpdateType::Enum updateType) const		= 0;
 
 	/**
 	\brief this function is called by the SDK to update OmniPVD's view of it
 	*/
-	virtual void	updateOmniPvdProperties() const		= 0;
+	PX_DEPRECATED virtual void	updateOmniPvdProperties() const		= 0;
 
 	/**
 	\brief Constraint release callback
@@ -430,7 +430,7 @@ public:
 
 	@see PxConstraintInfo PxSimulationEventCallback.onConstraintBreak()
 	*/
-	virtual void*	getExternalReference(PxU32& typeID)	= 0;
+	PX_DEPRECATED virtual void*	getExternalReference(PxU32& typeID)	= 0;
 
 	/**
 	\brief Obtain a reference to a PxBase interface if the constraint has one.
@@ -442,7 +442,7 @@ public:
 	/**
 	\brief Obtain the shader function pointer used to prep rows for this constraint
 	*/
-	virtual PxConstraintSolverPrep	getPrep()	const	= 0;
+	PX_DEPRECATED virtual PxConstraintSolverPrep	getPrep()	const	= 0;
 
 	/**
 	\brief Obtain the pointer to the constraint's constant data

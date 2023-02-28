@@ -50,7 +50,7 @@ namespace physx
 		{
 			eSIMD_GUARD	= (1<<0),	//!< Saves/restores SIMD control word for each query (safer but slower). Omit this if you took care of it yourself in your app.
 
-			eDEFAULT	= eSIMD_GUARD
+			eDEFAULT PX_DEPRECATED	= eSIMD_GUARD
 		};
 	};
 

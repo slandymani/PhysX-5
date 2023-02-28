@@ -86,7 +86,7 @@ PX_FLAGS_OPERATORS(PxConstraintFlag::Enum, PxU16)
 struct PxConstraintShaderTable
 {
 	PxConstraintSolverPrep	solverPrep;	//!< solver constraint generation function
-	PxConstraintProject		project;	//!< @deprecated constraint projection function
+	PX_DEPRECATED PxConstraintProject		project;	//!< @deprecated constraint projection function
 	PxConstraintVisualize	visualize;	//!< constraint visualization function
 	PxConstraintFlag::Enum	flag;		//!< constraint flags
 };

@@ -547,7 +547,7 @@ namespace physx
 
 		@see PxRenderOutput
 		*/
-		virtual	void	visualize(PxU32 prunerIndex, PxRenderOutput& out)	const	= 0;
+		PX_DEPRECATED virtual	void	visualize(PxU32 prunerIndex, PxRenderOutput& out)	const	= 0;
 
 		/**
 		\brief Merges a pruning structure with the SQ system's internal pruners.

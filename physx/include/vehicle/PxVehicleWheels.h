@@ -118,7 +118,7 @@ struct PX_DEPRECATED PxVehicleWheelsSimFlag
 
 @see PxVehicleWheelsSimFlag
 */
-typedef PxFlags<PxVehicleWheelsSimFlag::Enum, PxU32> PxVehicleWheelsSimFlags;
+PX_DEPRECATED typedef PxFlags<PxVehicleWheelsSimFlag::Enum, PxU32> PxVehicleWheelsSimFlags;
 PX_FLAGS_OPERATORS(PxVehicleWheelsSimFlag::Enum, PxU32)
 
 /**

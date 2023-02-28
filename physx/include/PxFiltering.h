@@ -740,7 +740,7 @@ struct PxPairFilteringMode
 		/**
 		\brief Default is eSUPPRESS for compatibility with previous PhysX versions.
 		*/
-		eDEFAULT = eSUPPRESS
+		eDEFAULT PX_DEPRECATED = eSUPPRESS
 	};
 };
 

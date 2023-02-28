@@ -39,7 +39,7 @@ namespace physx
 Socket abstraction API
 */
 
-class PX_FOUNDATION_API PxSocket : public PxUserAllocated
+class PX_DEPRECATED PX_FOUNDATION_API PxSocket : public PxUserAllocated
 {
   public:
 	static const uint32_t DEFAULT_BUFFER_SIZE;

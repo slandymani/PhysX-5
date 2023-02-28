@@ -127,7 +127,7 @@ public:
 	\brief Retrieves the PxOmniPvd instance if there is one registered with PxPhysics.
 	\return A pointer to a PxOmniPvd object.
 	*/
-	virtual PxOmniPvd* getOmniPvd() = 0;
+	PX_DEPRECATED virtual PxOmniPvd* getOmniPvd() = 0;
 
 	/**
 	\brief Creates an aggregate with the specified maximum size and filtering hint.
@@ -533,7 +533,7 @@ public:
 
 	@see PxShape
 	*/
-	PX_FORCE_INLINE	PxShape* createShape(	const PxGeometry& geometry,
+	PX_DEPRECATED PX_FORCE_INLINE	PxShape* createShape(	const PxGeometry& geometry,
 											const PxFEMSoftBodyMaterial& material,
 											bool isExclusive = false,
 											PxShapeFlags shapeFlags = PxShapeFlag::eVISUALIZATION | PxShapeFlag::eSCENE_QUERY_SHAPE | PxShapeFlag::eSIMULATION_SHAPE)
@@ -591,13 +591,13 @@ public:
 									bool isExclusive = false,
 									PxShapeFlags shapeFlags = PxShapeFlag::eVISUALIZATION | PxShapeFlag::eSCENE_QUERY_SHAPE | PxShapeFlag::eSIMULATION_SHAPE) = 0;
 
-	virtual PxShape* createShape(	const PxGeometry& geometry,
+	PX_DEPRECATED virtual PxShape* createShape(	const PxGeometry& geometry,
 									PxFEMSoftBodyMaterial*const * materials,
 									PxU16 materialCount,
 									bool isExclusive = false,
 									PxShapeFlags shapeFlags = PxShapeFlag::eVISUALIZATION | PxShapeFlag::eSCENE_QUERY_SHAPE | PxShapeFlag::eSIMULATION_SHAPE) = 0;
 
-	virtual PxShape* createShape(	const PxGeometry& geometry,
+	PX_DEPRECATED virtual PxShape* createShape(	const PxGeometry& geometry,
 									PxFEMClothMaterial*const * materials,
 									PxU16 materialCount,
 									bool isExclusive = false,
@@ -660,7 +660,6 @@ public:
 	*/
 	virtual PxArticulationReducedCoordinate* createArticulationReducedCoordinate() = 0;
 
-
 	/**
 	\brief Creates a FEM-based cloth with all fields initialized to their default values.
 	\warning Feature under development, only for internal usage.
@@ -670,7 +669,7 @@ public:
 
 	@see PxFEMCloth
 	*/
-	virtual PxFEMCloth* createFEMCloth(PxCudaContextManager& cudaContextManager) = 0;
+	PX_DEPRECATED virtual PxFEMCloth* createFEMCloth(PxCudaContextManager& cudaContextManager) = 0;
 
 	/**
 	\brief Creates a FEM-based soft body with all fields initialized to their default values.
@@ -680,7 +679,7 @@ public:
 
 	@see PxSoftBody
 	*/
-	virtual PxSoftBody* createSoftBody(PxCudaContextManager& cudaContextManager) = 0;
+	PX_DEPRECATED virtual PxSoftBody* createSoftBody(PxCudaContextManager& cudaContextManager) = 0;
 
 	/**
 	\brief Creates a hair system with all fields initialized to their default values.
@@ -691,7 +690,7 @@ public:
 
 	@see PxHairSystem
 	*/
-	virtual PxHairSystem* createHairSystem(PxCudaContextManager& cudaContextManager) = 0;
+	PX_DEPRECATED virtual PxHairSystem* createHairSystem(PxCudaContextManager& cudaContextManager) = 0;
 
 	/**
 	\brief Creates a particle system with a position-based dynamics (PBD) solver.
@@ -705,7 +704,7 @@ public:
 
 	@see PxPBDParticleSystem
 	*/
-	virtual PxPBDParticleSystem* createPBDParticleSystem(PxCudaContextManager& cudaContextManager, PxU32 maxNeighborhood = 96) = 0;
+	PX_DEPRECATED virtual PxPBDParticleSystem* createPBDParticleSystem(PxCudaContextManager& cudaContextManager, PxU32 maxNeighborhood = 96) = 0;
 
 	/**
 	\brief Creates a particle system with a fluid-implicit particle solver (FLIP).
@@ -716,7 +715,7 @@ public:
 
 	@see PxFLIPParticleSystem
 	*/
-	virtual PxFLIPParticleSystem* createFLIPParticleSystem(PxCudaContextManager& cudaContextManager) = 0;
+	PX_DEPRECATED virtual PxFLIPParticleSystem* createFLIPParticleSystem(PxCudaContextManager& cudaContextManager) = 0;
 
 	/**
 	\brief Creates a particle system with a material-point-method solver (MPM).
@@ -729,7 +728,7 @@ public:
 
 	@see PxMPMParticleSystem
 	*/
-	virtual PxMPMParticleSystem* createMPMParticleSystem(PxCudaContextManager& cudaContextManager) = 0;
+	PX_DEPRECATED virtual PxMPMParticleSystem* createMPMParticleSystem(PxCudaContextManager& cudaContextManager) = 0;
 
 	/**
 	\brief Creates a customizable particle system to simulate effects that are not supported by PhysX natively (e.g. molecular dynamics).
@@ -741,7 +740,7 @@ public:
 
 	@see PxCustomParticleSystem
 	*/
-	virtual PxCustomParticleSystem* createCustomParticleSystem(PxCudaContextManager& cudaContextManager, PxU32 maxNeighborhood) = 0;
+	PX_DEPRECATED virtual PxCustomParticleSystem* createCustomParticleSystem(PxCudaContextManager& cudaContextManager, PxU32 maxNeighborhood) = 0;
 
 	/**
 	\brief Create a buffer for reading and writing data across host and device memory spaces.
@@ -753,7 +752,7 @@ public:
 
 	@see PxBuffer
 	*/
-	virtual PxBuffer* createBuffer(PxU64 byteSize, PxBufferType::Enum bufferType, PxCudaContextManager* cudaContextManager) = 0;
+	PX_DEPRECATED virtual PxBuffer* createBuffer(PxU64 byteSize, PxBufferType::Enum bufferType, PxCudaContextManager* cudaContextManager) = 0;
 
 	/**
 	\brief Create particle buffer to simulate fluid/granular material.
@@ -765,7 +764,7 @@ public:
 
 	@see PxParticleBuffer
 	*/
-	virtual PxParticleBuffer* createParticleBuffer(PxU32 maxParticles, PxU32 maxVolumes, PxCudaContextManager* cudaContextManager) = 0;
+	PX_DEPRECATED virtual PxParticleBuffer* createParticleBuffer(PxU32 maxParticles, PxU32 maxVolumes, PxCudaContextManager* cudaContextManager) = 0;
 
 	/**
 	\brief Create a particle buffer for fluid dynamics with diffuse particles. Diffuse particles are used to simulate fluid effects
@@ -779,7 +778,7 @@ public:
 
 	@see PxParticleAndDiffuseBuffer, PxDiffuseParticleParams
 	*/
-	virtual PxParticleAndDiffuseBuffer* createParticleAndDiffuseBuffer(PxU32 maxParticles, PxU32 maxVolumes, PxU32 maxDiffuseParticles, PxCudaContextManager* cudaContextManager) = 0;
+	PX_DEPRECATED virtual PxParticleAndDiffuseBuffer* createParticleAndDiffuseBuffer(PxU32 maxParticles, PxU32 maxVolumes, PxU32 maxDiffuseParticles, PxCudaContextManager* cudaContextManager) = 0;
 
 	/**
 	\brief Create a particle buffer to simulate particle cloth.
@@ -794,7 +793,7 @@ public:
 
 	@see PxParticleClothBuffer
 	*/
-	virtual PxParticleClothBuffer* createParticleClothBuffer(PxU32 maxParticles, PxU32 maxNumVolumes, PxU32 maxNumCloths, PxU32 maxNumTriangles, PxU32 maxNumSprings, PxCudaContextManager* cudaContextManager) = 0;
+	PX_DEPRECATED virtual PxParticleClothBuffer* createParticleClothBuffer(PxU32 maxParticles, PxU32 maxNumVolumes, PxU32 maxNumCloths, PxU32 maxNumTriangles, PxU32 maxNumSprings, PxCudaContextManager* cudaContextManager) = 0;
 	
 	/**
 	\brief Create a particle buffer to simulate rigid bodies using shape matching with particles.
@@ -807,7 +806,7 @@ public:
 
 	@see PxParticleRigidBuffer
 	*/
-	virtual PxParticleRigidBuffer* createParticleRigidBuffer(PxU32 maxParticles, PxU32 maxNumVolumes, PxU32 maxNumRigids, PxCudaContextManager* cudaContextManager) = 0;
+	PX_DEPRECATED virtual PxParticleRigidBuffer* createParticleRigidBuffer(PxU32 maxParticles, PxU32 maxNumVolumes, PxU32 maxNumRigids, PxCudaContextManager* cudaContextManager) = 0;
 
 	//@}
 	/** @name Materials
@@ -863,7 +862,7 @@ public:
 
 	@see PxFEMSoftBodyMaterial
 	*/
-	virtual PxFEMSoftBodyMaterial* createFEMSoftBodyMaterial(PxReal youngs, PxReal poissons, PxReal dynamicFriction) = 0;
+	PX_DEPRECATED virtual PxFEMSoftBodyMaterial* createFEMSoftBodyMaterial(PxReal youngs, PxReal poissons, PxReal dynamicFriction) = 0;
 
 	/**
 	\brief Return the number of FEM soft body materials that currently exist.
@@ -872,7 +871,7 @@ public:
 
 	@see getFEMSoftBodyMaterials()
 	*/
-	virtual PxU32 getNbFEMSoftBodyMaterials() const = 0;
+	PX_DEPRECATED virtual PxU32 getNbFEMSoftBodyMaterials() const = 0;
 
 	/**
 	\brief Writes the array of FEM soft body material pointers to a user buffer.
@@ -888,7 +887,7 @@ public:
 
 	@see getNbFEMSoftBodyMaterials() PxFEMSoftBodyMaterial
 	*/
-	virtual PxU32 getFEMSoftBodyMaterials(PxFEMSoftBodyMaterial** userBuffer, PxU32 bufferSize, PxU32 startIndex = 0) const = 0;
+	PX_DEPRECATED virtual PxU32 getFEMSoftBodyMaterials(PxFEMSoftBodyMaterial** userBuffer, PxU32 bufferSize, PxU32 startIndex = 0) const = 0;
 
 	/**
 	\brief Creates a new FEM cloth material with certain default properties.
@@ -902,7 +901,7 @@ public:
 
 	@see PxFEMClothMaterial
 	*/
-	virtual PxFEMClothMaterial* createFEMClothMaterial(PxReal youngs, PxReal poissons, PxReal dynamicFriction) = 0;
+	PX_DEPRECATED virtual PxFEMClothMaterial* createFEMClothMaterial(PxReal youngs, PxReal poissons, PxReal dynamicFriction) = 0;
 
 	/**
 	\brief Return the number of FEM cloth materials that currently exist.
@@ -911,7 +910,7 @@ public:
 
 	@see getFEMClothMaterials()
 	*/
-	virtual PxU32 getNbFEMClothMaterials() const = 0;
+	PX_DEPRECATED virtual PxU32 getNbFEMClothMaterials() const = 0;
 
 	/**
 	\brief Writes the array of FEM cloth material pointers to a user buffer.
@@ -927,7 +926,7 @@ public:
 
 	@see getNbFEMClothMaterials() PxFEMClothMaterial
 	*/
-	virtual PxU32 getFEMClothMaterials(PxFEMClothMaterial** userBuffer, PxU32 bufferSize, PxU32 startIndex = 0) const = 0;
+	PX_DEPRECATED virtual PxU32 getFEMClothMaterials(PxFEMClothMaterial** userBuffer, PxU32 bufferSize, PxU32 startIndex = 0) const = 0;
 
 	/**
 	\brief Creates a new PBD material with certain default properties.
@@ -947,7 +946,7 @@ public:
 
 	@see PxPBDMaterial
 	*/
-	virtual PxPBDMaterial* createPBDMaterial(PxReal friction, PxReal damping, PxReal adhesion, PxReal viscosity, PxReal vorticityConfinement, PxReal surfaceTension, PxReal cohesion, PxReal lift, PxReal drag, PxReal cflCoefficient = 1.f, PxReal gravityScale = 1.f) = 0;
+	PX_DEPRECATED virtual PxPBDMaterial* createPBDMaterial(PxReal friction, PxReal damping, PxReal adhesion, PxReal viscosity, PxReal vorticityConfinement, PxReal surfaceTension, PxReal cohesion, PxReal lift, PxReal drag, PxReal cflCoefficient = 1.f, PxReal gravityScale = 1.f) = 0;
 
 	/**
 	\brief Return the number of PBD materials that currently exist.
@@ -956,7 +955,7 @@ public:
 
 	@see getPBDMaterials()
 	*/
-	virtual PxU32 getNbPBDMaterials() const = 0;
+	PX_DEPRECATED virtual PxU32 getNbPBDMaterials() const = 0;
 
 	/**
 	\brief Writes the array of PBD material pointers to a user buffer.
@@ -972,7 +971,7 @@ public:
 
 	@see getNbPBDMaterials() PxPBDMaterial
 	*/
-	virtual PxU32 getPBDMaterials(PxPBDMaterial** userBuffer, PxU32 bufferSize, PxU32 startIndex = 0) const = 0;
+	PX_DEPRECATED virtual PxU32 getPBDMaterials(PxPBDMaterial** userBuffer, PxU32 bufferSize, PxU32 startIndex = 0) const = 0;
 	
 	/**
 	\brief Creates a new FLIP material with certain default properties.
@@ -987,7 +986,7 @@ public:
 
 	@see PxFLIPMaterial
 	*/
-	virtual PxFLIPMaterial* createFLIPMaterial(PxReal friction, PxReal damping, PxReal adhesion, PxReal viscosity, PxReal gravityScale = 1.f) = 0;
+	PX_DEPRECATED virtual PxFLIPMaterial* createFLIPMaterial(PxReal friction, PxReal damping, PxReal adhesion, PxReal viscosity, PxReal gravityScale = 1.f) = 0;
 
 	/**
 	\brief Return the number of FLIP materials that currently exist.
@@ -997,7 +996,7 @@ public:
 
 	@see getFLIPMaterials()
 	*/
-	virtual PxU32 getNbFLIPMaterials() const = 0;
+	PX_DEPRECATED virtual PxU32 getNbFLIPMaterials() const = 0;
 
 	/**
 	\brief Writes the array of FLIP material pointers to a user buffer.
@@ -1014,7 +1013,7 @@ public:
 
 	@see getNbFLIPMaterials() PxFLIPMaterial
 	*/
-	virtual PxU32 getFLIPMaterials(PxFLIPMaterial** userBuffer, PxU32 bufferSize, PxU32 startIndex = 0) const = 0;
+	PX_DEPRECATED virtual PxU32 getFLIPMaterials(PxFLIPMaterial** userBuffer, PxU32 bufferSize, PxU32 startIndex = 0) const = 0;
 	
 	/**
 	\brief Creates a new MPM material with certain default properties.
@@ -1037,7 +1036,7 @@ public:
 
 	@see PxMPMMaterial
 	*/
-	virtual PxMPMMaterial* createMPMMaterial(PxReal friction, PxReal damping, PxReal adhesion, bool isPlastic, PxReal youngsModulus, PxReal poissons, PxReal hardening, PxReal criticalCompression, PxReal criticalStretch, PxReal tensileDamageSensitivity, PxReal compressiveDamageSensitivity, PxReal attractiveForceResidual, PxReal gravityScale = 1.0f) = 0;
+	PX_DEPRECATED virtual PxMPMMaterial* createMPMMaterial(PxReal friction, PxReal damping, PxReal adhesion, bool isPlastic, PxReal youngsModulus, PxReal poissons, PxReal hardening, PxReal criticalCompression, PxReal criticalStretch, PxReal tensileDamageSensitivity, PxReal compressiveDamageSensitivity, PxReal attractiveForceResidual, PxReal gravityScale = 1.0f) = 0;
 
 	/**
 	\brief Return the number of MPM materials that currently exist.
@@ -1047,7 +1046,7 @@ public:
 
 	@see getMPMMaterials()
 	*/
-	virtual PxU32 getNbMPMMaterials() const = 0;
+	PX_DEPRECATED virtual PxU32 getNbMPMMaterials() const = 0;
 
 	/**
 	\brief Writes the array of MPM material pointers to a user buffer.
@@ -1064,7 +1063,7 @@ public:
 
 	@see getNbMPMMaterials() PxMPMMaterial
 	*/
-	virtual PxU32 getMPMMaterials(PxMPMMaterial** userBuffer, PxU32 bufferSize, PxU32 startIndex = 0) const = 0;
+	PX_DEPRECATED virtual PxU32 getMPMMaterials(PxMPMMaterial** userBuffer, PxU32 bufferSize, PxU32 startIndex = 0) const = 0;
 
 	/**
 	\brief Creates a new material for custom particle systems.
@@ -1073,7 +1072,7 @@ public:
 	\param[in] gpuBuffer A pointer to a GPU buffer containing material parameters.
 	\return the new material.
 	*/
-	virtual PxCustomMaterial* createCustomMaterial(void* gpuBuffer) = 0;
+	PX_DEPRECATED virtual PxCustomMaterial* createCustomMaterial(void* gpuBuffer) = 0;
 
 	/**
 	\brief Return the number of custom materials that currently exist.
@@ -1083,7 +1082,7 @@ public:
 
 	@see getCustomMaterials()
 	*/
-	virtual PxU32 getNbCustomMaterials() const = 0;
+	PX_DEPRECATED virtual PxU32 getNbCustomMaterials() const = 0;
 
 	/**
 	\brief Writes the array of custom material pointers to a user buffer.
@@ -1100,7 +1099,7 @@ public:
 
 	@see getNbCustomMaterials() PxCustomMaterial
 	*/
-	virtual PxU32 getCustomMaterials(PxCustomMaterial** userBuffer, PxU32 bufferSize, PxU32 startIndex = 0) const = 0;
+	PX_DEPRECATED virtual PxU32 getCustomMaterials(PxCustomMaterial** userBuffer, PxU32 bufferSize, PxU32 startIndex = 0) const = 0;
 
 
 	//@}
@@ -1278,7 +1277,7 @@ modules manually.
 
 @see PxPhysics, PxCreateBasePhysics, PxRegisterArticulationsReducedCoordinate, PxRegisterHeightFields
 */
-PX_INLINE physx::PxPhysics* PxCreatePhysics(physx::PxU32 version,
+PX_C_EXPORT PX_PHYSX_CORE_API PX_INLINE physx::PxPhysics* PxCreatePhysics(physx::PxU32 version,
 											physx::PxFoundation& foundation,
 											const physx::PxTolerancesScale& scale,
 											bool trackOutstandingAllocations = false,

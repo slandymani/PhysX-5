@@ -333,7 +333,7 @@ struct PxCookingParams
 potentially including the construction of acceleration structures and other support data) all kind of simulation data
 @deprecated
 */
-class PX_DEPRECATED PxCooking
+class PxCooking
 {
 public:
 	/**
@@ -887,7 +887,7 @@ You should pass the same foundation object to all instances of the cooking inter
 \return true on success.
 @deprecated
 */
-PX_C_EXPORT PX_PHYSX_COOKING_API PX_DEPRECATED physx::PxCooking* PX_CALL_CONV PxCreateCooking(physx::PxU32 version,
+PX_C_EXPORT PX_PHYSX_COOKING_API physx::PxCooking* PX_CALL_CONV PxCreateCooking(physx::PxU32 version,
 																				physx::PxFoundation& foundation,
 																				const physx::PxCookingParams& params);
 

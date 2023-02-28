@@ -45,7 +45,7 @@ namespace physx
 
 	@see PxPhysics.createFEMSoftBodyMaterial
 	*/
-	class PxFEMSoftBodyMaterial : public PxFEMMaterial
+	class PX_DEPRECATED PxFEMSoftBodyMaterial : public PxFEMMaterial
 	{
 	public:
 
