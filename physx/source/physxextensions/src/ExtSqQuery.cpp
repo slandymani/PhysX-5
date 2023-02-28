@@ -823,7 +823,7 @@ struct LocalBaseCallback
 };
 
 template<typename HitType>
-struct LocalRaycastCallback : LocalBaseCallback<HitType>,  PxBVH::RaycastCallback
+struct LocalRaycastCallback : LocalBaseCallback<HitType>,  PxBVHRaycastCallback
 {
 	LocalRaycastCallback(const ExtMultiQueryInput& input, ExtMultiQueryCallback<HitType>& pcb, const Sq::ExtPrunerManager& manager, const ExtQueryAdapter& adapter, PxHitCallback<HitType>& hits, const PxQueryFilterData& filterData, PxQueryFilterCallback* filterCall) :
 		LocalBaseCallback<HitType>(pcb, manager, adapter, hits, filterData, filterCall), mInput(input)	{}
@@ -842,7 +842,7 @@ struct LocalRaycastCallback : LocalBaseCallback<HitType>,  PxBVH::RaycastCallbac
 };
 
 template<typename HitType>
-struct LocalOverlapCallback : LocalBaseCallback<HitType>,  PxBVH::OverlapCallback
+struct LocalOverlapCallback : LocalBaseCallback<HitType>,  PxBVHOverlapCallback
 {
 	LocalOverlapCallback(const ShapeData& shapeData, ExtMultiQueryCallback<HitType>& pcb, const Sq::ExtPrunerManager& manager, const ExtQueryAdapter& adapter, PxHitCallback<HitType>& hits, const PxQueryFilterData& filterData, PxQueryFilterCallback* filterCall) :
 		LocalBaseCallback<HitType>(pcb, manager, adapter, hits, filterData, filterCall), mShapeData(shapeData)	{}
@@ -861,7 +861,7 @@ struct LocalOverlapCallback : LocalBaseCallback<HitType>,  PxBVH::OverlapCallbac
 };
 
 template<typename HitType>
-struct LocalSweepCallback : LocalBaseCallback<HitType>,  PxBVH::RaycastCallback
+struct LocalSweepCallback : LocalBaseCallback<HitType>,  PxBVHRaycastCallback
 {
 	LocalSweepCallback(const ShapeData& shapeData, const PxVec3& dir, ExtMultiQueryCallback<HitType>& pcb, const Sq::ExtPrunerManager& manager, const ExtQueryAdapter& adapter, PxHitCallback<HitType>& hits, const PxQueryFilterData& filterData, PxQueryFilterCallback* filterCall) :
 		LocalBaseCallback<HitType>(pcb, manager, adapter, hits, filterData, filterCall), mShapeData(shapeData), mDir(dir)	{}

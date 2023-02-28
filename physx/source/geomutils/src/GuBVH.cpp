@@ -382,7 +382,7 @@ namespace
 {
 	struct RaycastAdapter
 	{
-		RaycastAdapter(PxBVH::RaycastCallback& cb) : mCallback(cb), mAbort(false)	{}
+		RaycastAdapter(PxBVHRaycastCallback& cb) : mCallback(cb), mAbort(false)	{}
 		PX_FORCE_INLINE bool invoke(PxReal& distance, PxU32 index)
 		{
 			if(mAbort || !mCallback.reportHit(index, distance))
@@ -392,13 +392,13 @@ namespace
 			}
 			return true;
 		}
-		PxBVH::RaycastCallback& mCallback;
+		PxBVHRaycastCallback& mCallback;
 		bool					mAbort;
 		PX_NOCOPY(RaycastAdapter)
 	};
 }
 
-bool BVH::raycast(const PxVec3& origin, const PxVec3& unitDir, float distance, RaycastCallback& cb, PxGeometryQueryFlags flags) const
+bool BVH::raycast(const PxVec3& origin, const PxVec3& unitDir, float distance, PxBVHRaycastCallback& cb, PxGeometryQueryFlags flags) const
 {
 	PX_SIMD_GUARD_CNDT(flags & PxGeometryQueryFlag::eSIMD_GUARD)
 	RaycastAdapter ra(cb);
@@ -412,7 +412,7 @@ namespace
 {
 	struct OverlapAdapter
 	{
-		OverlapAdapter(PxBVH::OverlapCallback& cb) : mCallback(cb), mAbort(false)	{}
+		OverlapAdapter(PxBVHOverlapCallback& cb) : mCallback(cb), mAbort(false)	{}
 		PX_FORCE_INLINE bool invoke(PxU32 index)
 		{
 			if(mAbort || !mCallback.reportHit(index))
@@ -422,13 +422,13 @@ namespace
 			}
 			return true;
 		}
-		PxBVH::OverlapCallback& mCallback;
+		PxBVHOverlapCallback& mCallback;
 		bool					mAbort;
 		PX_NOCOPY(OverlapAdapter)
 	};
 }
 
-bool BVH::overlap(const ShapeData& queryVolume, OverlapCallback& cb, PxGeometryQueryFlags flags) const
+bool BVH::overlap(const ShapeData& queryVolume, PxBVHOverlapCallback& cb, PxGeometryQueryFlags flags) const
 {
 	PX_SIMD_GUARD_CNDT(flags & PxGeometryQueryFlag::eSIMD_GUARD)
 
@@ -485,13 +485,13 @@ bool BVH::overlap(const ShapeData& queryVolume, OverlapCallback& cb, PxGeometryQ
 	return false;
 }
 
-bool BVH::overlap(const PxGeometry& geom, const PxTransform& pose, OverlapCallback& cb, PxGeometryQueryFlags flags) const
+bool BVH::overlap(const PxGeometry& geom, const PxTransform& pose, PxBVHOverlapCallback& cb, PxGeometryQueryFlags flags) const
 {
 	const ShapeData queryVolume(geom, pose, 0.0f);
 	return overlap(queryVolume, cb, flags);
 }
 
-bool BVH::sweep(const ShapeData& queryVolume, const PxVec3& unitDir, float distance, RaycastCallback& cb, PxGeometryQueryFlags flags) const
+bool BVH::sweep(const ShapeData& queryVolume, const PxVec3& unitDir, float distance, PxBVHRaycastCallback& cb, PxGeometryQueryFlags flags) const
 {
 	PX_SIMD_GUARD_CNDT(flags & PxGeometryQueryFlag::eSIMD_GUARD)
 
@@ -503,7 +503,7 @@ bool BVH::sweep(const ShapeData& queryVolume, const PxVec3& unitDir, float dista
 		return AABBTreeRaycast<true, false, BVHTree, BVHNode, RaycastAdapter>()(mData.mBounds, BVHTree(mData), aabb.getCenter(), unitDir, distance, aabb.getExtents(), ra);
 }
 
-bool BVH::sweep(const PxGeometry& geom, const PxTransform& pose, const PxVec3& unitDir, float distance, RaycastCallback& cb, PxGeometryQueryFlags flags) const
+bool BVH::sweep(const PxGeometry& geom, const PxTransform& pose, const PxVec3& unitDir, float distance, PxBVHRaycastCallback& cb, PxGeometryQueryFlags flags) const
 {
 	const ShapeData queryVolume(geom, pose, 0.0f);
 	return sweep(queryVolume, unitDir, distance, cb, flags);
@@ -613,7 +613,7 @@ static bool dumpNode(OverlapAdapter& oa, const BVHNode* const nodeBase, const BV
 	return true;
 }
 
-bool BVH::cull(PxU32 nbPlanes, const PxPlane* planes, OverlapCallback& cb, PxGeometryQueryFlags flags) const
+bool BVH::cull(PxU32 nbPlanes, const PxPlane* planes, PxBVHOverlapCallback& cb, PxGeometryQueryFlags flags) const
 {
 	PX_SIMD_GUARD_CNDT(flags & PxGeometryQueryFlag::eSIMD_GUARD)
 
@@ -738,7 +738,7 @@ void BVH::partialRefit()
 	mData.refitMarkedNodes(mData.mBounds.getBounds());
 }
 
-bool BVH::traverse(TraversalCallback& cb) const
+bool BVH::traverse(PxBVHTraversalCallback& cb) const
 {
 	// PT: copy-pasted from AABBTreeOverlap and modified
 

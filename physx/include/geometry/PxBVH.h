@@ -45,6 +45,46 @@ namespace physx
 
 class PxGeometry;
 
+struct PxBVHRaycastCallback
+{
+					PxBVHRaycastCallback()	{}
+	virtual			~PxBVHRaycastCallback()	{}
+
+	// Reports one raycast or sweep hit.
+	// boundsIndex	[in]		Index of touched bounds
+	// distance		[in/out]	Impact distance. Shrinks the ray if written out.
+	// return false to abort the query
+	virtual bool	reportHit(PxU32 boundsIndex, PxReal& distance) = 0;
+};
+
+struct PxBVHOverlapCallback
+{
+					PxBVHOverlapCallback()	{}
+	virtual			~PxBVHOverlapCallback()	{}
+
+	// Reports one overlap hit.
+	// boundsIndex	[in] Index of touched bounds
+	// return false to abort the query
+	virtual bool	reportHit(PxU32 boundsIndex) = 0;
+};
+
+struct PxBVHTraversalCallback
+{
+					PxBVHTraversalCallback()	{}
+	virtual			~PxBVHTraversalCallback()	{}
+
+	// Reports one visited node.
+	// bounds	[in] node bounds
+	// return true to continue traversing this branch
+	virtual bool	visitNode(const PxBounds3& bounds) = 0;
+
+	// Reports one validated leaf node. Called on leaf nodes after visitNode returns true on them.
+	// nbPrims	[in] number of primitives in the node
+	// prims	[in] primitives in the node (nbPrims entries)
+	// return false to abort the query
+	virtual bool	reportLeaf(PxU32 nbPrims, const PxU32* prims) = 0;
+};
+
 /**
 \brief Class representing a bounding volume hierarchy.
 
@@ -100,46 +140,6 @@ public:
 	*/
 	PX_DEPRECATED	virtual PxU32	overlap(const PxBounds3& aabb, PxU32 maxHits, PxU32* PX_RESTRICT overlapHits) const = 0;
 
-	struct RaycastCallback
-	{
-						RaycastCallback()	{}
-		virtual			~RaycastCallback()	{}
-
-		// Reports one raycast or sweep hit.
-		// boundsIndex	[in]		Index of touched bounds
-		// distance		[in/out]	Impact distance. Shrinks the ray if written out.
-		// return false to abort the query
-		virtual bool	reportHit(PxU32 boundsIndex, PxReal& distance) = 0;
-	};
-
-	struct OverlapCallback
-	{
-						OverlapCallback()	{}
-		virtual			~OverlapCallback()	{}
-
-		// Reports one overlap hit.
-		// boundsIndex	[in] Index of touched bounds
-		// return false to abort the query
-		virtual bool	reportHit(PxU32 boundsIndex) = 0;
-	};
-
-	struct TraversalCallback
-	{
-						TraversalCallback()		{}
-		virtual			~TraversalCallback()	{}
-
-		// Reports one visited node.
-		// bounds	[in] node bounds
-		// return true to continue traversing this branch
-		virtual bool	visitNode(const PxBounds3& bounds) = 0;
-
-		// Reports one validated leaf node. Called on leaf nodes after visitNode returns true on them.
-		// nbPrims	[in] number of primitives in the node
-		// prims	[in] primitives in the node (nbPrims entries)
-		// return false to abort the query
-		virtual bool	reportLeaf(PxU32 nbPrims, const PxU32* prims) = 0;
-	};
-
 	/**
 	\brief Raycast test against a BVH.
 
@@ -150,7 +150,7 @@ public:
 	\param[in] queryFlags	Optional flags controlling the query.
 	\return false if query has been aborted
 	*/
-	virtual	bool				raycast(const PxVec3& origin, const PxVec3& unitDir, float maxDist, RaycastCallback& cb, PxGeometryQueryFlags queryFlags = PxGeometryQueryFlag::eDEFAULT) const = 0;
+	virtual	bool				raycast(const PxVec3& origin, const PxVec3& unitDir, float maxDist, PxBVHRaycastCallback& cb, PxGeometryQueryFlags queryFlags = PxGeometryQueryFlag::eDEFAULT) const = 0;
 
 	/**
 	\brief Sweep test against a BVH.
@@ -163,7 +163,7 @@ public:
 	\param[in] queryFlags	Optional flags controlling the query.
 	\return false if query has been aborted
 	*/
-	virtual bool				sweep(const PxGeometry& geom, const PxTransform& pose, const PxVec3& unitDir, float maxDist, RaycastCallback& cb, PxGeometryQueryFlags queryFlags = PxGeometryQueryFlag::eDEFAULT) const = 0;
+	virtual bool				sweep(const PxGeometry& geom, const PxTransform& pose, const PxVec3& unitDir, float maxDist, PxBVHRaycastCallback& cb, PxGeometryQueryFlags queryFlags = PxGeometryQueryFlag::eDEFAULT) const = 0;
 
 	/**
 	\brief Overlap test against a BVH.
@@ -174,7 +174,7 @@ public:
 	\param[in] queryFlags	Optional flags controlling the query.
 	\return false if query has been aborted
 	*/
-	virtual	bool				overlap(const PxGeometry& geom, const PxTransform& pose, OverlapCallback& cb, PxGeometryQueryFlags queryFlags = PxGeometryQueryFlag::eDEFAULT) const = 0;
+	virtual	bool				overlap(const PxGeometry& geom, const PxTransform& pose, PxBVHOverlapCallback& cb, PxGeometryQueryFlags queryFlags = PxGeometryQueryFlag::eDEFAULT) const = 0;
 
 	/**
 	\brief Frustum culling test against a BVH.
@@ -193,7 +193,7 @@ public:
 	\param[in] queryFlags	Optional flags controlling the query.
 	\return false if query has been aborted
 	*/
-	virtual	bool				cull(PxU32 nbPlanes, const PxPlane* planes, OverlapCallback& cb, PxGeometryQueryFlags queryFlags = PxGeometryQueryFlag::eDEFAULT) const = 0;
+	virtual	bool				cull(PxU32 nbPlanes, const PxPlane* planes, PxBVHOverlapCallback& cb, PxGeometryQueryFlags queryFlags = PxGeometryQueryFlag::eDEFAULT) const = 0;
 
 	/**
 	\brief Returns the number of bounds in the BVH.
@@ -287,7 +287,7 @@ public:
 	\param[in] cb	Traversal callback, called for each visited node
 	\return false if query has been aborted
 	*/
-	virtual	bool				traverse(TraversalCallback& cb)	const	= 0;
+	virtual	bool				traverse(PxBVHTraversalCallback& cb)	const	= 0;
 
 	virtual	const char*			getConcreteTypeName() const	{ return "PxBVH";	}
 protected:

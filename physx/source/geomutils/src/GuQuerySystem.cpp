@@ -648,7 +648,7 @@ void QuerySystem::sync(PxU32 prunerIndex, const PrunerHandle* handles, const PxU
 
 namespace
 {
-	struct LocalRaycastCB : PxBVH::RaycastCallback
+	struct LocalRaycastCB : PxBVHRaycastCallback
 	{
 		LocalRaycastCB(const PxArray<QuerySystem::PrunerExt*>& pruners, const PrunerFilter* prunerFilter, const PxVec3& origin, const PxVec3& unitDir, PrunerRaycastCallback& cb) :
 			mPrunerExt(pruners), mPrunerFilter(prunerFilter), mOrigin(origin), mUnitDir(unitDir), mCB(cb)	{}
@@ -674,7 +674,7 @@ namespace
 		PX_NOCOPY(LocalRaycastCB)
 	};
 
-	struct LocalOverlapCB : PxBVH::OverlapCallback
+	struct LocalOverlapCB : PxBVHOverlapCallback
 	{
 		LocalOverlapCB(const PxArray<QuerySystem::PrunerExt*>& pruners, const PrunerFilter* prunerFilter, const ShapeData& queryVolume, PrunerOverlapCallback& cb) :
 			mPrunerExt(pruners), mPrunerFilter(prunerFilter), mQueryVolume(queryVolume), mCB(cb)	{}
@@ -699,7 +699,7 @@ namespace
 		PX_NOCOPY(LocalOverlapCB)
 	};
 
-	struct LocalSweepCB : PxBVH::RaycastCallback
+	struct LocalSweepCB : PxBVHRaycastCallback
 	{
 		LocalSweepCB(const PxArray<QuerySystem::PrunerExt*>& pruners, const PrunerFilter* prunerFilter, const ShapeData& queryVolume, const PxVec3& unitDir, PrunerRaycastCallback& cb) :
 			mPrunerExt(pruners), mPrunerFilter(prunerFilter), mQueryVolume(queryVolume), mUnitDir(unitDir), mCB(cb)	{}

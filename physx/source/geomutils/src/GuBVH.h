@@ -103,10 +103,10 @@ namespace Gu
 							void				release();
 
 		// PxBVH
-		virtual				bool				raycast(const PxVec3& origin, const PxVec3& unitDir, float distance, RaycastCallback& cb, PxGeometryQueryFlags flags)							const	/*override*/;
-		virtual				bool				overlap(const PxGeometry& geom, const PxTransform& pose, OverlapCallback& cb, PxGeometryQueryFlags flags)										const	/*override*/;
-		virtual				bool				sweep(const PxGeometry& geom, const PxTransform& pose, const PxVec3& unitDir, float distance, RaycastCallback& cb, PxGeometryQueryFlags flags)	const	/*override*/;
-		virtual				bool				cull(PxU32 nbPlanes, const PxPlane* planes, OverlapCallback& cb, PxGeometryQueryFlags flags)													const	/*override*/;
+		virtual				bool				raycast(const PxVec3& origin, const PxVec3& unitDir, float distance, PxBVHRaycastCallback& cb, PxGeometryQueryFlags flags)							const	/*override*/;
+		virtual				bool				overlap(const PxGeometry& geom, const PxTransform& pose, PxBVHOverlapCallback& cb, PxGeometryQueryFlags flags)										const	/*override*/;
+		virtual				bool				sweep(const PxGeometry& geom, const PxTransform& pose, const PxVec3& unitDir, float distance, PxBVHRaycastCallback& cb, PxGeometryQueryFlags flags)	const	/*override*/;
+		virtual				bool				cull(PxU32 nbPlanes, const PxPlane* planes, PxBVHOverlapCallback& cb, PxGeometryQueryFlags flags)													const	/*override*/;
 
 		virtual				PxU32				raycast(const PxVec3& origin, const PxVec3& unitDir, PxReal maxDist, PxU32 maxHits, PxU32* PX_RESTRICT rayHits)									const	/*override*/;
 		virtual				PxU32				sweep(const PxBounds3& aabb, const PxVec3& unitDir, PxReal maxDist, PxU32 maxHits, PxU32* PX_RESTRICT sweepHits)								const	/*override*/;
@@ -119,7 +119,7 @@ namespace Gu
 		virtual				bool				updateBounds(PxU32 boundsIndex, const PxBounds3& newBounds)	/*override*/;
 		virtual				void				partialRefit()												/*override*/;
 
-		virtual				bool				traverse(TraversalCallback& cb)	const	/*override*/;
+		virtual				bool				traverse(PxBVHTraversalCallback& cb)	const	/*override*/;
 		//~PxBVH
 
 		// Cm::RefCountable
@@ -133,8 +133,8 @@ namespace Gu
 							bool				getInternalData(PxBVHInternalData&, bool)	const;
 							bool				updateBoundsInternal(PxU32 localIndex, const PxBounds3& bounds);
 		// PT: alternative implementations directly working on shape data
-							bool				overlap(const ShapeData& shapeData, OverlapCallback& cb, PxGeometryQueryFlags flags)										const;
-							bool				sweep(const ShapeData& shapeData, const PxVec3& unitDir, float distance, RaycastCallback& cb, PxGeometryQueryFlags flags)	const;
+							bool				overlap(const ShapeData& shapeData, PxBVHOverlapCallback& cb, PxGeometryQueryFlags flags)										const;
+							bool				sweep(const ShapeData& shapeData, const PxVec3& unitDir, float distance, PxBVHRaycastCallback& cb, PxGeometryQueryFlags flags)	const;
 		private:
 							MeshFactory*		mMeshFactory;
 							BVHData				mData;
