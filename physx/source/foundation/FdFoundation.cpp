@@ -47,7 +47,7 @@ Foundation::Foundation(PxErrorCallback& errc, PxAllocatorCallback& alloc)
 #else
     mReportAllocationNames(false),
 #endif
-    mErrorMask(PxErrorCode::Enum(~0))
+    mErrorMask(~0)
 , mErrorMutex("Foundation::mErrorMutex")
 , mTempAllocMutex("Foundation::mTempAllocMutex")
 , mRefCount(0)

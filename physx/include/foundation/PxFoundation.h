@@ -34,7 +34,6 @@
 */
 
 #include "foundation/Px.h"
-#include "foundation/PxErrors.h"
 #include "foundation/PxFoundationConfig.h"
 #include "foundation/PxErrors.h"
 
@@ -74,12 +73,12 @@ class PX_FOUNDATION_API PxFoundation
 	/**
 	Sets mask of errors to report.
 	*/
-	virtual void setErrorLevel(PxErrorCode::Enum mask = PxErrorCode::eMASK_ALL) = 0;
+	virtual void setErrorLevel(uint32_t mask = PxErrorCode::eMASK_ALL) = 0;
 
 	/**
 	Retrieves mask of errors to be reported.
 	*/
-	virtual PxErrorCode::Enum getErrorLevel() const = 0;
+	virtual uint32_t getErrorLevel() const = 0;
 
 	/**
 	Retrieves the allocator this object was created with.

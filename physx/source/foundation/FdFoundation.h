@@ -81,11 +81,11 @@ class PX_FOUNDATION_API Foundation : public PxFoundation, public PxUserAllocated
 	virtual void registerErrorCallback(PxErrorCallback& listener);
 	virtual void deregisterErrorCallback(PxErrorCallback& listener);
 
-	virtual void setErrorLevel(PxErrorCode::Enum mask)
+	virtual void setErrorLevel(uint32_t mask)
 	{
 		mErrorMask = mask;
 	}
-	virtual PxErrorCode::Enum getErrorLevel() const
+	virtual uint32_t getErrorLevel() const
 	{
 		return mErrorMask;
 	}
@@ -145,7 +145,7 @@ class PX_FOUNDATION_API Foundation : public PxFoundation, public PxUserAllocated
 
 	bool mReportAllocationNames;
 
-	PxErrorCode::Enum mErrorMask;
+	uint32_t mErrorMask;
 	Mutex mErrorMutex;
 
 	AllocFreeTable mTempAllocFreeTable;
