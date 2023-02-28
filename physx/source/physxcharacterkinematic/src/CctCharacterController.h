@@ -217,7 +217,7 @@ namespace Cct
 	struct TouchedCustom : public TouchedGeom
 	{
 		PxVec3							mCenter;			//!< Custom geometry's center
-		PxCustomGeometry::Callbacks*	mCustomCallbacks;	//!< Custom geometry's callback object
+		PxCustomGeometryCallbacks*	mCustomCallbacks;	//!< Custom geometry's callback object
 	};
 
 	struct TouchedCapsule : public TouchedGeom

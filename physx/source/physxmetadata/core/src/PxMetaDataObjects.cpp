@@ -147,7 +147,7 @@ PX_PHYSX_CORE_API SimulationStatisticsProperty::SimulationStatisticsProperty()
 {
 }
 
-inline PxU32 GetCustomType(const PxCustomGeometry* inGeom) { PxCustomGeometry::Type t = inGeom->callbacks->getCustomType(); return *reinterpret_cast<const PxU32*>(&t); }
+inline PxU32 GetCustomType(const PxCustomGeometry* inGeom) { PxCustomGeometryType t = inGeom->callbacks->getCustomType(); return *reinterpret_cast<const PxU32*>(&t); }
 PX_PHYSX_CORE_API PxCustomGeometryCustomTypeProperty::PxCustomGeometryCustomTypeProperty()
 	: PxReadOnlyPropertyInfo<PxPropertyInfoName::PxCustomGeometry_CustomType, PxCustomGeometry, PxU32 >("CustomType", GetCustomType)
 {

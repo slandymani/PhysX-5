@@ -483,7 +483,7 @@ bool PxGeometryQuery::generateTriangleContacts(const PxGeometry& geom, const PxT
 
 ///////////////////////////////////////////////////////////////////////////////
 
-PxU32 PxCustomGeometry::getUniqueID()
+PxU32 PxCustomGeometry_getUniqueID()
 {
     static PxU32 uniqueID(0);
     PxAtomicIncrement(reinterpret_cast<volatile PxI32*>(&uniqueID));

@@ -1083,7 +1083,7 @@ PX_PHYSX_CORE_API PxCustomGeometryGeneratedValues::PxCustomGeometryGeneratedValu
 		:PxGeometryGeneratedValues( inSource )
 {
 	PX_UNUSED(inSource);
-	PxCustomGeometry::Type t = inSource->callbacks->getCustomType(); CustomType = *reinterpret_cast<const PxU32*>(&t);
+	PxCustomGeometryType t = inSource->callbacks->getCustomType(); CustomType = *reinterpret_cast<const PxU32*>(&t);
 }
 inline PxU32 getPxHeightFieldDescNbRows( const PxHeightFieldDesc* inOwner ) { return inOwner->nbRows; }
 inline void setPxHeightFieldDescNbRows( PxHeightFieldDesc* inOwner, PxU32 inData) { inOwner->nbRows = inData; }

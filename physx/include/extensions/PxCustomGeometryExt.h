@@ -53,13 +53,13 @@ class PxCustomGeometryExt
 public:
 
 	/// \cond PRIVATE
-	struct BaseConvexCallbacks : PxCustomGeometry::Callbacks, PxGjkQuery::Support
+	struct BaseConvexCallbacks : PxCustomGeometryCallbacks, PxGjkQuery::Support
 	{
 		float margin;
 
 		BaseConvexCallbacks(float _margin) : margin(_margin) {}
 
-		// override PxCustomGeometry::Callbacks
+		// override PxCustomGeometryCallbacks
 		virtual PxBounds3 getLocalBounds(const PxGeometry& geometry) const;
 		PX_DEPRECATED virtual bool generateContacts(const PxGeometry& geom0, const PxGeometry& geom1, const PxTransform& pose0, const PxTransform& pose1,
 			const PxReal contactDistance, const PxReal meshContactMargin, const PxReal toleranceLength,
@@ -105,7 +105,7 @@ public:
 		CylinderCallbacks(float height, float radius, int axis = 0, float margin = 0);
 
 		/// \cond PRIVATE
-		// override PxCustomGeometry::Callbacks
+		// override PxCustomGeometryCallbacks
 		DECLARE_CUSTOM_GEOMETRY_TYPE
 		PX_DEPRECATED virtual void visualize(const PxGeometry&, PxRenderOutput&, const PxTransform&, const PxBounds3&) const;
 		virtual void computeMassProperties(const PxGeometry& geometry, PxMassProperties& massProperties) const;
@@ -146,7 +146,7 @@ public:
 		ConeCallbacks(float height, float radius, int axis = 0, float margin = 0);
 
 		/// \cond PRIVATE
-		// override PxCustomGeometry::Callbacks
+		// override PxCustomGeometryCallbacks
 		DECLARE_CUSTOM_GEOMETRY_TYPE
 		PX_DEPRECATED virtual void visualize(const PxGeometry&, PxRenderOutput&, const PxTransform&, const PxBounds3&) const;
 		virtual void computeMassProperties(const PxGeometry& geometry, PxMassProperties& massProperties) const;
