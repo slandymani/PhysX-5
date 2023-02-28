@@ -48,37 +48,20 @@ typedef uint32_t PxU32;
 
 class PxAllocatorCallback;
 class PxErrorCallback;
-struct PxErrorCode;
+//struct PxErrorCode;
 class PxAssertHandler;
 
 class PxInputStream;
 class PxInputData;
 class PxOutputStream;
-
-template<class Type>	class PxVec2T;
-typedef PxVec2T<float>	PxVec2;
-
-template<class Type>	class PxVec3T;
-typedef PxVec3T<float>	PxVec3;
-
-template<class Type>	class PxVec4T;
-typedef PxVec4T<float>	PxVec4;
-
-template<class Type>	class PxQuatT;
-typedef PxQuatT<float>	PxQuat;
-
-template<class Type>	class PxMat33T;
-typedef PxMat33T<float>	PxMat33;
-
-template<class Type>	class PxMat34T;
-typedef PxMat34T<float>	PxMat34;
-
-template<class Type>	class PxMat44T;
-typedef PxMat44T<float>	PxMat44;
-
-template<class Type>	class PxTransformT;
-typedef PxTransformT<float>	PxTransform;
-
+class PxVec2;
+class PxVec3;
+class PxVec4;
+class PxQuat;
+class PxMat33;
+class PxMat34;
+class PxMat44;
+class PxTransform;
 class PxPlane;
 class PxBounds3;
 

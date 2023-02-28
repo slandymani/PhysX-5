@@ -44,34 +44,33 @@ namespace physx
 consult a mathematics source on complex numbers.
 */
 
-template<class Type>
-class PxQuatT
+class PxQuat
 {
   public:
 
 	/**
 	\brief Default constructor, does not do any initialization.
 	*/
-	PX_CUDA_CALLABLE PX_FORCE_INLINE PxQuatT()
+	PX_CUDA_CALLABLE PX_FORCE_INLINE PxQuat()
 	{
 	}
 
 	//! identity constructor
-	PX_CUDA_CALLABLE PX_FORCE_INLINE PxQuatT(PxIDENTITY) : x(Type(0.0)), y(Type(0.0)), z(Type(0.0)), w(Type(1.0))
+	PX_CUDA_CALLABLE PX_FORCE_INLINE PxQuat(PxIDENTITY) : x(float(0.0)), y(float(0.0)), z(float(0.0)), w(float(1.0))
 	{
 	}
 
 	/**
 	\brief Constructor from a scalar: sets the real part w to the scalar value, and the imaginary parts (x,y,z) to zero
 	*/
-	explicit PX_CUDA_CALLABLE PX_FORCE_INLINE PxQuatT(Type r) : x(Type(0.0)), y(Type(0.0)), z(Type(0.0)), w(r)
+	explicit PX_CUDA_CALLABLE PX_FORCE_INLINE PxQuat(float r) : x(float(0.0)), y(float(0.0)), z(float(0.0)), w(r)
 	{
 	}
 
 	/**
 	\brief Constructor. Take note of the order of the elements!
 	*/
-	PX_CUDA_CALLABLE PX_FORCE_INLINE PxQuatT(Type nx, Type ny, Type nz, Type nw) : x(nx), y(ny), z(nz), w(nw)
+	PX_CUDA_CALLABLE PX_FORCE_INLINE PxQuat(float nx, float ny, float nz, float nw) : x(nx), y(ny), z(nz), w(nw)
 	{
 	}
 
@@ -84,12 +83,12 @@ class PxQuatT
 
 	<b>Unit:</b> Radians
 	*/
-	PX_CUDA_CALLABLE PX_INLINE PxQuatT(Type angleRadians, const PxVec3T<Type>& unitAxis)
+	PX_CUDA_CALLABLE PX_INLINE PxQuat(float angleRadians, const PxVec3& unitAxis)
 	{
-		PX_ASSERT(PxAbs(Type(1.0) - unitAxis.magnitude()) < Type(1e-3));
-		const Type a = angleRadians * Type(0.5);
+		PX_ASSERT(PxAbs(float(1.0) - unitAxis.magnitude()) < float(1e-3));
+		const float a = angleRadians * float(0.5);
 
-		Type s;
+		float s;
 		PxSinCos(a, s, w);
 		x = unitAxis.x * s;
 		y = unitAxis.y * s;
@@ -99,7 +98,7 @@ class PxQuatT
 	/**
 	\brief Copy ctor.
 	*/
-	PX_CUDA_CALLABLE PX_FORCE_INLINE PxQuatT(const PxQuatT& v) : x(v.x), y(v.y), z(v.z), w(v.w)
+	PX_CUDA_CALLABLE PX_FORCE_INLINE PxQuat(const PxQuat& v) : x(v.x), y(v.y), z(v.z), w(v.w)
 	{
 	}
 
@@ -108,14 +107,14 @@ class PxQuatT
 
 	\param[in] m Rotation matrix to extract quaternion from.
 	*/
-	PX_CUDA_CALLABLE PX_INLINE explicit PxQuatT(const PxMat33T<Type>& m); /* defined in PxMat33.h */
+	PX_CUDA_CALLABLE PX_INLINE explicit PxQuat(const PxMat33& m); /* defined in PxMat33.h */
 
 	/**
 	\brief returns true if quat is identity
 	*/
 	PX_CUDA_CALLABLE PX_FORCE_INLINE bool isIdentity() const
 	{
-		return x==Type(0.0) && y==Type(0.0) && z==Type(0.0) && w==Type(1.0);
+		return x==float(0.0) && y==float(0.0) && z==float(0.0) && w==float(1.0);
 	}
 
 	/**
@@ -131,8 +130,8 @@ class PxQuatT
 	*/
 	PX_CUDA_CALLABLE bool isUnit() const
 	{
-		const Type unitTolerance = Type(1e-3);
-		return isFinite() && PxAbs(magnitude() - Type(1.0)) < unitTolerance;
+		const float unitTolerance = float(1e-3);
+		return isFinite() && PxAbs(magnitude() - float(1.0)) < unitTolerance;
 	}
 
 	/**
@@ -141,14 +140,14 @@ class PxQuatT
 	*/
 	PX_CUDA_CALLABLE bool isSane() const
 	{
-		const Type unitTolerance = Type(1e-2);
-		return isFinite() && PxAbs(magnitude() - Type(1.0)) < unitTolerance;
+		const float unitTolerance = float(1e-2);
+		return isFinite() && PxAbs(magnitude() - float(1.0)) < unitTolerance;
 	}
 
 	/**
 	\brief returns true if the two quaternions are exactly equal
 	*/
-	PX_CUDA_CALLABLE PX_FORCE_INLINE bool operator==(const PxQuatT& q) const
+	PX_CUDA_CALLABLE PX_FORCE_INLINE bool operator==(const PxQuat& q) const
 	{
 		return x == q.x && y == q.y && z == q.z && w == q.w;
 	}
@@ -156,20 +155,20 @@ class PxQuatT
 	/**
 	\brief converts this quaternion to angle-axis representation
 	*/
-	PX_CUDA_CALLABLE PX_INLINE void toRadiansAndUnitAxis(Type& angle, PxVec3T<Type>& axis) const
+	PX_CUDA_CALLABLE PX_INLINE void toRadiansAndUnitAxis(float& angle, PxVec3& axis) const
 	{
-		const Type quatEpsilon = Type(1.0e-8);
-		const Type s2 = x * x + y * y + z * z;
+		const float quatEpsilon = float(1.0e-8);
+		const float s2 = x * x + y * y + z * z;
 		if(s2 < quatEpsilon * quatEpsilon) // can't extract a sensible axis
 		{
-			angle = Type(0.0);
-			axis = PxVec3T<Type>(Type(1.0), Type(0.0), Type(0.0));
+			angle = float(0.0);
+			axis = PxVec3(float(1.0), float(0.0), float(0.0));
 		}
 		else
 		{
-			const Type s = PxRecipSqrt(s2);
-			axis = PxVec3T<Type>(x, y, z) * s;
-			angle = PxAbs(w) < quatEpsilon ? Type(PxPi) : PxAtan2(s2 * s, w) * Type(2.0);
+			const float s = PxRecipSqrt(s2);
+			axis = PxVec3(x, y, z) * s;
+			angle = PxAbs(w) < quatEpsilon ? float(PxPi) : PxAtan2(s2 * s, w) * float(2.0);
 		}
 	}
 
@@ -178,9 +177,9 @@ class PxQuatT
 
 	<b>Unit:</b> Radians
 	*/
-	PX_CUDA_CALLABLE PX_FORCE_INLINE Type getAngle() const
+	PX_CUDA_CALLABLE PX_FORCE_INLINE float getAngle() const
 	{
-		return PxAcos(w) * Type(2.0);
+		return PxAcos(w) * float(2.0);
 	}
 
 	/**
@@ -188,15 +187,15 @@ class PxQuatT
 
 	<b>Unit:</b> Radians
 	*/
-	PX_CUDA_CALLABLE PX_FORCE_INLINE Type getAngle(const PxQuatT& q) const
+	PX_CUDA_CALLABLE PX_FORCE_INLINE float getAngle(const PxQuat& q) const
 	{
-		return PxAcos(dot(q)) * Type(2.0);
+		return PxAcos(dot(q)) * float(2.0);
 	}
 
 	/**
 	\brief This is the squared 4D vector length, should be 1 for unit quaternions.
 	*/
-	PX_CUDA_CALLABLE PX_FORCE_INLINE Type magnitudeSquared() const
+	PX_CUDA_CALLABLE PX_FORCE_INLINE float magnitudeSquared() const
 	{
 		return x * x + y * y + z * z + w * w;
 	}
@@ -204,18 +203,18 @@ class PxQuatT
 	/**
 	\brief returns the scalar product of this and other.
 	*/
-	PX_CUDA_CALLABLE PX_FORCE_INLINE Type dot(const PxQuatT& v) const
+	PX_CUDA_CALLABLE PX_FORCE_INLINE float dot(const PxQuat& v) const
 	{
 		return x * v.x + y * v.y + z * v.z + w * v.w;
 	}
 
-	PX_CUDA_CALLABLE PX_FORCE_INLINE PxQuatT getNormalized() const
+	PX_CUDA_CALLABLE PX_FORCE_INLINE PxQuat getNormalized() const
 	{
-		const Type s = Type(1.0) / magnitude();
-		return PxQuatT(x * s, y * s, z * s, w * s);
+		const float s = float(1.0) / magnitude();
+		return PxQuat(x * s, y * s, z * s, w * s);
 	}
 
-	PX_CUDA_CALLABLE PX_FORCE_INLINE Type magnitude() const
+	PX_CUDA_CALLABLE PX_FORCE_INLINE float magnitude() const
 	{
 		return PxSqrt(magnitudeSquared());
 	}
@@ -224,12 +223,12 @@ class PxQuatT
 	/**
 	\brief maps to the closest unit quaternion.
 	*/
-	PX_CUDA_CALLABLE PX_FORCE_INLINE Type normalize() // convert this PxQuatT to a unit quaternion
+	PX_CUDA_CALLABLE PX_FORCE_INLINE float normalize() // convert this PxQuat to a unit quaternion
 	{
-		const Type mag = magnitude();
-		if(mag != Type(0.0))
+		const float mag = magnitude();
+		if(mag != float(0.0))
 		{
-			const Type imag = Type(1.0) / mag;
+			const float imag = float(1.0) / mag;
 
 			x *= imag;
 			y *= imag;
@@ -244,75 +243,75 @@ class PxQuatT
 
 	\note for unit quaternions, this is the inverse.
 	*/
-	PX_CUDA_CALLABLE PX_FORCE_INLINE PxQuatT getConjugate() const
+	PX_CUDA_CALLABLE PX_FORCE_INLINE PxQuat getConjugate() const
 	{
-		return PxQuatT(-x, -y, -z, w);
+		return PxQuat(-x, -y, -z, w);
 	}
 
 	/*
 	\brief returns imaginary part.
 	*/
-	PX_CUDA_CALLABLE PX_FORCE_INLINE PxVec3T<Type> getImaginaryPart() const
+	PX_CUDA_CALLABLE PX_FORCE_INLINE PxVec3 getImaginaryPart() const
 	{
-		return PxVec3T<Type>(x, y, z);
+		return PxVec3(x, y, z);
 	}
 
 	/** brief computes rotation of x-axis */
-	PX_CUDA_CALLABLE PX_FORCE_INLINE PxVec3T<Type> getBasisVector0() const
+	PX_CUDA_CALLABLE PX_FORCE_INLINE PxVec3 getBasisVector0() const
 	{
-		const Type x2 = x * Type(2.0);
-		const Type w2 = w * Type(2.0);
-		return PxVec3T<Type>((w * w2) - Type(1.0) + x * x2, (z * w2) + y * x2, (-y * w2) + z * x2);
+		const float x2 = x * float(2.0);
+		const float w2 = w * float(2.0);
+		return PxVec3((w * w2) - float(1.0) + x * x2, (z * w2) + y * x2, (-y * w2) + z * x2);
 	}
 
 	/** brief computes rotation of y-axis */
-	PX_CUDA_CALLABLE PX_FORCE_INLINE PxVec3T<Type> getBasisVector1() const
+	PX_CUDA_CALLABLE PX_FORCE_INLINE PxVec3 getBasisVector1() const
 	{
-		const Type y2 = y * Type(2.0);
-		const Type w2 = w * Type(2.0);
-		return PxVec3T<Type>((-z * w2) + x * y2, (w * w2) - Type(1.0) + y * y2, (x * w2) + z * y2);
+		const float y2 = y * float(2.0);
+		const float w2 = w * float(2.0);
+		return PxVec3((-z * w2) + x * y2, (w * w2) - float(1.0) + y * y2, (x * w2) + z * y2);
 	}
 
 	/** brief computes rotation of z-axis */
-	PX_CUDA_CALLABLE PX_FORCE_INLINE PxVec3T<Type> getBasisVector2() const
+	PX_CUDA_CALLABLE PX_FORCE_INLINE PxVec3 getBasisVector2() const
 	{
-		const Type z2 = z * Type(2.0);
-		const Type w2 = w * Type(2.0);
-		return PxVec3T<Type>((y * w2) + x * z2, (-x * w2) + y * z2, (w * w2) - Type(1.0) + z * z2);
+		const float z2 = z * float(2.0);
+		const float w2 = w * float(2.0);
+		return PxVec3((y * w2) + x * z2, (-x * w2) + y * z2, (w * w2) - float(1.0) + z * z2);
 	}
 
 	/**
 	rotates passed vec by this (assumed unitary)
 	*/
-	PX_CUDA_CALLABLE PX_FORCE_INLINE const PxVec3T<Type> rotate(const PxVec3T<Type>& v) const
+	PX_CUDA_CALLABLE PX_FORCE_INLINE const PxVec3 rotate(const PxVec3& v) const
 	{
-		const Type vx = Type(2.0) * v.x;
-		const Type vy = Type(2.0) * v.y;
-		const Type vz = Type(2.0) * v.z;
-		const Type w2 = w * w - 0.5f;
-		const Type dot2 = (x * vx + y * vy + z * vz);
-		return PxVec3T<Type>((vx * w2 + (y * vz - z * vy) * w + x * dot2), (vy * w2 + (z * vx - x * vz) * w + y * dot2),
+		const float vx = float(2.0) * v.x;
+		const float vy = float(2.0) * v.y;
+		const float vz = float(2.0) * v.z;
+		const float w2 = w * w - 0.5f;
+		const float dot2 = (x * vx + y * vy + z * vz);
+		return PxVec3((vx * w2 + (y * vz - z * vy) * w + x * dot2), (vy * w2 + (z * vx - x * vz) * w + y * dot2),
 						     (vz * w2 + (x * vy - y * vx) * w + z * dot2));
 	}
 
 	/**
 	inverse rotates passed vec by this (assumed unitary)
 	*/
-	PX_CUDA_CALLABLE PX_FORCE_INLINE const PxVec3T<Type> rotateInv(const PxVec3T<Type>& v) const
+	PX_CUDA_CALLABLE PX_FORCE_INLINE const PxVec3 rotateInv(const PxVec3& v) const
 	{
-		const Type vx = Type(2.0) * v.x;
-		const Type vy = Type(2.0) * v.y;
-		const Type vz = Type(2.0) * v.z;
-		const Type w2 = w * w - 0.5f;
-		const Type dot2 = (x * vx + y * vy + z * vz);
-		return PxVec3T<Type>((vx * w2 - (y * vz - z * vy) * w + x * dot2), (vy * w2 - (z * vx - x * vz) * w + y * dot2),
+		const float vx = float(2.0) * v.x;
+		const float vy = float(2.0) * v.y;
+		const float vz = float(2.0) * v.z;
+		const float w2 = w * w - 0.5f;
+		const float dot2 = (x * vx + y * vy + z * vz);
+		return PxVec3((vx * w2 - (y * vz - z * vy) * w + x * dot2), (vy * w2 - (z * vx - x * vz) * w + y * dot2),
 						    (vz * w2 - (x * vy - y * vx) * w + z * dot2));
 	}
 
 	/**
 	\brief Assignment operator
 	*/
-	PX_CUDA_CALLABLE PX_FORCE_INLINE PxQuatT& operator=(const PxQuatT& p)
+	PX_CUDA_CALLABLE PX_FORCE_INLINE PxQuat& operator=(const PxQuat& p)
 	{
 		x = p.x;
 		y = p.y;
@@ -321,11 +320,11 @@ class PxQuatT
 		return *this;
 	}
 
-	PX_CUDA_CALLABLE PX_FORCE_INLINE PxQuatT& operator*=(const PxQuatT& q)
+	PX_CUDA_CALLABLE PX_FORCE_INLINE PxQuat& operator*=(const PxQuat& q)
 	{
-		const Type tx = w * q.x + q.w * x + y * q.z - q.y * z;
-		const Type ty = w * q.y + q.w * y + z * q.x - q.z * x;
-		const Type tz = w * q.z + q.w * z + x * q.y - q.x * y;
+		const float tx = w * q.x + q.w * x + y * q.z - q.y * z;
+		const float ty = w * q.y + q.w * y + z * q.x - q.z * x;
+		const float tz = w * q.z + q.w * z + x * q.y - q.x * y;
 
 		w = w * q.w - q.x * x - y * q.y - q.z * z;
 		x = tx;
@@ -334,7 +333,7 @@ class PxQuatT
 		return *this;
 	}
 
-	PX_CUDA_CALLABLE PX_FORCE_INLINE PxQuatT& operator+=(const PxQuatT& q)
+	PX_CUDA_CALLABLE PX_FORCE_INLINE PxQuat& operator+=(const PxQuat& q)
 	{
 		x += q.x;
 		y += q.y;
@@ -343,7 +342,7 @@ class PxQuatT
 		return *this;
 	}
 
-	PX_CUDA_CALLABLE PX_FORCE_INLINE PxQuatT& operator-=(const PxQuatT& q)
+	PX_CUDA_CALLABLE PX_FORCE_INLINE PxQuat& operator-=(const PxQuat& q)
 	{
 		x -= q.x;
 		y -= q.y;
@@ -352,7 +351,7 @@ class PxQuatT
 		return *this;
 	}
 
-	PX_CUDA_CALLABLE PX_FORCE_INLINE PxQuatT& operator*=(const Type s)
+	PX_CUDA_CALLABLE PX_FORCE_INLINE PxQuat& operator*=(const float s)
 	{
 		x *= s;
 		y *= s;
@@ -362,40 +361,37 @@ class PxQuatT
 	}
 
 	/** quaternion multiplication */
-	PX_CUDA_CALLABLE PX_FORCE_INLINE PxQuatT operator*(const PxQuatT& q) const
+	PX_CUDA_CALLABLE PX_FORCE_INLINE PxQuat operator*(const PxQuat& q) const
 	{
-		return PxQuatT(w * q.x + q.w * x + y * q.z - q.y * z, w * q.y + q.w * y + z * q.x - q.z * x,
+		return PxQuat(w * q.x + q.w * x + y * q.z - q.y * z, w * q.y + q.w * y + z * q.x - q.z * x,
 		              w * q.z + q.w * z + x * q.y - q.x * y, w * q.w - x * q.x - y * q.y - z * q.z);
 	}
 
 	/** quaternion addition */
-	PX_CUDA_CALLABLE PX_FORCE_INLINE PxQuatT operator+(const PxQuatT& q) const
+	PX_CUDA_CALLABLE PX_FORCE_INLINE PxQuat operator+(const PxQuat& q) const
 	{
-		return PxQuatT(x + q.x, y + q.y, z + q.z, w + q.w);
+		return PxQuat(x + q.x, y + q.y, z + q.z, w + q.w);
 	}
 
 	/** quaternion subtraction */
-	PX_CUDA_CALLABLE PX_FORCE_INLINE PxQuatT operator-() const
+	PX_CUDA_CALLABLE PX_FORCE_INLINE PxQuat operator-() const
 	{
-		return PxQuatT(-x, -y, -z, -w);
+		return PxQuat(-x, -y, -z, -w);
 	}
 
-	PX_CUDA_CALLABLE PX_FORCE_INLINE PxQuatT operator-(const PxQuatT& q) const
+	PX_CUDA_CALLABLE PX_FORCE_INLINE PxQuat operator-(const PxQuat& q) const
 	{
-		return PxQuatT(x - q.x, y - q.y, z - q.z, w - q.w);
+		return PxQuat(x - q.x, y - q.y, z - q.z, w - q.w);
 	}
 
-	PX_CUDA_CALLABLE PX_FORCE_INLINE PxQuatT operator*(Type r) const
+	PX_CUDA_CALLABLE PX_FORCE_INLINE PxQuat operator*(float r) const
 	{
-		return PxQuatT(x * r, y * r, z * r, w * r);
+		return PxQuat(x * r, y * r, z * r, w * r);
 	}
 
 	/** the quaternion elements */
-	Type	x, y, z, w;
+	float	x, y, z, w;
 };
-
-typedef PxQuatT<float>	PxQuat;
-typedef PxQuatT<double>	PxQuatd;
 
 #if !PX_DOXYGEN
 } // namespace physx
