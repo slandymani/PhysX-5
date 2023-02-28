@@ -616,7 +616,7 @@ public:
 	scenes which the constraint solver can't converge, e.g. scenes where an object is being dragged through a wall with a constraint.
 	A value of 0 ensures that the pair of objects stop at the exact time-of-impact and will not gently drift through each-other. However, with very small/thin objects initially in 
 	contact, this can lead to a large amount of time being dropped and increases the chances of jamming. Jamming occurs when the an object is persistently in contact with an object 
-	such that the time-of-impact is	0, which results in no time being advanced for those objects in that CCD pass.
+	such that the time-of-impact is 0, which results in no time being advanced for those objects in that CCD pass.
 
 	The chances of jamming can be reduced by increasing the number of CCD mass @see PxSceneDesc.ccdMaxPasses. However, increasing this number increases the CCD overhead.
 
@@ -649,7 +649,7 @@ public:
 
 	/**
 	\brief Sets a limit on the impulse that may be applied at a contact. The maximum impulse at a contact between two dynamic or kinematic
-	bodies will be the minimum	of the two limit values. For a collision between a static and a dynamic body, the impulse is limited
+	bodies will be the minimum of the two limit values. For a collision between a static and a dynamic body, the impulse is limited
 	by the value for the dynamic body.
 
 	\param[in] maxImpulse the maximum contact impulse. <b>Range:</b> [0, PX_MAX_F32] <b>Default:</b> PX_MAX_F32

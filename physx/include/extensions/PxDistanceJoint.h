@@ -90,7 +90,7 @@ public:
 	/**
 	\brief Set the allowed minimum distance for the joint.
 
-	The minimum	distance must be no more than the maximum distance
+	The minimum distance must be no more than the maximum distance
 
 	<b>Default</b> 0.0f
 	<b>Range</b> [0, PX_MAX_F32)
@@ -113,7 +113,7 @@ public:
 	/**
 	\brief Set the allowed maximum distance for the joint.
 
-	The maximum	distance must be no less than the minimum distance. 
+	The maximum distance must be no less than the minimum distance. 
 
 	<b>Default</b> 0.0f
 	<b>Range</b> [0, PX_MAX_F32)

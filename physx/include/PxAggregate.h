@@ -147,7 +147,7 @@ public:
 	\brief Adds an articulation to the aggregate object.
 
 	A warning is output if the total number of actors is reached (every articulation link counts as an actor), 
-	or if the incoming articulation already belongs	to an aggregate.
+	or if the incoming articulation already belongs to an aggregate.
 
 	If the aggregate belongs to a scene, adding an articulation to the aggregate also adds the articulation to that scene.
 

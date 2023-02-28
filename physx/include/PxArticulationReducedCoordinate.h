@@ -923,9 +923,9 @@ namespace physx
 		\brief Prepares common articulation data based on articulation pose for inverse dynamics calculations.
 
 		Usage:
-		-# Set articulation pose (joint positions and base transform) via articulation cache and applyCache().
-		-# Call commonInit.
-		-# Call inverse dynamics computation method.
+		1. Set articulation pose (joint positions and base transform) via articulation cache and applyCache().
+		1. Call commonInit.
+		1. Call inverse dynamics computation method.
 
 		\note This call may only be made on articulations that are in a scene, and may not be made during simulation.
 
@@ -936,8 +936,8 @@ namespace physx
 		/**
 		\brief Computes the joint DOF forces required to counteract gravitational forces for the given articulation pose.
 
-		- Inputs:	Articulation pose (joint positions + base transform).
-		- Outputs:	Joint forces to counteract gravity (in cache).
+		- Inputs - Articulation pose (joint positions + base transform).
+		- Outputs - Joint forces to counteract gravity (in cache).
 
 		- The joint forces returned are determined purely by gravity for the articulation in the current joint and base pose, and joints at rest;
 		i.e. external forces, joint velocities, and joint accelerations are set to zero. Joint drives are also not considered in the computation.
@@ -954,8 +954,8 @@ namespace physx
 		/**
 		\brief Computes the joint DOF forces required to counteract Coriolis and centrifugal forces for the given articulation state.
 
-		- Inputs:	Articulation state (joint positions and velocities (in cache), and base transform and spatial velocity).
-		- Outputs:	Joint forces to counteract Coriolis and centrifugal forces (in cache).
+		- Inputs - Articulation state (joint positions and velocities (in cache), and base transform and spatial velocity).
+		- Outputs - Joint forces to counteract Coriolis and centrifugal forces (in cache).
 
 		- The joint forces returned are determined purely by the articulation's state; i.e. external forces, gravity, and joint accelerations are set to zero.
 		Joint drives and potential damping terms, such as link angular or linear damping, or joint friction, are also not considered in the computation.
@@ -973,8 +973,8 @@ namespace physx
 		/**
 		\brief Computes the joint DOF forces required to counteract external spatial forces applied to articulation links.
 
-		- Inputs:	External forces on links (in cache), articulation pose (joint positions + base transform).
-		- Outputs:	Joint forces to counteract the external forces (in cache).
+		- Inputs - External forces on links (in cache), articulation pose (joint positions + base transform).
+		- Outputs - Joint forces to counteract the external forces (in cache).
 
 		- Only the external spatial forces provided in the cache and the articulation pose are considered in the computation.
 		- The external spatial forces are with respect to the links' centers of mass, and not the actor's origin.
@@ -991,8 +991,8 @@ namespace physx
 		/**
 		\brief Computes the joint accelerations for the given articulation state and joint forces.
 
-		- Inputs:	Joint forces (in cache) and articulation state (joint positions and velocities (in cache), and base transform and spatial velocity).
-		- Outputs:	Joint accelerations (in cache).
+		- Inputs - Joint forces (in cache) and articulation state (joint positions and velocities (in cache), and base transform and spatial velocity).
+		- Outputs - Joint accelerations (in cache).
 
 		- The computation includes Coriolis terms and gravity. However, joint drives and potential damping terms are not considered in the computation
 		(for example, linear link damping or joint friction).
@@ -1010,8 +1010,8 @@ namespace physx
 		/**
 		\brief Computes the joint forces for the given articulation state and joint accelerations, not considering gravity.
 
-		- Inputs:	Joint accelerations (in cache) and articulation state (joint positions and velocities (in cache), and base transform and spatial velocity).
-		- Outputs:	Joint forces (in cache).
+		- Inputs - Joint accelerations (in cache) and articulation state (joint positions and velocities (in cache), and base transform and spatial velocity).
+		- Outputs - Joint forces (in cache).
 
 		- The computation includes Coriolis terms. However, joint drives and potential damping terms are not considered in the computation
 		(for example, linear link damping or joint friction).
@@ -1078,8 +1078,8 @@ namespace physx
 		/**
 		\brief Compute the joint-space inertia matrix that maps joint accelerations to joint forces: forces = M * accelerations.
 
-		- Inputs:	Articulation pose (joint positions and base transform).
-		- Outputs:	Mass matrix (in cache).
+		- Inputs - Articulation pose (joint positions and base transform).
+		- Outputs - Mass matrix (in cache).
 
 		commonInit() must be called before the computation, and after setting the articulation pose via applyCache().
 

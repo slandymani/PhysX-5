@@ -59,9 +59,14 @@ public:
 	
 	This is equivalent to the following
 
-	PxShape* shape(...) = PxGetPhysics().createShape(...);	// reference count is 1
-	actor->attachShape(shape);								// increments reference count
-	shape->release();										// releases user reference, leaving reference count at 1
+	```cpp
+	// reference count is 1
+	PxShape* shape(...) = PxGetPhysics().createShape(...);
+	// increments reference count
+	actor->attachShape(shape);
+	// releases user reference, leaving reference count at 1
+	shape->release();
+	```
 
 	As a consequence, detachShape() will result in the release of the last reference, and the shape will be deleted.
 
@@ -102,9 +107,14 @@ public:
 
 	This is equivalent to the following
 
-	PxShape* shape(...) = PxGetPhysics().createShape(...);	// reference count is 1
-	actor->attachShape(shape);								// increments reference count
-	shape->release();										// releases user reference, leaving reference count at 1
+	```cpp
+	// reference count is 1
+	PxShape* shape(...) = PxGetPhysics().createShape(...);
+	// increments reference count
+	actor->attachShape(shape);
+	// releases user reference, leaving reference count at 1
+	shape->release();
+	```
 
 	As a consequence, detachShape() will result in the release of the last reference, and the shape will be deleted.
 

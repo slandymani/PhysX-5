@@ -195,7 +195,7 @@ class PxScene : public PxSceneSQSystem
 	Removes any actors and constraint shaders from this scene
 	(if the user hasn't already done so).
 
-	Be sure	to not keep a reference to this object after calling release.
+	Be sure to not keep a reference to this object after calling release.
 	Avoid release calls while the scene is simulating (in between simulate() and fetchResults() calls).
 	
 	@see PxPhysics.createScene() 

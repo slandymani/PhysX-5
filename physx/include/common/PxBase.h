@@ -209,7 +209,7 @@ public:
 	\brief Returns the reference count of the object.
 
 	At creation, the reference count of the object is 1. Every other object referencing this object increments the
-	count by 1.	When the reference count reaches 0, and only then, the object gets destroyed automatically.
+	count by 1. When the reference count reaches 0, and only then, the object gets destroyed automatically.
 
 	\return the current reference count.
 	*/

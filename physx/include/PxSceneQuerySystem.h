@@ -376,7 +376,7 @@ namespace physx
 
 		/**
 		This method must be called after sceneQueriesUpdate. It will wait for the scene queries update to finish. If the user makes an illegal scene queries update call, 
-		the SDK will issue an error	message.
+		the SDK will issue an error message.
 
 		If a new AABB tree build finished, then during fetchQueries the current tree within the pruning structure is swapped with the new tree. 
 
