@@ -36,6 +36,8 @@
 
 namespace physx
 {
+	class PxScene;
+	
 	namespace pvdsdk
 	{
 		class PsPvd;

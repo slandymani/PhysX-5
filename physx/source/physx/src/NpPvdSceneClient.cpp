@@ -174,7 +174,9 @@ namespace
 			//op(*static_cast<const PxFEMCloth*>(actor));
 			break;
 		case PxActorType::ePBD_PARTICLESYSTEM:
+		#if PX_SUPPORT_GPU_PHYSX
 			op(*static_cast<const PxPBDParticleSystem*>(actor));
+		#endif
 			break;
 		case PxActorType::eFLIP_PARTICLESYSTEM:
 			//op(*static_cast<const PxFLIPParticleSystem*>(actor));

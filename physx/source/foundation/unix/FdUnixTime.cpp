@@ -50,7 +50,7 @@ const PxCounterFrequencyToTensOfNanos& PxTime::getBootCounterFrequency()
 	return gCounterFreq;
 }
 
-static PxTime::Second getTimeSeconds()
+static PxF64 getTimeSeconds()
 {
 	static struct timeval _tv;
 	gettimeofday(&_tv, NULL);
@@ -62,22 +62,22 @@ PxTime::PxTime()
 	mLastTime = getTimeSeconds();
 }
 
-PxTime::Second PxTime::getElapsedSeconds()
+PxF64 PxTime::getElapsedSeconds()
 {
-	PxTime::Second curTime = getTimeSeconds();
-	PxTime::Second diff = curTime - mLastTime;
+	PxF64 curTime = getTimeSeconds();
+	PxF64 diff = curTime - mLastTime;
 	mLastTime = curTime;
 	return diff;
 }
 
-PxTime::Second PxTime::peekElapsedSeconds()
+PxF64 PxTime::peekElapsedSeconds()
 {
-	PxTime::Second curTime = getTimeSeconds();
-	PxTime::Second diff = curTime - mLastTime;
+	PxF64 curTime = getTimeSeconds();
+	PxF64 diff = curTime - mLastTime;
 	return diff;
 }
 
-PxTime::Second PxTime::getLastTime() const
+PxF64 PxTime::getLastTime() const
 {
 	return mLastTime;
 }

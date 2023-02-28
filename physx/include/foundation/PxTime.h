@@ -59,7 +59,6 @@ struct PxCounterFrequencyToTensOfNanos
 class PX_FOUNDATION_API PxTime
 {
   public:
-	typedef PxF64 Second;
 	static const PxU64 sNumTensOfNanoSecondsInASecond = 100000000;
 	// This is supposedly guaranteed to not change after system boot
 	// regardless of processors, speedstep, etc.
@@ -78,13 +77,13 @@ class PX_FOUNDATION_API PxTime
 	}
 
 	PxTime();
-	Second getElapsedSeconds();
-	Second peekElapsedSeconds();
-	Second getLastTime() const;
+	PxF64 getElapsedSeconds();
+	PxF64 peekElapsedSeconds();
+	PxF64 getLastTime() const;
 
   private:
 #if PX_LINUX || PX_APPLE_FAMILY
-	Second mLastTime;
+	PxF64 mLastTime;
 #else
 	PxI64 mTickCount;
 #endif

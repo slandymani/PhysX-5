@@ -77,19 +77,19 @@ PxTime::PxTime() : mTickCount(0)
 	getElapsedSeconds();
 }
 
-PxTime::Second PxTime::getElapsedSeconds()
+PxF64 PxTime::getElapsedSeconds()
 {
 	int64_t lastTickCount = mTickCount;
 	mTickCount = getTimeTicks();
 	return (mTickCount - lastTickCount) * sTickDuration;
 }
 
-PxTime::Second PxTime::peekElapsedSeconds()
+PxF64 PxTime::peekElapsedSeconds()
 {
 	return (getTimeTicks() - mTickCount) * sTickDuration;
 }
 
-PxTime::Second PxTime::getLastTime() const
+PxF64 PxTime::getLastTime() const
 {
 	return mTickCount * sTickDuration;
 }

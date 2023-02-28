@@ -2678,6 +2678,11 @@ static void storeHit
 	cachedHitQueryTypes[i] = hitQueryType;
 }
 
+static PX_FORCE_INLINE PxBatchQueryStatus::Enum getStatus(const PxSweepBuffer& r)
+{
+	return (0xffffffff == r.nbTouches) ? PxBatchQueryStatus::ePENDING : (0xffffffff == r.maxNbTouches ? PxBatchQueryStatus::eOVERFLOW : PxBatchQueryStatus::eSUCCESS); 
+}
+
 static void processSuspTireWheels
 (const PxU32 startWheelIndex, 
  const ProcessSuspWheelTireConstData& constData, const ProcessSuspWheelTireInputData& inputData, 
@@ -2842,8 +2847,7 @@ static void processSuspTireWheels
 		{
 			//Test that raycasts issue blocking hits.
 			PX_CHECK_AND_RETURN(!raycastResults || (0 == raycastResults[i].nbTouches), "Raycasts must generate blocking hits");
-			PX_CHECK_MSG(!sweepResults || (PxBatchQueryStatus::getStatus(sweepResults[i]) != PxBatchQueryStatus::eOVERFLOW), "PxVehicleUpdate::suspensionSweeps - batched sweep touch array not large enough to perform sweep.");
-
+			PX_CHECK_MSG(!sweepResults || (getStatus(sweepResults[i]) != PxBatchQueryStatus::eOVERFLOW), "PxVehicleUpdate::suspensionSweeps - batched sweep touch array not large enough to perform sweep.");
 			PxU32 hitCount = 0;
 			if ((raycastResults && raycastResults[i].hasBlock) || (sweepResults && sweepResults[i].hasBlock))
 			{

@@ -318,19 +318,6 @@ struct PxBatchQueryStatus
 		*/
 		eOVERFLOW
 	};
-
-	static PX_FORCE_INLINE Enum getStatus(const PxRaycastBuffer& r) 
-	{
-		return (0xffffffff == r.nbTouches) ? ePENDING : (0xffffffff == r.maxNbTouches ? eOVERFLOW : eSUCCESS);
-	} 
-	static PX_FORCE_INLINE Enum getStatus(const PxSweepBuffer& r)
-	{
-		return (0xffffffff == r.nbTouches) ? ePENDING : (0xffffffff == r.maxNbTouches ? eOVERFLOW : eSUCCESS); 
-	}
-	static PX_FORCE_INLINE Enum getStatus(const PxOverlapBuffer& r)
-	{
-		return (0xffffffff == r.nbTouches) ? ePENDING : (0xffffffff == r.maxNbTouches ? eOVERFLOW : eSUCCESS);
-	}
 };
 
 class PxBatchQueryExt

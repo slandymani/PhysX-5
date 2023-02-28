@@ -37,12 +37,13 @@
 #include "foundation/PxIO.h"
 #include "foundation/PxFoundation.h"
 
-typedef FILE* PxFileHandle;
 
 #if !PX_DOXYGEN
 namespace physx
 {
 #endif
+
+typedef FILE* PxFileHandle;
 
 /** 
 \brief default implementation of a memory write stream
