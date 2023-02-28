@@ -55,6 +55,29 @@ namespace physx
 	class PxBinaryConverter;
 
 /**
+\brief Additional PxScene and PxPhysics options stored in XML serialized data.
+
+The PxXmlMiscParameter parameter can be serialized and deserialized along with PxCollection instances (XML only).
+This is for application use only and has no impact on how objects are serialized or deserialized. 
+@see PxSerialization::createCollectionFromXml, PxSerialization::serializeCollectionToXml
+*/
+struct PxXmlMiscParameter
+{
+	/**
+	\brief Up vector for the scene reference coordinate system.
+	*/
+	PxVec3				upVector;
+
+	/**
+	\brief Tolerances scale to be used for the scene.
+	*/
+	PxTolerancesScale	scale;
+	
+	PxXmlMiscParameter() : upVector(0) {}
+	PxXmlMiscParameter(PxVec3& inUpVector, PxTolerancesScale inScale) : upVector(inUpVector), scale(inScale) {}
+};
+
+/**
 \brief Utility functions for serialization
 
 @see PxCollection, PxSerializationRegistry
@@ -62,29 +85,6 @@ namespace physx
 class PxSerialization
 {
 public:
-	/**
-	\brief Additional PxScene and PxPhysics options stored in XML serialized data.
-
-	The PxXmlMiscParameter parameter can be serialized and deserialized along with PxCollection instances (XML only).
-	This is for application use only and has no impact on how objects are serialized or deserialized. 
-	@see PxSerialization::createCollectionFromXml, PxSerialization::serializeCollectionToXml
-	*/
-	struct PxXmlMiscParameter
-	{
-		/**
-		\brief Up vector for the scene reference coordinate system.
-		*/
-		PxVec3				upVector;
-
-		/**
-		\brief Tolerances scale to be used for the scene.
-		*/
-		PxTolerancesScale	scale;
-		
-		PxXmlMiscParameter() : upVector(0) {}
-		PxXmlMiscParameter(PxVec3& inUpVector, PxTolerancesScale inScale) : upVector(inUpVector), scale(inScale) {}
-	};
-
 	/**
 	\brief Returns whether the collection is serializable with the externalReferences collection.
 
