@@ -45,7 +45,7 @@ namespace physx
  * @brief  Base class to handle assert failures
  * @deprecated  
  */
-class PX_DEPRECATED PxAssertHandler
+class PxAssertHandler
 {
   public:
 	virtual ~PxAssertHandler()
@@ -57,12 +57,12 @@ class PX_DEPRECATED PxAssertHandler
 /**
  * @deprecated
  */
-PX_FOUNDATION_API PX_DEPRECATED PxAssertHandler& PxGetAssertHandler();
+PX_FOUNDATION_API PxAssertHandler& PxGetAssertHandler();
 
 /**
  * @deprecated
  */
-PX_FOUNDATION_API PX_DEPRECATED void PxSetAssertHandler(PxAssertHandler& handler);
+PX_FOUNDATION_API void PxSetAssertHandler(PxAssertHandler& handler);
 
 
 #if !PX_ENABLE_ASSERTS
