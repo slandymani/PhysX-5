@@ -486,7 +486,7 @@ public:
 
 	@deprecated
 	*/
-	PX_DEPRECATED	virtual void				setProjectionLinearTolerance(PxReal tolerance)	= 0;
+	virtual void				setProjectionLinearTolerance(PxReal tolerance)	= 0;
 
 	/**
 	\brief Get the linear tolerance threshold for projection.
@@ -497,7 +497,7 @@ public:
 
 	@deprecated
 	*/
-	PX_DEPRECATED	virtual PxReal				getProjectionLinearTolerance()	const	= 0;
+	virtual PxReal				getProjectionLinearTolerance()	const	= 0;
 
 	/**
 	\brief Set the angular tolerance threshold for projection. Projection is enabled if 
