@@ -522,7 +522,7 @@ public:
 
 	@deprecated
 	*/
-	PX_DEPRECATED	virtual void				setProjectionAngularTolerance(PxReal tolerance)	= 0;
+	virtual void				setProjectionAngularTolerance(PxReal tolerance)	= 0;
 
 	/**
 	\brief Get the angular tolerance threshold for projection.
@@ -533,7 +533,7 @@ public:
 
 	@deprecated
 	*/
-	PX_DEPRECATED	virtual PxReal				getProjectionAngularTolerance()	const	= 0;
+	virtual PxReal				getProjectionAngularTolerance()	const	= 0;
 
 	/**
 	\brief Returns string name of PxD6Joint, used for serialization
