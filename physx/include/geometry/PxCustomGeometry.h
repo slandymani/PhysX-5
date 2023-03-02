@@ -36,6 +36,12 @@
 #include "geometry/PxGeometryHit.h"
 #include "geometry/PxGeometryQueryContext.h"
 #include "foundation/PxFoundationConfig.h"
+#include "PxPhysXConfig.h"
+
+/**
+\brief For internal use
+*/
+PX_C_EXPORT PX_PHYSX_COMMON_API uint32_t PxCustomGeometry_getUniqueID();
 
 #if !PX_DOXYGEN
 namespace physx
@@ -44,11 +50,6 @@ namespace physx
 	class PxContactBuffer;
 	class PxRenderOutput;
 	class PxMassProperties;
-
-	/**
-	\brief For internal use
-	*/
-	PX_C_EXPORT PX_PHYSX_COMMON_API PxU32 PxCustomGeometry_getUniqueID();
 
 	/**
 	\brief The type of a custom geometry. Allows to identify a particular kind of it.
