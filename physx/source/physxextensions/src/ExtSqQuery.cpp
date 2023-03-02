@@ -52,6 +52,15 @@ using namespace physx;
 using namespace Sq;
 using namespace Gu;
 
+// compiling for a windows target with clang will completely fail due to errors
+// physx/include/foundation/PxFlags.h(81,29): note: candidate constructor not viable: no known conversion from 'const __restrict physx::PxHitFlags' (aka 'const __restrict PxFlags<physx::PxHitFlag::Enum, unsigned sh
+//    PX_CUDA_CALLABLE PX_INLINE PxFlags(enumtype e);
+#if PX_WINDOWS_FAMILY && !PX_CLANG
+       #define PX_MSVC_RESTRICT PX_RESTRICT
+#else
+       #define PX_MSVC_RESTRICT
+#endif
+
 ///////////////////////////////////////////////////////////////////////////////
 
 PX_IMPLEMENT_OUTPUT_ERROR
@@ -436,10 +445,7 @@ struct ExtMultiQueryCallback : public PrunerRaycastCallback, public PrunerOverla
 	{
 	}
 
-	bool processTouchHit(const HitType& hit, PxReal& aDist)
-#if PX_WINDOWS_FAMILY
-		PX_RESTRICT
-#endif
+	bool processTouchHit(const HitType& hit, PxReal& aDist) PX_MSVC_RESTRICT
 	{
 		// -------------------------- handle eTOUCH hits ---------------------------------
 		// for qType=multiple, store the hit. For other qTypes ignore it.
@@ -496,10 +502,7 @@ struct ExtMultiQueryCallback : public PrunerRaycastCallback, public PrunerOverla
 	}
 
 	template<const bool isCached>	// is this call coming as a callback from the pruner or a single item cached callback?
-	bool _invoke(PxReal& aDist, PxU32 primIndex, const PrunerPayload* payloads, const PxTransform* transforms, const PxTransform* compoundPose)
-#if PX_WINDOWS_FAMILY
-		PX_RESTRICT
-#endif
+	bool _invoke(PxReal& aDist, PxU32 primIndex, const PrunerPayload* payloads, const PxTransform* transforms, const PxTransform* compoundPose) PX_MSVC_RESTRICT
 	{
 		PX_ASSERT(payloads);
 		const PrunerPayload& payload = payloads[primIndex];
