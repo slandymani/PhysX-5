@@ -48,7 +48,7 @@ namespace physx
 	/**
 	\brief For internal use
 	*/
-	PX_PHYSX_COMMON_API PxU32 PxCustomGeometry_getUniqueID();
+	PX_C_EXPORT PX_PHYSX_COMMON_API PxU32 PxCustomGeometry_getUniqueID();
 
 	/**
 	\brief The type of a custom geometry. Allows to identify a particular kind of it.
