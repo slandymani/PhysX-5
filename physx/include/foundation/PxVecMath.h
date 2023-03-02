@@ -47,13 +47,15 @@
 
 // enable/disable SIMD
 #if !defined(PX_SIMD_DISABLED)
-#if PX_INTEL_FAMILY && (!defined(__EMSCRIPTEN__) || defined(__SSE2__))
-	#define COMPILE_VECTOR_INTRINSICS 1
-#elif PX_SWITCH
-	#define COMPILE_VECTOR_INTRINSICS 1
-#else
-	#define COMPILE_VECTOR_INTRINSICS 0
-#endif
+	#if PX_INTEL_FAMILY && (!defined(__EMSCRIPTEN__) || defined(__SSE2__))
+		#define COMPILE_VECTOR_INTRINSICS 1
+	#elif PX_SWITCH
+		#define COMPILE_VECTOR_INTRINSICS 1
+	#elif PX_OSX && PX_A64
+		#define COMPILE_VECTOR_INTRINSICS 1
+	#else
+		#define COMPILE_VECTOR_INTRINSICS 0
+	#endif
 #else
 	#define COMPILE_VECTOR_INTRINSICS 0
 #endif
