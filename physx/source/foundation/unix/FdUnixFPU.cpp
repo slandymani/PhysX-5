@@ -32,7 +32,7 @@
 PX_COMPILE_TIME_ASSERT(8 * sizeof(uint32_t) >= sizeof(fenv_t));
 #endif
 
-#if PX_OSX && !PX_A64
+#if PX_OSX && PX_X64
 // osx defines SIMD as standard for floating point operations.
 #include <xmmintrin.h>
 #endif
@@ -42,9 +42,13 @@ physx::PxFPUGuard::PxFPUGuard()
 #if defined(__CYGWIN__)
 #pragma message "FPUGuard::FPUGuard() is not implemented"
 #elif PX_OSX
-	mControlWords[0] = _mm_getcsr();
-	// set default (disable exceptions: _MM_MASK_MASK) and FTZ (_MM_FLUSH_ZERO_ON), DAZ (_MM_DENORMALS_ZERO_ON: (1<<6))
-	_mm_setcsr(_MM_MASK_MASK | _MM_FLUSH_ZERO_ON | (1 << 6));
+	#if PX_X64
+		mControlWords[0] = _mm_getcsr();
+		// set default (disable exceptions: _MM_MASK_MASK) and FTZ (_MM_FLUSH_ZERO_ON), DAZ (_MM_DENORMALS_ZERO_ON: (1<<6))
+		_mm_setcsr(_MM_MASK_MASK | _MM_FLUSH_ZERO_ON | (1 << 6));
+	#else
+		// Not supported
+	#endif
 #elif defined(__EMSCRIPTEN__)
 // not supported
 #else
@@ -67,9 +71,13 @@ physx::PxFPUGuard::~PxFPUGuard()
 #if defined(__CYGWIN__)
 #pragma message "PxFPUGuard::~PxFPUGuard() is not implemented"
 #elif PX_OSX
-	// restore control word and clear exception flags
-	// (setting exception state flags cause exceptions on the first following fp operation)
-	_mm_setcsr(mControlWords[0] & ~_MM_EXCEPT_MASK);
+	#if PX_X64
+		// restore control word and clear exception flags
+		// (setting exception state flags cause exceptions on the first following fp operation)
+		_mm_setcsr(mControlWords[0] & ~_MM_EXCEPT_MASK);
+	#else
+		// not supported
+	#endif
 #elif defined(__EMSCRIPTEN__)
 // not supported
 #else
@@ -82,7 +90,7 @@ PX_FOUNDATION_API void physx::PxEnableFPExceptions()
 #if PX_LINUX && !defined(__EMSCRIPTEN__)
 	feclearexcept(FE_ALL_EXCEPT);
 	feenableexcept(FE_INVALID | FE_DIVBYZERO | FE_OVERFLOW);
-#elif PX_OSX
+#elif PX_OSX && PX_X64
 	// clear any pending exceptions
 	// (setting exception state flags cause exceptions on the first following fp operation)
 	uint32_t control = _mm_getcsr() & ~_MM_EXCEPT_MASK;
@@ -90,7 +98,6 @@ PX_FOUNDATION_API void physx::PxEnableFPExceptions()
 	// enable all fp exceptions except inexact and underflow (common, benign)
 	// note: denorm has to be disabled as well because underflow can create denorms
 	_mm_setcsr((control & ~_MM_MASK_MASK) | _MM_MASK_INEXACT | _MM_MASK_UNDERFLOW | _MM_MASK_DENORM);
-
 #endif
 }
 
@@ -98,7 +105,7 @@ PX_FOUNDATION_API void physx::PxDisableFPExceptions()
 {
 #if PX_LINUX && !defined(__EMSCRIPTEN__)
 	fedisableexcept(FE_ALL_EXCEPT);
-#elif PX_OSX
+#elif PX_OSX && PX_X64
 	// clear any pending exceptions
 	// (setting exception state flags cause exceptions on the first following fp operation)
 	uint32_t control = _mm_getcsr() & ~_MM_EXCEPT_MASK;
