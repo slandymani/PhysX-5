@@ -32,9 +32,6 @@
 #include "foundation/PxThread.h"
 
 #include <math.h>
-#if !PX_APPLE_FAMILY && !defined(__CYGWIN__) && !PX_EMSCRIPTEN
-#include <bits/local_lim.h> // PTHREAD_STACK_MIN
-#endif
 #include <stdio.h>
 #include <pthread.h>
 #include <unistd.h>
@@ -244,9 +241,14 @@ __attribute__((noreturn))
 
 void PxThreadImpl::kill()
 {
+// TODO: Add workaround for lack of Android support. In a blog post. From 2009.
+// Seriously wtf.
+// http://igourd.blogspot.com/2009/05/work-around-on-pthreadcancel-for.html
+#if !defined(__ANDROID__)
 	if(getThread(this)->state == ePxThreadStarted)
 		pthread_cancel(getThread(this)->thread);
 	getThread(this)->state = ePxThreadStopped;
+#endif
 }
 
 void PxThreadImpl::sleep(uint32_t ms)

@@ -38,7 +38,7 @@
 namespace physx
 {
 
-#if PX_LINUX
+#if PX_LINUX && !defined(__ANDROID__)
 
 #include <sched.h>
 
@@ -91,7 +91,7 @@ PxMutexImpl::PxMutexImpl()
 	pthread_mutexattr_t attr;
 	pthread_mutexattr_init(&attr);
 	pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_RECURSIVE);
-#if PX_LINUX
+#if PX_LINUX && !defined(__ANDROID__)
 	pthread_mutexattr_setprotocol(&attr, gMutexProtocol);
 	pthread_mutexattr_setprioceiling(&attr, 0);
 #endif
