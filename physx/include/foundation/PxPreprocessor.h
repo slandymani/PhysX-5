@@ -366,13 +366,7 @@ Noalias macro
 /**
 Override macro
 */
-#if PX_WINDOWS_FAMILY
-	#define PX_OVERRIDE	override
-#else
-	// PT: we don't really need to support it on all platforms, as long as
-	// we compile the code on at least one platform that supports it.
-	#define PX_OVERRIDE
-#endif
+#define PX_OVERRIDE	override
 
 /**
 Alignment macros
