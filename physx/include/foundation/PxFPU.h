@@ -46,7 +46,7 @@ namespace physx
 {
 #endif
 // sets the default SDK state for scalar and SIMD units
-class PX_FOUNDATION_API PxFPUGuard
+class PX_FOUNDATION_API PX_DEPRECATED PxFPUGuard
 {
   public:
 	PxFPUGuard();  // set fpu control word for PhysX
@@ -56,7 +56,7 @@ class PX_FOUNDATION_API PxFPUGuard
 };
 
 // sets default SDK state for simd unit only, lighter weight than FPUGuard
-class PxSIMDGuard
+class PX_DEPRECATED PxSIMDGuard
 {
   public:
 	PX_INLINE PxSIMDGuard(bool enable = true);  // set simd control word for PhysX
