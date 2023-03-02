@@ -32,7 +32,7 @@
 PX_COMPILE_TIME_ASSERT(8 * sizeof(uint32_t) >= sizeof(fenv_t));
 #endif
 
-#if PX_OSX
+#if PX_OSX && !PX_A64
 // osx defines SIMD as standard for floating point operations.
 #include <xmmintrin.h>
 #endif
