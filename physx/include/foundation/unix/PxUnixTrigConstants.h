@@ -29,17 +29,10 @@
 #ifndef PXFOUNDATION_PXUNIXTRIGCONSTANTS_H
 #define PXFOUNDATION_PXUNIXTRIGCONSTANTS_H
 
-#include "foundation/PxPreprocessor.h"
-
 namespace physx
 {
 namespace aos
 {
-
-#if PX_CLANG
-	#pragma clang diagnostic push
-	#pragma clang diagnostic ignored "-Wmissing-variable-declarations"
-#endif
 
 #define PX_GLOBALCONST extern const __attribute__((weak))
 
@@ -62,9 +55,6 @@ g_PXCosCoefficients2 = { { 4.779477332e-14f, -1.561920697e-16f, 4.110317623e-19f
 PX_GLOBALCONST PX_VECTORF32 g_PXReciprocalTwoPi = { { PxInvTwoPi, PxInvTwoPi, PxInvTwoPi, PxInvTwoPi } };
 PX_GLOBALCONST PX_VECTORF32 g_PXTwoPi = { { PxTwoPi, PxTwoPi, PxTwoPi, PxTwoPi } };
 
-#if PX_CLANG
-	#pragma clang diagnostic pop
-#endif
 } // namespace aos
 } // namespace physx
 
