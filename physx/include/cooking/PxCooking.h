@@ -333,7 +333,7 @@ struct PxCookingParams
 potentially including the construction of acceleration structures and other support data) all kind of simulation data
 @deprecated
 */
-class PxCooking
+class PX_DEPRECATED PxCooking
 {
 public:
 	/**
@@ -371,41 +371,8 @@ public:
 	*/
 	virtual bool	platformMismatch() const = 0;
 
-	/**
-	\brief Cooks a triangle mesh. The results are written to the stream.
-
-	To create a triangle mesh object it is necessary to first 'cook' the mesh data into
-	a form which allows the SDK to perform efficient collision detection.
-
-	cookTriangleMesh() allows a mesh description to be cooked into a binary stream
-	suitable for loading and performing collision detection at runtime.
-
-	\param[in]	desc		The triangle mesh descriptor to read the mesh from.
-	\param[in]	stream		User stream to output the cooked data.
-	\param[out]	condition	Result from triangle mesh cooking.
-	\return true on success
-
-	@see cookConvexMesh() setParams() PxPhysics.createTriangleMesh() PxTriangleMeshCookingResult::Enum
-	*/
 	virtual	bool	cookTriangleMesh(const PxTriangleMeshDesc& desc, PxOutputStream& stream, PxTriangleMeshCookingResult::Enum* condition = NULL) const = 0;
 
-	/**
-	\brief Cooks and creates a triangle mesh without going through a stream.
-
-	\note This method does the same as cookTriangleMesh, but the produced mesh is not stored
-	into a stream but is either directly inserted in PxPhysics, or created as a standalone
-	object. Use this method if you are unable to cook offline.
-
-	\note PxInsertionCallback can be obtained through PxPhysics::getPhysicsInsertionCallback()
-	or PxCooking::getStandaloneInsertionCallback().
-
-	\param[in] desc					The triangle mesh descriptor to read the mesh from.
-	\param[in] insertionCallback	The insertion interface from PxPhysics.
-	\param[out] condition			Result from triangle mesh cooking.
-	\return PxTriangleMesh pointer on success.	
-
-	@see cookTriangleMesh() setParams() PxPhysics.createTriangleMesh() PxInsertionCallback
-	*/
 	virtual PxTriangleMesh*		createTriangleMesh(const PxTriangleMeshDesc& desc, PxInsertionCallback& insertionCallback, PxTriangleMeshCookingResult::Enum* condition = NULL) const = 0;
 
 	/**
@@ -425,19 +392,6 @@ public:
 		return createTriangleMesh(desc, const_cast<PxCooking&>(*this).getStandaloneInsertionCallback());
 	}
 
-	/**
-	\brief Verifies if the triangle mesh is valid. Prints an error message for each inconsistency found.
-
-	The following conditions are true for a valid triangle mesh:
-	1. There are no duplicate vertices (within specified vertexWeldTolerance. See PxCookingParams::meshWeldTolerance)
-    2. There are no large triangles (within specified PxTolerancesScale.)
-
-	\param[in] desc	The triangle mesh descriptor to read the mesh from.
-
-	\return true if all the validity conditions hold, false otherwise.
-
-	@see cookTriangleMesh()
-	*/
 	virtual bool  validateTriangleMesh(const PxTriangleMeshDesc& desc) const = 0;
 
 	/**
@@ -636,47 +590,8 @@ public:
 	virtual PxSoftBodyMesh*	assembleSoftBodyMesh(PxSimulationTetrahedronMeshData& simulationMesh, PxCollisionTetrahedronMeshData& collisionMesh, 
 		PxCollisionMeshMappingData& mappingData, PxInsertionCallback& insertionCallback) const = 0;
 	
-
-	/**
-	\brief Cooks a convex mesh. The results are written to the stream.
-
-	To create a triangle mesh object it is necessary to first 'cook' the mesh data into
-	a form which allows the SDK to perform efficient collision detection.
-
-	cookConvexMesh() allows a mesh description to be cooked into a binary stream
-	suitable for loading and performing collision detection at runtime.
-
-	\note The number of vertices and the number of convex polygons in a cooked convex mesh is limited to 255.
-	\note If those limits are exceeded in either the user-provided data or the final cooked mesh, an error is reported.
-
-	\param[in] desc			The convex mesh descriptor to read the mesh from.
-	\param[in] stream		User stream to output the cooked data.
-	\param[out] condition	Result from convex mesh cooking.
-	\return true on success.
-
-	@see cookTriangleMesh() setParams() PxConvexMeshCookingResult::Enum
-	*/
 	virtual bool  cookConvexMesh(const PxConvexMeshDesc& desc, PxOutputStream& stream, PxConvexMeshCookingResult::Enum* condition = NULL) const = 0;
-
-	/**
-	\brief Cooks and creates a convex mesh without going through a stream.
-
-	\note This method does the same as cookConvexMesh, but the produced mesh is not stored
-	into a stream but is either directly inserted in PxPhysics, or created as a standalone
-	object. Use this method if you are unable to cook offline.
-
-	\note PxInsertionCallback can be obtained through PxPhysics::getPhysicsInsertionCallback()
-	or PxCooking::getStandaloneInsertionCallback().
-
-	\param[in] desc					The convex mesh descriptor to read the mesh from.
-	\param[in] insertionCallback	The insertion interface from PxPhysics.
-	\param[out] condition			Result from convex mesh cooking.
-	\return PxConvexMesh pointer on success	
-
-	@see cookConvexMesh() setParams() PxInsertionCallback
-	*/
 	virtual PxConvexMesh*    createConvexMesh(const PxConvexMeshDesc& desc, PxInsertionCallback& insertionCallback, PxConvexMeshCookingResult::Enum* condition = NULL) const = 0;
-
 
 	/**
 	\brief Cooks and creates a convex mesh without going through a stream. Convenience function for standalone objects.
@@ -695,70 +610,14 @@ public:
 		return createConvexMesh(desc, const_cast<PxCooking&>(*this).getStandaloneInsertionCallback());
 	}
 
-	/**
-	\brief Verifies if the convex mesh is valid. Prints an error message for each inconsistency found.
-
-	The convex mesh descriptor must contain an already created convex mesh - the vertices, indices and polygons must be provided.	
-
-	\note This function should be used if PxConvexFlag::eDISABLE_MESH_VALIDATION is planned to be used in release builds.
-
-	\param[in] desc	The convex mesh descriptor to read the mesh from.
-
-	\return true if all the validity conditions hold, false otherwise.
-
-	@see cookConvexMesh()
-	*/
 	virtual bool  validateConvexMesh(const PxConvexMeshDesc& desc) const = 0;
 
-	/**
-	\brief Computed hull polygons from given vertices and triangles. Polygons are needed for PxConvexMeshDesc rather than triangles.
-
-	Please note that the resulting polygons may have different number of vertices. Some vertices may be removed. 
-	The output vertices, indices and polygons must be used to construct a hull.
-
-	The provided PxAllocatorCallback does allocate the out array's. It is the user responsibility to deallocated those
-	array's.
-
-	\param[in] mesh				Simple triangle mesh containing vertices and triangles used to compute polygons.
-	\param[in] inCallback		Memory allocator for out array allocations.
-	\param[out] nbVerts			Number of vertices used by polygons.
-	\param[out] vertices		Vertices array used by polygons.
-	\param[out] nbIndices		Number of indices used by polygons.
-	\param[out] indices			Indices array used by polygons.
-	\param[out] nbPolygons		Number of created polygons.
-	\param[out] hullPolygons	Polygons array.
-	\return true on success
-
-	@see cookConvexMesh() PxConvexFlags PxConvexMeshDesc PxSimpleTriangleMesh
-	*/
 	virtual bool  computeHullPolygons(const PxSimpleTriangleMesh& mesh, PxAllocatorCallback& inCallback, PxU32& nbVerts, PxVec3*& vertices,
 											PxU32& nbIndices, PxU32*& indices, PxU32& nbPolygons, PxHullPolygon*& hullPolygons) const = 0;
 
-	/**
-	\brief Cooks a heightfield. The results are written to the stream.
-
-	To create a heightfield object there is an option to precompute some of calculations done while loading the heightfield data.
-
-	cookHeightField() allows a heightfield description to be cooked into a binary stream
-	suitable for loading and performing collision detection at runtime.
-
-	\param[in] desc		The heightfield descriptor to read the HF from.
-	\param[in] stream	User stream to output the cooked data.
-	\return true on success
-
-	@see PxPhysics.createHeightField()
-	*/
+	
 	virtual bool  cookHeightField(const PxHeightFieldDesc& desc, PxOutputStream& stream) const = 0;
 
-	/**
-	\brief Cooks and creates a heightfield mesh and inserts it into PxPhysics.
-
-	\param[in] desc					The heightfield descriptor to read the HF from.
-	\param[in] insertionCallback	The insertion interface from PxPhysics.
-	\return PxHeightField pointer on success
-
-	@see cookConvexMesh() setParams() PxPhysics.createTriangleMesh() PxInsertionCallback
-	*/
 	virtual PxHeightField*    createHeightField(const PxHeightFieldDesc& desc, PxInsertionCallback& insertionCallback) const = 0;
 
 
@@ -775,18 +634,6 @@ public:
 		return createHeightField(desc, const_cast<PxCooking&>(*this).getStandaloneInsertionCallback());
 	}
 
-	/**
-	\brief Cooks a bounding volume hierarchy. The results are written to the stream.
-
-	cookBVH() allows a BVH description to be cooked into a binary stream
-	suitable for loading and performing BVH detection at runtime.
-
-	\param[in] desc		The BVH descriptor.
-	\param[in] stream	User stream to output the cooked data.
-	\return true on success.
-
-	@see PxBVH PxRigidActorExt::getRigidActorShapeLocalBoundsList
-	*/
 	virtual bool  cookBVH(const PxBVHDesc& desc, PxOutputStream& stream) const = 0;
 
 
@@ -803,37 +650,8 @@ public:
 		return cookBVH(desc, stream);
 	}
 
-	/**
-	\brief Cooks and creates a bounding volume hierarchy without going through a stream.
-
-	\note This method does the same as cookBVH, but the produced BVH is not stored
-	into a stream but is either directly inserted in PxPhysics, or created as a standalone
-	object. Use this method if you are unable to cook offline.
-
-	\note PxInsertionCallback can be obtained through PxPhysics::getPhysicsInsertionCallback()
-	or PxCooking::getStandaloneInsertionCallback().
-
-	\param[in] desc					The BVH descriptor.
-	\param[in] insertionCallback	The insertion interface.
-	\return PxBVH pointer on success
-
-	@see cookBVH() PxInsertionCallback
-	*/
 	virtual PxBVH*		createBVH(const PxBVHDesc& desc, PxInsertionCallback& insertionCallback) const = 0;
 
-
-	/**
-	\brief Cooks and creates a bounding volume hierarchy without going through a stream. Convenience function for standalone objects.
-
-	\note This method does the same as cookBVH, but the produced BVH is not stored
-	into a stream but is either directly inserted in PxPhysics, or created as a standalone
-	object. Use this method if you are unable to cook offline.
-
-	\param[in] desc					The BVH descriptor.
-	\return PxBVH pointer on success
-
-	@see cookBVH() PxInsertionCallback
-	*/
 	PX_FORCE_INLINE	PxBVH*	createBVH(const PxBVHDesc& desc) const
 	{
 		return createBVH(desc, const_cast<PxCooking&>(*this).getStandaloneInsertionCallback());
@@ -869,69 +687,204 @@ protected:
 } // namespace physx
 #endif
 
-/**
-\brief Create an instance of the cooking interface.
-
-Note that the foundation object is handled as an application-wide singleton in statically linked executables
-and a DLL-wide singleton in dynamically linked executables. Therefore, if you are using the runtime SDK in the
-same executable as cooking, you should pass the Physics's copy of foundation (acquired with
-PxPhysics::getFoundation()) to the cooker. This will also ensure correct handling of memory for objects
-passed from the cooker to the SDK.
-
-To use cooking in standalone mode, create an instance of the Foundation object with PxCreateFoundation.
-You should pass the same foundation object to all instances of the cooking interface.
-
-\param[in] version		The SDK version number
-\param[in] foundation	The foundation object associated with this instance of the cooking interface.
-\param[in] params		The parameters for this instance of the cooking interface
-\return true on success.
-@deprecated
-*/
-PX_C_EXPORT PX_PHYSX_COOKING_API physx::PxCooking* PX_CALL_CONV PxCreateCooking(physx::PxU32 version,
+PX_DEPRECATED PX_C_EXPORT PX_PHYSX_COOKING_API physx::PxCooking* PX_CALL_CONV PxCreateCooking(physx::PxU32 version,
 																				physx::PxFoundation& foundation,
 																				const physx::PxCookingParams& params);
-
-
-
 
 // Immediate cooking
 
 PX_C_EXPORT PX_PHYSX_COOKING_API	physx::PxInsertionCallback* PxGetStandaloneInsertionCallback();
 
 // BVH
+
+/**
+\brief Cooks a bounding volume hierarchy. The results are written to the stream.
+
+PxCookBVH() allows a BVH description to be cooked into a binary stream
+suitable for loading and performing BVH detection at runtime.
+
+\param[in] desc		The BVH descriptor.
+\param[in] stream	User stream to output the cooked data.
+\return true on success.
+
+@see PxBVH PxRigidActorExt::getRigidActorShapeLocalBoundsList
+*/
 PX_C_EXPORT PX_PHYSX_COOKING_API	bool PxCookBVH(const physx::PxBVHDesc& desc, physx::PxOutputStream& stream);
+/**
+\brief Cooks and creates a bounding volume hierarchy without going through a stream.
+
+\note This method does the same as cookBVH, but the produced BVH is not stored
+into a stream but is either directly inserted in PxPhysics, or created as a standalone
+object. Use this method if you are unable to cook offline.
+
+\note PxInsertionCallback can be obtained through PxPhysics::getPhysicsInsertionCallback()
+or PxCooking::getStandaloneInsertionCallback().
+
+\param[in] desc					The BVH descriptor.
+\param[in] insertionCallback	The insertion interface.
+\return PxBVH pointer on success
+
+@see PxCookBVH() PxInsertionCallback
+*/
 PX_C_EXPORT PX_PHYSX_COOKING_API	physx::PxBVH* PxCreateBVH(const physx::PxBVHDesc& desc, physx::PxInsertionCallback& insertionCallback);
 
-PX_FORCE_INLINE	physx::PxBVH* PxCreateBVH(const physx::PxBVHDesc& desc)
-{
-	return PxCreateBVH(desc, *PxGetStandaloneInsertionCallback());
-}
-
 // Heightfield
+
+/**
+\brief Cooks a heightfield. The results are written to the stream.
+
+To create a heightfield object there is an option to precompute some of calculations done while loading the heightfield data.
+
+cookHeightField() allows a heightfield description to be cooked into a binary stream
+suitable for loading and performing collision detection at runtime.
+
+\param[in] desc		The heightfield descriptor to read the HF from.
+\param[in] stream	User stream to output the cooked data.
+\return true on success
+
+@see PxPhysics.createHeightField()
+*/
 PX_C_EXPORT PX_PHYSX_COOKING_API	bool PxCookHeightField(const physx::PxHeightFieldDesc& desc, physx::PxOutputStream& stream);
+/**
+\brief Cooks and creates a heightfield mesh and inserts it into PxPhysics.
+
+\param[in] desc					The heightfield descriptor to read the HF from.
+\param[in] insertionCallback	The insertion interface from PxPhysics.
+\return PxHeightField pointer on success
+
+@see PxCookConvexMesh() PxPhysics.createTriangleMesh() PxInsertionCallback
+*/
 PX_C_EXPORT PX_PHYSX_COOKING_API	physx::PxHeightField* PxCreateHeightField(const physx::PxHeightFieldDesc& desc, physx::PxInsertionCallback& insertionCallback);
 
-PX_FORCE_INLINE	physx::PxHeightField* PxCreateHeightField(const physx::PxHeightFieldDesc& desc)
-{
-	return PxCreateHeightField(desc, *PxGetStandaloneInsertionCallback());
-}
-
 // Convex meshes
+
+/**
+\brief Cooks a convex mesh. The results are written to the stream.
+
+To create a triangle mesh object it is necessary to first 'cook' the mesh data into
+a form which allows the SDK to perform efficient collision detection.
+
+cookConvexMesh() allows a mesh description to be cooked into a binary stream
+suitable for loading and performing collision detection at runtime.
+
+\note The number of vertices and the number of convex polygons in a cooked convex mesh is limited to 255.
+\note If those limits are exceeded in either the user-provided data or the final cooked mesh, an error is reported.
+
+\param[in] desc			The convex mesh descriptor to read the mesh from.
+\param[in] stream		User stream to output the cooked data.
+\param[out] condition	Result from convex mesh cooking.
+\return true on success.
+
+@see PxCookTriangleMesh() PxConvexMeshCookingResult::Enum
+*/
 PX_C_EXPORT PX_PHYSX_COOKING_API	bool PxCookConvexMesh(const physx::PxCookingParams& params, const physx::PxConvexMeshDesc& desc, physx::PxOutputStream& stream, physx::PxConvexMeshCookingResult::Enum* condition=NULL);
+/**
+\brief Cooks and creates a convex mesh without going through a stream.
+
+\note This method does the same as cookConvexMesh, but the produced mesh is not stored
+into a stream but is either directly inserted in PxPhysics, or created as a standalone
+object. Use this method if you are unable to cook offline.
+
+\note PxInsertionCallback can be obtained through PxPhysics::getPhysicsInsertionCallback()
+or PxCooking::getStandaloneInsertionCallback().
+
+\param[in] desc					The convex mesh descriptor to read the mesh from.
+\param[in] insertionCallback	The insertion interface from PxPhysics.
+\param[out] condition			Result from convex mesh cooking.
+\return PxConvexMesh pointer on success	
+
+@see PxCookConvexMesh() PxInsertionCallback
+*/
 PX_C_EXPORT PX_PHYSX_COOKING_API	physx::PxConvexMesh* PxCreateConvexMesh(const physx::PxCookingParams& params, const physx::PxConvexMeshDesc& desc, physx::PxInsertionCallback& insertionCallback, physx::PxConvexMeshCookingResult::Enum* condition=NULL);
 
-PX_FORCE_INLINE	physx::PxConvexMesh* PxCreateConvexMesh(const physx::PxCookingParams& params, const physx::PxConvexMeshDesc& desc)
-{
-	return PxCreateConvexMesh(params, desc, *PxGetStandaloneInsertionCallback());
-}
+/**
+\brief Verifies if the convex mesh is valid. Prints an error message for each inconsistency found.
 
+The convex mesh descriptor must contain an already created convex mesh - the vertices, indices and polygons must be provided.	
+
+\note This function should be used if PxConvexFlag::eDISABLE_MESH_VALIDATION is planned to be used in release builds.
+
+\param[in] desc	The convex mesh descriptor to read the mesh from.
+
+\return true if all the validity conditions hold, false otherwise.
+
+@see cookConvexMesh()
+*/
 PX_C_EXPORT PX_PHYSX_COOKING_API	bool PxValidateConvexMesh(const physx::PxCookingParams& params, const physx::PxConvexMeshDesc& desc);
+/**
+\brief Computed hull polygons from given vertices and triangles. Polygons are needed for PxConvexMeshDesc rather than triangles.
+
+Please note that the resulting polygons may have different number of vertices. Some vertices may be removed. 
+The output vertices, indices and polygons must be used to construct a hull.
+
+The provided PxAllocatorCallback does allocate the out array's. It is the user responsibility to deallocated those
+array's.
+
+\param[in] mesh				Simple triangle mesh containing vertices and triangles used to compute polygons.
+\param[in] inCallback		Memory allocator for out array allocations.
+\param[out] nbVerts			Number of vertices used by polygons.
+\param[out] vertices		Vertices array used by polygons.
+\param[out] nbIndices		Number of indices used by polygons.
+\param[out] indices			Indices array used by polygons.
+\param[out] nbPolygons		Number of created polygons.
+\param[out] hullPolygons	Polygons array.
+\return true on success
+
+@see PxCookConvexMesh() PxConvexFlags PxConvexMeshDesc PxSimpleTriangleMesh
+*/
 PX_C_EXPORT PX_PHYSX_COOKING_API	bool PxComputeHullPolygons(const physx::PxCookingParams& params, const physx::PxSimpleTriangleMesh& mesh, physx::PxAllocatorCallback& inCallback, physx::PxU32& nbVerts, physx::PxVec3*& vertices,
 														physx::PxU32& nbIndices, physx::PxU32*& indices, physx::PxU32& nbPolygons, physx::PxHullPolygon*& hullPolygons);
 
 // Triangle meshes
+
+/**
+\brief Verifies if the triangle mesh is valid. Prints an error message for each inconsistency found.
+
+The following conditions are true for a valid triangle mesh:
+1. There are no duplicate vertices (within specified vertexWeldTolerance. See PxCookingParams::meshWeldTolerance)
+2. There are no large triangles (within specified PxTolerancesScale.)
+
+\param[in] desc	The triangle mesh descriptor to read the mesh from.
+
+\return true if all the validity conditions hold, false otherwise.
+
+@see PxCookTriangleMesh()
+*/
 PX_C_EXPORT PX_PHYSX_COOKING_API	bool PxValidateTriangleMesh(const physx::PxCookingParams& params, const physx::PxTriangleMeshDesc& desc);
+/**
+\brief Cooks and creates a triangle mesh without going through a stream.
+
+\note This method does the same as cookTriangleMesh, but the produced mesh is not stored
+into a stream but is either directly inserted in PxPhysics, or created as a standalone
+object. Use this method if you are unable to cook offline.
+
+\note PxInsertionCallback can be obtained through PxPhysics::getPhysicsInsertionCallback()
+or PxCooking::getStandaloneInsertionCallback().
+
+\param[in] desc					The triangle mesh descriptor to read the mesh from.
+\param[in] insertionCallback	The insertion interface from PxPhysics.
+\param[out] condition			Result from triangle mesh cooking.
+\return PxTriangleMesh pointer on success.	
+
+@see PxCookTriangleMesh() PxPhysics.createTriangleMesh() PxInsertionCallback
+*/
 PX_C_EXPORT PX_PHYSX_COOKING_API	physx::PxTriangleMesh* PxCreateTriangleMesh(const physx::PxCookingParams& params, const physx::PxTriangleMeshDesc& desc, physx::PxInsertionCallback& insertionCallback, physx::PxTriangleMeshCookingResult::Enum* condition=NULL);
+/**
+\brief Cooks a triangle mesh. The results are written to the stream.
+
+To create a triangle mesh object it is necessary to first 'cook' the mesh data into
+a form which allows the SDK to perform efficient collision detection.
+
+PxCookTriangleMesh() allows a mesh description to be cooked into a binary stream
+suitable for loading and performing collision detection at runtime.
+
+\param[in]	desc		The triangle mesh descriptor to read the mesh from.
+\param[in]	stream		User stream to output the cooked data.
+\param[out]	condition	Result from triangle mesh cooking.
+\return true on success
+
+@see PxCookConvexMesh() PxPhysics.createTriangleMesh() PxTriangleMeshCookingResult::Enum
+*/
 PX_C_EXPORT PX_PHYSX_COOKING_API	bool PxCookTriangleMesh(const physx::PxCookingParams& params, const physx::PxTriangleMeshDesc& desc, physx::PxOutputStream& stream, physx::PxTriangleMeshCookingResult::Enum* condition=NULL);
 
 PX_FORCE_INLINE	physx::PxTriangleMesh*	PxCreateTriangleMesh(const physx::PxCookingParams& params, const physx::PxTriangleMeshDesc& desc)
