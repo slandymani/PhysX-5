@@ -26,15 +26,20 @@
 // Copyright (c) 2004-2008 AGEIA Technologies, Inc. All rights reserved.
 // Copyright (c) 2001-2004 NovodeX AG. All rights reserved.
 
-#ifndef PXFOUNDATION_PXUNIXTRIGCONSTANTS_H
-#define PXFOUNDATION_PXUNIXTRIGCONSTANTS_H
+#pragma once
+
+#include "foundation/PxPreprocessor.h"
 
 namespace physx
 {
 namespace aos
 {
 
-#define PX_GLOBALCONST extern const __attribute__((weak))
+#if PX_CLANG && PX_WINDOWS
+	#define PX_GLOBALCONST extern const __declspec(selectany)
+#else
+	#define PX_GLOBALCONST extern const __attribute__((weak))
+#endif
 
 PX_ALIGN_PREFIX(16)
 struct PX_VECTORF32
@@ -57,5 +62,3 @@ PX_GLOBALCONST PX_VECTORF32 g_PXTwoPi = { { PxTwoPi, PxTwoPi, PxTwoPi, PxTwoPi }
 
 } // namespace aos
 } // namespace physx
-
-#endif //PXFOUNDATION_PXUNIXTRIGCONSTANTS_H
