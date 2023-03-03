@@ -32,3 +32,15 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 This is Embark's fork of PhysX, which is used as the source for the C++ code backing our [Rust wrapper](https://github.com/EmbarkStudios/physx-rs).
 
 This is a hard fork as the upstream rarely/never accepts PRs, thus we can get rid of all of the junk in the repo that we don't use in our bindings. You probably want to use the official repo if you aren't using our wrapper.
+
+## Differences from upstream
+
+### Fixes
+
+* [x] Compiling for `aarch64-apple-darwin` [actually works](https://github.com/NVIDIA-Omniverse/PhysX/issues/107). This only worked by [accident](https://github.com/EmbarkStudios/PhysX/blob/1689fbd312f447ac933c3c8023516f1fa57a5563/pxshared/include/foundation/PxPreprocessor.h#L110-L113) in PhysX 4.1
+* [x] Compiling for `aarch64-linux-android` actually works
+* [x] Cross compiling for `x86_64-pc-windows-msvc` with clang actually works
+
+### Deprecations
+
+We abuse the `PX_DEPRECATED` macro to control which items are exposed in our Rust bindings. So various new items like Particles/Cloth/Soft Bodies which are Cuda-only and therefore completely uninteresting to us are marked as deprecated to avoid them.
