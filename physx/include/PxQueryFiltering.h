@@ -192,21 +192,6 @@ public:
 
 	\param[in] filterData	custom filter data of the query
 	\param[in] hit			Scene query hit information. faceIndex member is not valid for overlap queries. For sweep and raycast queries the hit information can be cast to #PxSweepHit and #PxRaycastHit respectively.
-	\return the updated hit type for this hit  (see #PxQueryHitType)
-	@deprecated
-	*/
-	PX_DEPRECATED virtual PxQueryHitType::Enum postFilter(const PxFilterData& filterData, const PxQueryHit& hit)
-	{
-		PX_UNUSED(filterData);
-		PX_UNUSED(hit);
-		return PxQueryHitType::eBLOCK;
-	}
-
-	/**
-	\brief This filter callback is executed if the exact intersection test returned true and PxQueryFlag::ePOSTFILTER flag was set.
-
-	\param[in] filterData	custom filter data of the query
-	\param[in] hit			Scene query hit information. faceIndex member is not valid for overlap queries. For sweep and raycast queries the hit information can be cast to #PxSweepHit and #PxRaycastHit respectively.
 	\param[in] shape		Hit shape
 	\param[in] actor		Hit actor
 	\return the updated hit type for this hit  (see #PxQueryHitType)

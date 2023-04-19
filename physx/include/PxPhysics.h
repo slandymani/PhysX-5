@@ -134,30 +134,6 @@ public:
 	virtual	PxAggregate* createAggregate(PxU32 maxActor, PxU32 maxShape, PxAggregateFilterHint filterHint) = 0;
 
 	/**
-	\brief Creates an aggregate with the specified maximum size and filtering hint.
-
-	The previous API used "bool enableSelfCollision" which should now silently evaluates
-	to a PxAggregateType::eGENERIC aggregate with its self-collision bit.
-
-	Use PxAggregateType::eSTATIC or PxAggregateType::eKINEMATIC for aggregates that will
-	only contain static or kinematic actors. This provides faster filtering when used in
-	combination with PxPairFilteringMode.
-
-	\note This variation of the method is not compatible with GPU rigid bodies.
-
-	\param	[in] maxActor		The maximum number of actors that may be placed in the aggregate.
-	\param	[in] filterHint		The aggregate's filtering hint.
-	\return The new aggregate.
-
-	@see PxAggregate PxAggregateFilterHint PxAggregateType PxPairFilteringMode
-	@deprecated
-	*/
-	PX_FORCE_INLINE PX_DEPRECATED PxAggregate* createAggregate(PxU32 maxActor, PxAggregateFilterHint filterHint)
-	{
-		return createAggregate(maxActor, PX_MAX_U32, filterHint);
-	}
-
-	/**
 	\brief Returns the simulation tolerance parameters.
 	\return The current simulation tolerance parameters.
 	*/
@@ -290,31 +266,6 @@ public:
 	virtual PxBVH* createBVH(PxInputStream& stream) = 0;
 
 	/**
-	 * @deprecated
-	 */
-	PX_DEPRECATED PX_FORCE_INLINE PxBVH*	createBVHStructure(PxInputStream& stream)
-											{
-												return createBVH(stream);
-											}
-
-	/**
-	\brief Return the number of bounding volume hierarchies that currently exist.
-
-	\return Number of bounding volume hierarchies.
-
-	@see PxBVH getBVHs()
-	*/
-	virtual PxU32 getNbBVHs() const = 0;
-
-	/**
-	 * @deprecated
-	 */
-	PX_DEPRECATED PX_FORCE_INLINE PxU32		getNbBVHStructures() const
-											{
-												return getNbBVHs();
-											}
-
-	/**
 	\brief Writes the array of bounding volume hierarchy pointers to a user buffer.
 
 	Returns the number of pointers written.
@@ -329,14 +280,6 @@ public:
 	@see getNbBVHs() PxBVH
 	*/
 	virtual	PxU32 getBVHs(PxBVH** userBuffer, PxU32 bufferSize, PxU32 startIndex = 0) const = 0;
-
-	/**
-	 * @deprecated
-	 */
-	PX_DEPRECATED PX_FORCE_INLINE PxU32	getBVHStructures(PxBVHStructure** userBuffer, PxU32 bufferSize, PxU32 startIndex = 0) const
-										{
-											return getBVHs(userBuffer, bufferSize, startIndex);
-										}
 
 	//@}
 	/** @name Scenes
@@ -645,8 +588,8 @@ public:
 
 	The insertion interface is needed for PxCreateTriangleMesh, PxCooking::createTriangleMesh etc., this allows runtime mesh creation.
 
-	@see PxCreateTriangleMesh PxCreateHeightField PxCreateTetrahedronMesh PxCreateBVH
-	     PxCooking::createTriangleMesh PxCooking::createHeightfield PxCooking::createTetrahedronMesh PxCooking::createBVH
+	@see PxCreateTriangleMesh PxCreateHeightField PxCreateBVH
+	     PxCooking::createTriangleMesh PxCooking::createHeightfield PxCooking::createBVH
 	*/
 	virtual PxInsertionCallback& getPhysicsInsertionCallback() = 0;
 
