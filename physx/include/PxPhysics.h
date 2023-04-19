@@ -61,15 +61,6 @@ class PxFoundation;
 
 class PxPruningStructure;
 class PxBVH;
-/**
- * @deprecated
- */
-typedef PX_DEPRECATED PxBVH PxBVHStructure;
-
-class PxParticleClothBuffer;
-class PxParticleRigidBuffer;
-
-class PxSoftBodyMesh;
 
 /**
 \brief Abstract singleton factory class used for instancing objects in the Physics SDK.
@@ -213,59 +204,6 @@ public:
 	@see getNbTriangleMeshes() PxTriangleMesh
 	*/
 	virtual	PxU32 getTriangleMeshes(PxTriangleMesh** userBuffer, PxU32 bufferSize, PxU32 startIndex = 0) const = 0;
-
-
-	//@}
-	/** @name Tetrahedron Meshes
-	*/
-	//@{
-
-	/**
-	\brief Creates a tetrahedron mesh object.
-
-	This can then be instanced into #PxShape objects.
-
-	\param[in] stream The tetrahedron mesh stream.
-	\return The new tetrahedron mesh.
-
-	@see PxTetrahedronMesh PxMeshPreprocessingFlag PxTetrahedronMesh.release() PxInputStream PxTriangleMeshFlag
-	*/
-	virtual PxTetrahedronMesh* createTetrahedronMesh(PxInputStream& stream) = 0;
-
-	/**
-	\brief Creates a softbody mesh object.
-
-	\param[in] stream The softbody mesh stream.
-	\return The new softbody mesh.
-
-	@see createTetrahedronMesh
-	*/
-	virtual PxSoftBodyMesh* createSoftBodyMesh(PxInputStream& stream) = 0;
-
-	/**
-	\brief Return the number of tetrahedron meshes that currently exist.
-
-	\return Number of tetrahedron meshes.
-
-	@see getTetrahedronMeshes()
-	*/
-	virtual PxU32 getNbTetrahedronMeshes() const = 0;
-
-	/**
-	\brief Writes the array of tetrahedron mesh pointers to a user buffer.
-
-	Returns the number of pointers written.
-
-	The ordering of the tetrahedron meshes in the array is not specified.
-
-	\param[out] userBuffer The buffer to receive tetrahedron mesh pointers.
-	\param[in] bufferSize The number of tetrahedron mesh pointers which can be stored in the buffer.
-	\param[in] startIndex Index of first mesh pointer to be retrieved.
-	\return The number of tetrahedron mesh pointers written to userBuffer, this should be less or equal to bufferSize.
-
-	@see getNbTetrahedronMeshes() PxTetrahedronMesh
-	*/
-	virtual	PxU32 getTetrahedronMeshes(PxTetrahedronMesh** userBuffer, PxU32 bufferSize, PxU32 startIndex = 0) const = 0;
 
 	/**
 	\brief Creates a heightfield object from previously cooked stream.

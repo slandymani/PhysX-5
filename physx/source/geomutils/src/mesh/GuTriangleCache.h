@@ -199,39 +199,6 @@ namespace physx
 				mEdgeFlags[triInd] = edgeFlag;
 			}
 		};
-
-		template <PxU32 MaxTetrahedrons>
-		struct TetrahedronCache
-		{
-			PxVec3 mVertices[4 * MaxTetrahedrons];
-			PxU32 mTetVertIndices[4 * MaxTetrahedrons];
-			PxU32 mTetrahedronIndices[MaxTetrahedrons];
-			PxU32 mNumTetrahedrons;
-
-			TetrahedronCache() : mNumTetrahedrons(0)
-			{
-			}
-
-			PX_FORCE_INLINE bool isEmpty() const { return mNumTetrahedrons == 0; }
-			PX_FORCE_INLINE bool isFull() const { return mNumTetrahedrons == MaxTetrahedrons; }
-			PX_FORCE_INLINE void reset() { mNumTetrahedrons = 0; }
-
-			void addTetrahedrons(const PxVec3* verts, const PxU32* indices, PxU32 tetIndex)
-			{
-				PX_ASSERT(mNumTetrahedrons < MaxTetrahedrons);
-				PxU32 tetInd = mNumTetrahedrons++;
-				PxU32 tetIndMul4 = tetInd * 4;
-				mVertices[tetIndMul4] = verts[0];
-				mVertices[tetIndMul4 + 1] = verts[1];
-				mVertices[tetIndMul4 + 2] = verts[2];
-				mVertices[tetIndMul4 + 3] = verts[3];
-				mTetVertIndices[tetIndMul4] = indices[0];
-				mTetVertIndices[tetIndMul4 + 1] = indices[1];
-				mTetVertIndices[tetIndMul4 + 2] = indices[2];
-				mTetVertIndices[tetIndMul4 + 3] = indices[3];
-				mTetrahedronIndices[tetInd] = tetIndex;
-			}
-		};
 	}
 }
 

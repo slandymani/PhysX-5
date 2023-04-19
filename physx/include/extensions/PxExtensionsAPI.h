@@ -63,7 +63,6 @@
 #include "extensions/PxCustomSceneQuerySystem.h"
 #include "extensions/PxConvexMeshExt.h"
 #include "extensions/PxSamplingExt.h"
-#include "extensions/PxTetrahedronMeshExt.h"
 
 /** \brief Initialize the PhysXExtensions library. 
 

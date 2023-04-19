@@ -757,7 +757,6 @@ namespace physx { namespace Sn {
 				case PxGeometryType::eCONVEXMESH: writeGeomProperty<PxConvexMeshGeometry>( inProp, "PxConvexMeshGeometry" ); break;
 				case PxGeometryType::eTRIANGLEMESH: writeGeomProperty<PxTriangleMeshGeometry>( inProp, "PxTriangleMeshGeometry" ); break;
 				case PxGeometryType::eHEIGHTFIELD: writeGeomProperty<PxHeightFieldGeometry>( inProp, "PxHeightFieldGeometry" ); break;
-				case PxGeometryType::eTETRAHEDRONMESH: writeGeomProperty<PxTetrahedronMeshGeometry>( inProp, "PxTetrahedronMeshGeometry" ); break;
 				default:
 					PX_ASSERT( false );
 			}

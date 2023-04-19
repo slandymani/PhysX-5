@@ -209,51 +209,6 @@ protected:
 	PCMHeightfieldContactGenerationCallback& operator=(const PCMHeightfieldContactGenerationCallback&);
 };
 
-template <typename Derived>
-struct PCMTetMeshContactGenerationCallback : TetMeshHitCallback<PxGeomRaycastHit>
-{
-public:
-		
-	static const PxU32 CacheSize = 16;
-	Gu::TetrahedronCache<CacheSize>			mCache;
-
-	PCMTetMeshContactGenerationCallback(): TetMeshHitCallback<PxGeomRaycastHit>(CallbackMode::eMULTIPLE)
-	{
-	}
-
-	void flushCache()
-	{
-		if (!mCache.isEmpty())
-		{
-			(static_cast<Derived*>(this))->template processTetrahedronCache< CacheSize >(mCache);
-			mCache.reset();
-		}
-	}
-
-	virtual PxAgain processHit(
-		const PxGeomRaycastHit& hit, const PxVec3& v0, const PxVec3& v1, const PxVec3& v2, const PxVec3& v3, PxReal&, const PxU32* vinds)
-	{
-		if (!(static_cast<Derived*>(this))->doTest(v0, v1, v2, v3))
-			return true;
-
-		PxVec3 v[4] = { v0, v1, v2, v3 };
-
-		const PxU32 tetIndex = hit.faceIndex;
-		
-		if (mCache.isFull())
-		{
-			(static_cast<Derived*>(this))->template processTetrahedronCache< CacheSize >(mCache);
-			mCache.reset();
-		}
-		mCache.addTetrahedrons(v, vinds, tetIndex);
-
-		return true;
-	}
-
-protected:
-	PCMTetMeshContactGenerationCallback& operator=(const PCMTetMeshContactGenerationCallback&);
-};
-
 }//Gu
 }//physx
 

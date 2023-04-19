@@ -49,7 +49,6 @@ namespace Gu
 			eBOX,
 			eCAPSULE,
 			eTRIANGLE,
-			eTETRAHEDRON,
 			eCUSTOM
 		};
 	};

@@ -748,14 +748,6 @@ void physx::Gu::intersectOBB_BV4(const TriangleMesh* mesh, const Box& obb, MeshH
 	BV4_OverlapBoxCB(obb, static_cast<const BV4TriangleMesh*>(mesh)->getBV4Tree(), gVolumeCallback, &callback);
 }
 
-void physx::Gu::intersectOBB_BV4(const TetrahedronMesh* mesh, const Box& obb, TetMeshHitCallback<PxGeomRaycastHit>& callback)
-{
-	BV4_OverlapBoxCB(obb, static_cast<const BVTetrahedronMesh*>(mesh)->getBV4Tree(), gTetVolumeCallback, &callback);
-}
-
-
-
-
 #include "GuVecCapsule.h"
 #include "GuSweepMTD.h"
 

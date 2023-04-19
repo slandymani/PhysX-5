@@ -384,7 +384,6 @@ public:
 	static void drawPoint(PxRenderOutput& out, const aos::Vec3VArg p, const PxF32 size, const PxU32 color = 0x0000ff00);
 	static void drawLine(PxRenderOutput& out, const aos::Vec3VArg p0, const aos::Vec3VArg p1, const PxU32 color = 0xff00ffff);  
 	static void drawTriangle(PxRenderOutput& out, const aos::Vec3VArg p0, const aos::Vec3VArg p1, const aos::Vec3VArg p2, const PxU32 color = 0xffff0000);
-	static void drawTetrahedron(PxRenderOutput& out, const aos::Vec3VArg p0, const aos::Vec3VArg p1, const aos::Vec3VArg p2, const aos::Vec3VArg p3, const PxU32 color = 0xffff0000);
 	static void drawPolygon( PxRenderOutput& out, const aos::PxTransformV& transform,  aos::Vec3V* points, const PxU32 numVerts, const PxU32 color = 0xff00ffff);
 	static void drawPolygon( PxRenderOutput& out, const aos::PxMatTransformV& transform,  aos::Vec3V* points, const PxU32 numVerts, const PxU32 color = 0xff00ffff);
 

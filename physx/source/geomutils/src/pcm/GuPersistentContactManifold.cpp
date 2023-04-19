@@ -499,34 +499,6 @@ void Gu::PersistentContactManifold::drawTriangle(PxRenderOutput& out, const aos:
 #endif
 }
 
-void Gu::PersistentContactManifold::drawTetrahedron(PxRenderOutput& out, const aos::Vec3VArg p0, const aos::Vec3VArg p1, const aos::Vec3VArg p2,
-	const aos::Vec3VArg p3, const PxU32 color)
-{
-	using namespace aos;
-#if VISUALIZE_PERSISTENT_CONTACT
-	PxVec3 a, b, c, d;
-	V3StoreU(p0, a);
-	V3StoreU(p1, b);
-	V3StoreU(p2, c);
-	V3StoreU(p3, d);
-
-	PxMat44 m = PxMat44(PxIdentity);
-	out << color << m << PxRenderOutput::LINES << a << b;
-	out << color << m << PxRenderOutput::LINES << a << c;
-	out << color << m << PxRenderOutput::LINES << a << d;
-	out << color << m << PxRenderOutput::LINES << b << c;
-	out << color << m << PxRenderOutput::LINES << b << d;
-	out << color << m << PxRenderOutput::LINES << c << d;
-	
-#else
-	PX_UNUSED(out);
-	PX_UNUSED(p0);
-	PX_UNUSED(p1);
-	PX_UNUSED(p2);
-	PX_UNUSED(color);
-#endif
-}
-
 void Gu::PersistentContactManifold::drawPolygon( PxRenderOutput& out, const aos::PxTransformV& transform,  aos::Vec3V* points, const PxU32 numVerts, const PxU32 color)
 {
 	using namespace aos;

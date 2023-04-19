@@ -213,29 +213,6 @@ static void buildBV32(const BV4_AABBTree& source, BV32Node* tmp, const AABBTreeN
 
 }
 
-//
-//static void validateTree(const AABBTree& Source, const AABBTreeNode* currentNode)
-//{
-//	if (currentNode->isLeaf())
-//	{
-//		const PxU32* indexBase = Source.getIndices();
-//		const PxU32* prims = currentNode->getPrimitives();
-//		const PxU32 offset = PxU32(prims - indexBase);
-//		const PxU32 nbPrims = currentNode->getNbPrimitives();
-//		for (PxU32 j = 0; j<nbPrims; j++)
-//		{
-//			PX_ASSERT(prims[j] == offset + j);
-//		}
-//	}
-//	else
-//	{
-//		const AABBTreeNode* pos = currentNode->getPos();
-//		validateTree(Source, pos);
-//		const AABBTreeNode* neg = currentNode->getNeg();
-//		validateTree(Source, neg);
-//	}
-//}
-
 #if BV32_VALIDATE
 static void validateNodeBound(const BV32Node* currentNode, SourceMeshBase* mesh, float epsilon)
 {
@@ -265,27 +242,6 @@ static void validateNodeBound(const BV32Node* currentNode, SourceMeshBase* mesh,
 					IndTri32 index = triIndices[startIndex + j];
 
 					for (PxU32 k = 0; k < 3; ++k)
-					{
-						const PxVec3& v = verts[index.mRef[k]];
-
-						min.x = (min.x > v.x) ? v.x : min.x;
-						min.y = (min.y > v.y) ? v.y : min.y;
-						min.z = (min.z > v.z) ? v.z : min.z;
-
-						max.x = (max.x < v.x) ? v.x : max.x;
-						max.y = (max.y < v.y) ? v.y : max.y;
-						max.z = (max.z < v.z) ? v.z : max.z;
-					}
-				}
-			}
-			else
-			{
-				const IndTetrahedron32* tetIndices = static_cast<TetrahedronSourceMesh*>(mesh)->getTetrahedrons32();
-				for (PxU32 j = 0; j < nbPrimitives; ++j)
-				{
-					IndTetrahedron32 index = tetIndices[startIndex + j];
-
-					for (PxU32 k = 0; k < 4; ++k)
 					{
 						const PxVec3& v = verts[index.mRef[k]];
 
