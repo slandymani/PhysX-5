@@ -41,7 +41,6 @@ namespace physx
 #endif
 
 	class PxBaseTask;
-	class PxCudaContextManager;
 
 	/**
 	\brief Broad phase algorithm used in the simulation
@@ -64,14 +63,6 @@ namespace physx
 
 	ePABP is a parallel implementation of ABP. It can often be the fastest (CPU) broadphase, but it
 	can use more memory than ABP.
-
-	eGPU is a GPU implementation of the incremental sweep and prune approach. Additionally, it uses a ABP-style
-	initial pair generation approach to avoid large spikes when inserting shapes. It not only has the advantage 
-	of traditional SAP approch which is good for when many objects are sleeping, but due to being fully parallel, 
-	it also is great when lots of shapes are moving or for runtime pair insertion and removal. It can become a 
-	performance bottleneck if there are a very large number of shapes roughly projecting to the same values
-	on a given axis. If the scene has a very large number of shapes in an actor, e.g. a humanoid, it is recommended
-	to use an aggregate to represent multi-shape or multi-body actors to minimize stress placed on the broad phase.
 	*/
 	struct PxBroadPhaseType
 	{
@@ -81,7 +72,6 @@ namespace physx
 			eMBP,	//!< Multi box pruning
 			eABP,	//!< Automatic box pruning
 			ePABP,	//!< Parallel automatic box pruning
-			eGPU,	//!< GPU broad phase
 			eLAST
 		};
 	};
@@ -138,8 +128,6 @@ namespace physx
 	This structure is used to create a standalone broadphase. It captures all the parameters needed to
 	initialize a broadphase.
 
-	For the GPU broadphase (PxBroadPhaseType::eGPU) it is necessary to provide a CUDA context manager.
-
 	The kinematic filtering flags are currently not supported by the GPU broadphase. They are used to
 	dismiss pairs that involve kinematic objects directly within the broadphase.
 
@@ -152,7 +140,6 @@ namespace physx
 			mType						(type),
 			mContextID					(0),
 			mContextManager				(NULL),
-			mFoundLostPairsCapacity		(256 * 1024),
 			mDiscardStaticVsKinematic	(false),
 			mDiscardKinematicVsKinematic(false)
 		{}
@@ -160,18 +147,12 @@ namespace physx
 		PxBroadPhaseType::Enum	mType;							//!< Desired broadphase implementation
 		PxU64					mContextID;						//!< Context ID for profiler. See PxProfilerCallback.
 
-		PX_DEPRECATED PxCudaContextManager*	mContextManager;				//!< (GPU) CUDA context manager, must be provided for PxBroadPhaseType::eGPU.
-		PxU32					mFoundLostPairsCapacity;		//!< (GPU) Capacity of found and lost buffers allocated in GPU global memory. This is used for the found/lost pair reports in the BP.
-
 		bool					mDiscardStaticVsKinematic;		//!< Static-vs-kinematic filtering flag. Not supported by PxBroadPhaseType::eGPU.
 		bool					mDiscardKinematicVsKinematic;	//!< kinematic-vs-kinematic filtering flag. Not supported by PxBroadPhaseType::eGPU.
 
 		PX_INLINE	bool		isValid()	const
 		{
 			if(PxU32(mType)>=PxBroadPhaseType::eLAST)
-				return false;
-
-			if(mType==PxBroadPhaseType::eGPU && !mContextManager)
 				return false;
 
 			return true;

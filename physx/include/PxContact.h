@@ -644,26 +644,6 @@ private:
 
 };
 
-/**
-\brief Contains contact information for a contact reported by the direct-GPU contact report API. See PxScene::copyContactData().
-*/
-struct PxGpuContactPair
-{
-	PxU8* contactPatches;				//!< Ptr to contact patches. Type: PxContactPatch*, size: nbPatches.
-	PxU8* contactPoints;				//!< Ptr to contact points. Type: PxContact*, size: nbContacts.
-	PxReal* contactForces;				//!< Ptr to contact forces. Size: nbContacts.
-	PxU32 transformCacheRef0;			//!< Ref to shape0's transform in transform cache.
-	PxU32 transformCacheRef1;			//!< Ref to shape1's transform in transform cache.
-	PxNodeIndex nodeIndex0;				//!< Unique Id for actor0 if the actor is dynamic.
-	PxNodeIndex nodeIndex1;				//!< Unique Id for actor1 if the actor is dynamic.
-	PxActor* actor0;					//!< Ptr to PxActor for actor0.
-	PxActor* actor1;					//!< Ptr to PxActor for actor1.
-
-	PxU16 nbContacts;					//!< Num contacts.
-	PxU16 nbPatches;					//!< Num patches.
-};
-
-
 #if PX_VC
 #pragma warning(pop)
 #endif

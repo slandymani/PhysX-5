@@ -2438,137 +2438,12 @@ const PxU32* ImmCPUBP::getOutOfBoundsObjects()	const
 
 ///////////////////////////////////////////////////////////////////////////////
 
-#if PX_SUPPORT_GPU_PHYSX
-namespace
-{
-	class ImmGPUBP : public ImmCPUBP, public PxAllocatorCallback
-	{
-		public:
-												ImmGPUBP(const PxBroadPhaseDesc& desc);
-		virtual									~ImmGPUBP();
-
-		// PxAllocatorCallback
-		virtual void*							allocate(size_t size, const char* /*typeName*/, const char* filename, int line)	PX_OVERRIDE;
-		virtual void							deallocate(void* ptr)															PX_OVERRIDE;
-		//~PxAllocatorCallback
-
-		// PxBroadPhase
-		virtual	PxAllocatorCallback*			getAllocator()	PX_OVERRIDE;
-		//~PxBroadPhase
-
-		// ImmCPUBP
-		virtual	bool							init(const PxBroadPhaseDesc& desc)	PX_OVERRIDE;
-		//~ImmCPUBP
-
-				PxPhysXGpu*						mPxGpu;
-				PxsMemoryManager*				mMemoryManager;
-				PxsKernelWranglerManager*		mGpuWranglerManagers;
-				PxsHeapMemoryAllocatorManager*	mHeapMemoryAllocationManager;
-	};
-}
-#endif
-
-///////////////////////////////////////////////////////////////////////////////
-
-#if PX_SUPPORT_GPU_PHYSX
-
-#include "PxPhysXGpu.h"
-
-ImmGPUBP::ImmGPUBP(const PxBroadPhaseDesc& desc) :
-	ImmCPUBP					(desc),
-	mPxGpu						(NULL),
-	mMemoryManager				(NULL),
-	mGpuWranglerManagers		(NULL),
-	mHeapMemoryAllocationManager(NULL)
-{
-}
-
-ImmGPUBP::~ImmGPUBP()
-{
-	releaseBP();	// PT: must release the BP first, before the base dtor is called
-	PX_DELETE(mHeapMemoryAllocationManager);
-	PX_DELETE(mGpuWranglerManagers);
-	PX_DELETE(mMemoryManager);
-	//PX_RELEASE(mPxGpu);
-	PxvReleasePhysXGpu(mPxGpu);
-	mPxGpu = NULL;
-}
-
-void* ImmGPUBP::allocate(size_t size, const char* /*typeName*/, const char* filename, int line)
-{
-	PX_ASSERT(mMemoryManager);
-	PxVirtualAllocatorCallback* cb = mMemoryManager->getHostMemoryAllocator();
-	return cb->allocate(size, 0, filename, line);
-}
-
-void ImmGPUBP::deallocate(void* ptr)
-{
-	PX_ASSERT(mMemoryManager);
-	PxVirtualAllocatorCallback* cb = mMemoryManager->getHostMemoryAllocator();
-	cb->deallocate(ptr);
-}
-
-PxAllocatorCallback* ImmGPUBP::getAllocator()
-{
-	return this;
-}
-
-bool ImmGPUBP::init(const PxBroadPhaseDesc& desc)
-{
-	PX_ASSERT(desc.mType==PxBroadPhaseType::eGPU);
-
-	if(!desc.isValid())
-		return outputError<PxErrorCode::eINVALID_PARAMETER>(__LINE__, "PxCreateBroadPhase: invalid broadphase descriptor");
-
-	PxCudaContextManager* contextManager = desc.mContextManager;
-
-	// PT: one issue with PxvGetPhysXGpu is that it creates the whole PxPhysXGpu object, not just the BP. Questionable coupling there.
-
-	//mPxGpu = PxCreatePhysXGpu();
-
-	mPxGpu = PxvGetPhysXGpu(true);
-	if(!mPxGpu)
-		return false;
-
-	const PxU32 gpuComputeVersion = 0;
-
-	// PT: what's the difference between the "GPU memory manager" and the "GPU heap memory allocator manager" ?
-	mMemoryManager = mPxGpu->createGpuMemoryManager(contextManager);
-	if(!mMemoryManager)
-		return false;
-
-	mGpuWranglerManagers = mPxGpu->createGpuKernelWranglerManager(contextManager, *PxGetErrorCallback(), gpuComputeVersion);
-	if(!mGpuWranglerManagers)
-		return false;
-
-	PxgDynamicsMemoryConfig gpuDynamicsConfig;
-	gpuDynamicsConfig.foundLostPairsCapacity = desc.mFoundLostPairsCapacity;
-
-	mHeapMemoryAllocationManager = mPxGpu->createGpuHeapMemoryAllocatorManager(gpuDynamicsConfig.heapCapacity, mMemoryManager, gpuComputeVersion);
-	if(!mHeapMemoryAllocationManager)
-		return false;
-
-	mBroadPhase = mPxGpu->createGpuBroadPhase(mGpuWranglerManagers, contextManager, gpuComputeVersion, gpuDynamicsConfig, mHeapMemoryAllocationManager, desc.mContextID);
-	return mBroadPhase!=NULL;
-}
-#endif
-
-///////////////////////////////////////////////////////////////////////////////
-
 // PT: TODO: why don't we even have a PxBroadPhaseDesc in the main Px API by now? (PX-2933)
 // The BP parameters are scattered in PxSceneDesc/PxSceneLimits/etc
 // The various BP-related APIs are particularly messy.
 PxBroadPhase* physx::PxCreateBroadPhase(const PxBroadPhaseDesc& desc)
 {
-	ImmCPUBP* immBP;
-	if(desc.mType == PxBroadPhaseType::eGPU)
-#if PX_SUPPORT_GPU_PHYSX
-		immBP = PX_NEW(ImmGPUBP)(desc);
-#else
-		return NULL;
-#endif
-	else
-		immBP = PX_NEW(ImmCPUBP)(desc);
+	ImmCPUBP* immBP = PX_NEW(ImmCPUBP)(desc);
 
 	if(!immBP->init(desc))
 	{
@@ -2577,9 +2452,6 @@ PxBroadPhase* physx::PxCreateBroadPhase(const PxBroadPhaseDesc& desc)
 	}
 	return immBP;
 }
-
-
-
 
 namespace
 {

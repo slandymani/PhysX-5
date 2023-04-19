@@ -626,15 +626,6 @@ class PxScene : public PxSceneSQSystem
 	*/
 	virtual PxCpuDispatcher* getCpuDispatcher() const = 0;
 
-	/**
-	\brief Return the CUDA context manager that was set in PxSceneDesc::cudaContextManager when creating the scene with PxPhysics::createScene
-
-	<b>Platform specific:</b> Applies to PC GPU only.
-
-	@see PxSceneDesc::cudaContextManager, PxPhysics::createScene
-	*/
-	PX_DEPRECATED virtual PxCudaContextManager* getCudaContextManager() const = 0;
-
 	//@}
 	/************************************************************************************************/
 	/** @name Multiclient

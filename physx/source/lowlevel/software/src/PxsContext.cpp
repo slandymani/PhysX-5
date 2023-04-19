@@ -44,16 +44,12 @@
 #include "PxvManager.h"
 #include "PxsSimpleIslandManager.h"
 
-#if PX_SUPPORT_GPU_PHYSX
-#include "PxPhysXGpu.h"
-#endif
-
 #include "PxcNpContactPrepShared.h"
 #include "PxcNpCache.h"
 
 using namespace physx;
 
-PxsContext::PxsContext(const PxSceneDesc& desc, PxTaskManager* taskManager, Cm::FlushPool& taskPool, PxCudaContextManager* cudaContextManager, 
+PxsContext::PxsContext(const PxSceneDesc& desc, PxTaskManager* taskManager, Cm::FlushPool& taskPool,
 	const PxU32 poolSlabSize, PxU64 contextID) :
 	mNpThreadContextPool		(this),
 	mContactManagerPool			("mContactManagerPool", this, poolSlabSize),
@@ -64,7 +60,6 @@ PxsContext::PxsContext(const PxSceneDesc& desc, PxTaskManager* taskManager, Cm::
 	mNpFallbackImplementationContext(NULL),
 	mTaskManager				(taskManager),
 	mTaskPool					(taskPool),
-	mCudaContextManager			(cudaContextManager),
 	mPCM						(desc.flags & PxSceneFlag::eENABLE_PCM),
 	mContactCache				(false),
 	mCreateAveragePoint			(desc.flags & PxSceneFlag::eENABLE_AVERAGE_POINT),
@@ -96,8 +91,6 @@ namespace physx
 			false,				//eCAPSULE
 			false,				//eBOX
 			true,				//eCONVEXMESH
-			false,				//ePARTICLESYSTEM
-			true,				//eSOFTBODY,
 			true,				//eTRIANGLEMESH
 			true,				//eHEIGHTFIELD
 			true,				//eCUSTOM
@@ -110,8 +103,6 @@ namespace physx
 			true,				//eCAPSULE
 			true,				//eBOX
 			true,				//eCONVEXMESH
-			false,				//ePARTICLESYSTEM
-			true,				//eSOFTBODY,
 			false,				//eTRIANGLEMESH
 			false,				//eHEIGHTFIELD
 			true,				//eCUSTOM
@@ -124,8 +115,6 @@ namespace physx
 			false,				//eCAPSULE
 			true,				//eBOX
 			true,				//eCONVEXMESH
-			false,				//ePARTICLESYSTEM
-			true,				//eSOFTBODY,
 			true,				//eTRIANGLEMESH
 			true,				//eHEIGHTFIELD
 			true,				//eCUSTOM
@@ -138,8 +127,6 @@ namespace physx
 			true,				//eCAPSULE
 			true,				//eBOX
 			true,				//eCONVEXMESH
-			false,				//ePARTICLESYSTEM
-			true,				//eSOFTBODY,
 			true,				//eTRIANGLEMESH
 			true,				//eHEIGHTFIELD
 			true,				//eCUSTOM
@@ -152,39 +139,9 @@ namespace physx
 			true,				//eCAPSULE
 			true,				//eBOX
 			true,				//eCONVEXMESH
-			false,				//ePARTICLESYSTEM
-			true,				//eSOFTBODY,
 			true,				//eTRIANGLEMESH
 			true,				//eHEIGHTFIELD
 			true,				//eCUSTOM
-		},
-
-		//ePARTICLESYSTEM
-		{
-			false,				//eSPHERE
-			false,				//ePLANE
-			false,				//eCAPSULE
-			false,				//eBOX
-			false,				//eCONVEXMESH
-			false,				//ePARTICLESYSTEM
-			false,				//eSOFTBODY,
-			false,				//eTRIANGLEMESH
-			false,				//eHEIGHTFIELD
-			false,				//eCUSTOM
-		},
-
-		//eSOFTBODY
-		{
-			false,				//eSPHERE
-			false,				//ePLANE
-			false,				//eCAPSULE
-			false,				//eBOX
-			false,				//eCONVEXMESH
-			false,				//ePARTICLESYSTEM
-			false,				//eSOFTBODY,
-			false,				//eTRIANGLEMESH
-			false,				//eHEIGHTFIELD
-			false,				//eCUSTOM
 		},
 
 		//eTRIANGLEMESH,
@@ -194,8 +151,6 @@ namespace physx
 			true,				//eCAPSULE
 			true,				//eBOX
 			true,				//eCONVEXMESH
-			false,				//ePARTICLESYSTEM
-			true,				//eSOFTBODY,
 			false,				//eTRIANGLEMESH
 			false,				//eHEIGHTFIELD
 			true,				//eCUSTOM
@@ -208,8 +163,6 @@ namespace physx
 			true,				//eCAPSULE
 			true,				//eBOX
 			true,				//eCONVEXMESH
-			false,				//ePARTICLESYSTEM
-			true,				//eSOFTBODY,
 			false,				//eTRIANGLEMESH
 			false,				//eHEIGHTFIELD
 			true,				//eCUSTOM
@@ -222,8 +175,6 @@ namespace physx
 			true,				//eCAPSULE
 			true,				//eBOX
 			true,				//eCONVEXMESH
-			false,				//ePARTICLESYSTEM
-			false,				//eSOFTBODY,
 			true,				//eTRIANGLEMESH
 			true,				//eHEIGHTFIELD
 			true,				//eCUSTOM

@@ -272,91 +272,6 @@ public:
 	*/
 	PxU32	nbPartitions;
 
-	/**
-	\brief GPU device memory in bytes allocated for particle state accessible through API
-	*/
-	PxU64	gpuMemParticles;
-
-	/**
-	\brief GPU device memory in bytes allocated for FEM-based soft body state accessible through API
-	*/
-	PxU64	gpuMemSoftBodies;
-
-	/**
-	\brief GPU device memory in bytes allocated for FEM-based cloth state accessible through API
-	*/
-	PxU64	gpuMemFEMCloths;
-
-	/**
-	\brief GPU device memory in bytes allocated for internal heap allocation
-	*/
-	PxU64	gpuMemHeap;
-
-	/**
-	\brief GPU device heap memory used for broad phase in bytes
-	*/
-	PxU64	gpuMemHeapBroadPhase;
-
-	/**
-	\brief GPU device heap memory used for narrow phase in bytes
-	*/
-	PxU64	gpuMemHeapNarrowPhase;
-
-	/**
-	\brief GPU device heap memory used for solver in bytes
-	*/
-	PxU64	gpuMemHeapSolver;
-
-	/**
-	\brief GPU device heap memory used for articulations in bytes
-	*/
-	PxU64	gpuMemHeapArticulation;
-
-	/**
-	\brief GPU device heap memory used for simulation pipeline in bytes
-	*/
-	PxU64	gpuMemHeapSimulation;
-
-	/**
-	\brief GPU device heap memory used for articulations in the simulation pipeline in bytes
-	*/
-	PxU64	gpuMemHeapSimulationArticulation;
-
-	/**
-	\brief GPU device heap memory used for particles in the simulation pipeline in bytes
-	*/
-	PxU64	gpuMemHeapSimulationParticles;
-
-	/**
-	\brief GPU device heap memory used for soft bodies in the simulation pipeline in bytes
-	*/
-	PxU64	gpuMemHeapSimulationSoftBody;
-
-	/**
-	\brief GPU device heap memory used for FEM-cloth in the simulation pipeline in bytes
-	*/
-	PxU64	gpuMemHeapSimulationFEMCloth;
-
-	/**
-	\brief GPU device heap memory used for shared buffers in the particles pipeline in bytes
-	*/
-	PxU64	gpuMemHeapParticles;
-
-	/**
-	\brief GPU device heap memory used for shared buffers in the FEM-based soft body pipeline in bytes
-	*/
-	PxU64	gpuMemHeapSoftBodies;
-
-	/**
-	\brief GPU device heap memory used for shared buffers in the FEM-based cloth pipeline in bytes
-	*/
-	PxU64	gpuMemHeapFEMCloths;
-
-	/**
-	\brief GPU device heap memory not covered by other stats in bytes
-	*/
-	PxU64	gpuMemHeapOther;
-
 	PxSimulationStatistics() :
 		nbActiveConstraints					(0),
 		nbActiveDynamicBodies				(0),
@@ -377,24 +292,7 @@ public:
 		nbLostPairs							(0),
 		nbNewTouches						(0),
 		nbLostTouches						(0),
-		nbPartitions						(0),
-		gpuMemParticles						(0),
-		gpuMemSoftBodies					(0),
-		gpuMemFEMCloths                     (0),
-		gpuMemHeap							(0),
-		gpuMemHeapBroadPhase				(0),
-		gpuMemHeapNarrowPhase				(0),
-		gpuMemHeapSolver					(0),
-		gpuMemHeapArticulation				(0),
-		gpuMemHeapSimulation				(0),
-		gpuMemHeapSimulationArticulation	(0),
-		gpuMemHeapSimulationParticles		(0),
-		gpuMemHeapSimulationSoftBody		(0),
-		gpuMemHeapSimulationFEMCloth        (0),
-		gpuMemHeapParticles					(0),
-		gpuMemHeapSoftBodies				(0),
-		gpuMemHeapFEMCloths                 (0),
-		gpuMemHeapOther						(0)
+		nbPartitions						(0)
 	{
 		nbBroadPhaseAdds = 0;
 		nbBroadPhaseRemoves = 0;

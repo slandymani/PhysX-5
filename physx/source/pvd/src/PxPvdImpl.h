@@ -204,7 +204,6 @@ class PvdImpl : public PsPvd, public PxUserAllocated
 
 	PxPvdInstrumentationFlags			mFlags;
 	bool								mIsConnected;
-	bool                                mGPUProfilingWasConnected;
 	bool								mIsNVTXSupportEnabled;
 	uint32_t							mNVTXContext;
 	uint64_t							mNextStreamId;

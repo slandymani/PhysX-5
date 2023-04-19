@@ -1256,13 +1256,6 @@ namespace physx
 		virtual		PxSpatialVelocity		getLinkAcceleration(const PxU32 linkId) = 0;
 
 		/**
-		\brief Returns the GPU articulation index.
-
-		\return The GPU index, or 0xFFFFFFFF if the articulation is not in a scene or PxSceneFlag::eSUPPRESS_READBACK is not set.
-		*/
-		virtual		PxU32					getGpuArticulationIndex() = 0;
-
-		/**
 		\brief Creates a spatial tendon to attach to the articulation with default attribute values.
 
 		\return The new spatial tendon.

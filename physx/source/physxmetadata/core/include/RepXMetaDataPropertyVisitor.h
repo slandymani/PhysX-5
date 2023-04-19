@@ -200,7 +200,6 @@ namespace physx {
 		DEFINE_REPX_PROPERTY_NOP( PxContactModifyCallback * )
 		DEFINE_REPX_PROPERTY_NOP( PxCCDContactModifyCallback * )
 		DEFINE_REPX_PROPERTY_NOP( PxSimulationEventCallback * )
-		DEFINE_REPX_PROPERTY_NOP( physx::PxCudaContextManager* )
 		DEFINE_REPX_PROPERTY_NOP( physx::PxCpuDispatcher * )
 		DEFINE_REPX_PROPERTY_NOP( PxRigidActor )
 		DEFINE_REPX_PROPERTY_NOP( const PxRigidActor )

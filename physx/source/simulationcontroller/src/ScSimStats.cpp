@@ -37,9 +37,6 @@ Sc::SimStats::SimStats()
 {
 	numBroadPhaseAdds = numBroadPhaseRemoves = 0;
 
-	gpuMemSizeParticles = 0;
-	gpuMemSizeSoftBodies = 0;
-
 	clear();
 }
 
@@ -131,9 +128,6 @@ void Sc::SimStats::readOut(PxSimulationStatistics& s, const PxvSimStats& simStat
 	s.nbNewTouches = simStats.mNbNewTouches;
 	s.nbLostTouches = simStats.mNbLostTouches;
 	s.nbPartitions = simStats.mNbPartitions;
-
-	s.gpuMemParticles = gpuMemSizeParticles;
-	s.gpuMemSoftBodies = gpuMemSizeSoftBodies;
 
 #else
 	PX_CATCH_UNDEFINED_ENABLE_SIM_STATS

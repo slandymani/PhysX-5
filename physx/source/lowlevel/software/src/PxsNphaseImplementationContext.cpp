@@ -31,10 +31,6 @@
 #include "PxsSimpleIslandManager.h"
 #include "common/PxProfileZone.h"
 
-#if PX_SUPPORT_GPU_PHYSX
-#include "PxPhysXGpu.h"
-#endif
-
 #include "PxsContactManagerState.h"
 
 #include "PxsNphaseImplementationContext.h"

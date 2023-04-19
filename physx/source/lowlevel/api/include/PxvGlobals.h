@@ -105,11 +105,6 @@ Initialize low-level implementation.
 
 void PxvRegisterHeightFields();
 
-#if PX_SUPPORT_GPU_PHYSX
-class PxPhysXGpu* PxvGetPhysXGpu(bool createIfNeeded);
-void PxvReleasePhysXGpu(PxPhysXGpu*);
-#endif
-
 }
 
 #endif

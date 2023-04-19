@@ -48,7 +48,6 @@ namespace physx
 #endif
 
 	class PxBroadPhaseCallback;
-	class PxCudaContextManager;
 
 /**
 \brief Enum for selecting the friction algorithm used for simulation.
@@ -231,14 +230,6 @@ struct PxSceneFlag
 		*/
 		eEXCLUDE_KINEMATICS_FROM_ACTIVE_ACTORS = (1 << 12),
 
-		/*\brief Enables the GPU dynamics pipeline
-
-		When set to true, a CUDA ARCH 3.0 or above-enabled NVIDIA GPU is present and the CUDA context manager has been configured, this will run the GPU dynamics pipelin instead of the CPU dynamics pipeline.
-
-		Note that this flag is not mutable and must be set in PxSceneDesc at scene creation.
-		*/
-		eENABLE_GPU_DYNAMICS = (1 << 13),
-
 		/**
 		\brief Provides improved determinism at the expense of performance. 
 
@@ -277,17 +268,6 @@ struct PxSceneFlag
 		\note This flag only has effect with the default solver. The TGS solver always performs friction per-iteration.
 		*/
 		eENABLE_FRICTION_EVERY_ITERATION = (1 << 15),
-
-		/*
-		\brief Disables GPU readback of articulation data when running on GPU.
-		Useful if your application only needs to communicate to the GPU via GPU buffers. Can be significantly faster
-		*/
-		eSUPPRESS_READBACK = (1<<16),
-
-		/*
-		\brief Forces GPU readback of articulation data when user raise eSUPPRESS_READBACK.
-		*/
-		eFORCE_READBACK = (1 << 17),
 
 		eMUTABLE_FLAGS = eENABLE_ACTIVE_ACTORS|eEXCLUDE_KINEMATICS_FROM_ACTIVE_ACTORS|eSUPPRESS_READBACK
 	};
@@ -367,51 +347,6 @@ PX_INLINE bool PxSceneLimits::isValid() const
 
 	return true;
 }
-
-//#if PX_SUPPORT_GPU_PHYSX
-/**
-\brief Sizes of pre-allocated buffers use for GPU dynamics
-*/
-
-struct PxgDynamicsMemoryConfig
-{
-	PxU32 tempBufferCapacity;				//!< Capacity of temp buffer allocated in pinned host memory.
-	PxU32 maxRigidContactCount;				//!< Size of contact stream buffer allocated in pinned host memory. This is double-buffered so total allocation size = 2* contactStreamCapacity * sizeof(PxContact).
-	PxU32 maxRigidPatchCount;				//!< Size of the contact patch stream buffer allocated in pinned host memory. This is double-buffered so total allocation size = 2 * patchStreamCapacity * sizeof(PxContactPatch).
-	PxU32 heapCapacity;						//!< Initial capacity of the GPU and pinned host memory heaps. Additional memory will be allocated if more memory is required.
-	PxU32 foundLostPairsCapacity;			//!< Capacity of found and lost buffers allocated in GPU global memory. This is used for the found/lost pair reports in the BP. 
-	PxU32 foundLostAggregatePairsCapacity;	//!<Capacity of found and lost buffers in aggregate system allocated in GPU global memory. This is used for the found/lost pair reports in AABB manager
-	PxU32 totalAggregatePairsCapacity;		//!<Capacity of total number of aggregate pairs allocated in GPU global memory.
-	PxU32 maxSoftBodyContacts;
-	PxU32 maxFemClothContacts;
-	PxU32 maxParticleContacts;
-	PxU32 collisionStackSize;
-
-	PxgDynamicsMemoryConfig() :
-		tempBufferCapacity(16 * 1024 * 1024),
-		maxRigidContactCount(1024 * 512),
-		maxRigidPatchCount(1024 * 80),
-		heapCapacity(64 * 1024 * 1024),
-		foundLostPairsCapacity(256 * 1024),
-		foundLostAggregatePairsCapacity(1024),
-		totalAggregatePairsCapacity(1024),
-		maxSoftBodyContacts(1 * 1024 * 1024),
-		maxFemClothContacts(1 * 1024 * 1024),
-		maxParticleContacts(1*1024*1024),
-		collisionStackSize(64*1024*1024)
-	{
-	}
-
-	PX_PHYSX_CORE_API bool isValid() const;
-};
-
-PX_INLINE bool PxgDynamicsMemoryConfig::isValid() const
-{
-	const bool isPowerOfTwo = PxIsPowerOfTwo(heapCapacity);
-	return isPowerOfTwo;
-}
-
-//#endif
 
 /**
 \brief Descriptor class for scenes. See #PxScene.
@@ -626,15 +561,6 @@ public:
 	PxCpuDispatcher*	cpuDispatcher;
 
 	/**
-	\brief The CUDA context manager for the scene.
-
-	<b>Platform specific:</b> Applies to PC GPU only.
-
-	@see PxCudaContextManager, PxScene::getCudaContextManager
-	*/
-	PX_DEPRECATED PxCudaContextManager* 	cudaContextManager;
-
-	/**
 	\brief Will be copied to PxScene::userData.
 
 	<b>Default:</b> NULL
@@ -813,31 +739,6 @@ public:
 	PxBounds3	sanityBounds;
 
 	/**
-	\brief The pre-allocations performed in the GPU dynamics pipeline.
-	*/
-	PxgDynamicsMemoryConfig gpuDynamicsConfig;
-
-	/**
-	\brief Limitation for the partitions in the GPU dynamics pipeline.
-	This variable must be power of 2.
-	A value greater than 32 is currently not supported.
-	<b>Range:</b> (1, 32)<br>
-	*/
-	PxU32	gpuMaxNumPartitions;
-
-	/**
-	\brief Limitation for the number of static rigid body partitions in the GPU dynamics pipeline.
-	<b>Range:</b> (1, 255)<br>
-	<b>Default:</b> 16
-	*/
-	PxU32	gpuMaxNumStaticPartitions;
-
-	/**
-	\brief Defines which compute version the GPU dynamics should target. DO NOT MODIFY
-	*/
-	PxU32	gpuComputeVersion;
-
-	/**
 	\brief Defines the size of a contact pool slab.
 	Contact pairs and associated data are allocated using a pool allocator. Increasing the slab size can trade
 	off some performance spikes when a large number of new contacts are found for an increase in overall memory 
@@ -932,7 +833,6 @@ PX_INLINE PxSceneDesc::PxSceneDesc(const PxTolerancesScale& scale):
 	flags							(PxSceneFlag::eENABLE_PCM),
 
 	cpuDispatcher					(NULL),
-	cudaContextManager				(NULL),
 
 	userData						(NULL),
 
@@ -948,9 +848,6 @@ PX_INLINE PxSceneDesc::PxSceneDesc(const PxTolerancesScale& scale):
 	ccdMaxSeparation				(0.04f * scale.length),
 	wakeCounterResetValue			(20.0f*0.02f),
 	sanityBounds					(PxBounds3(PxVec3(-PX_MAX_BOUNDS_EXTENTS), PxVec3(PX_MAX_BOUNDS_EXTENTS))),
-	gpuMaxNumPartitions				(8),
-	gpuMaxNumStaticPartitions		(16),
-	gpuComputeVersion				(0),
 	contactPairSlabSize				(256),
 	sceneQuerySystem				(NULL),
 	tolerancesScale					(scale)
@@ -1008,23 +905,6 @@ PX_INLINE bool PxSceneDesc::isValid() const
 
 	if(!sanityBounds.isValid())
 		return false;
-
-#if PX_SUPPORT_GPU_PHYSX
-	if(!PxIsPowerOfTwo(gpuMaxNumPartitions))
-		return false;
-	if(gpuMaxNumPartitions > 32)
-		return false;
-	if (gpuMaxNumPartitions == 0)
-		return false;
-	if(!gpuDynamicsConfig.isValid())
-		return false;
-
-	if (flags & PxSceneFlag::eSUPPRESS_READBACK)
-	{
-		if(!(flags & PxSceneFlag::eENABLE_GPU_DYNAMICS && broadPhaseType == PxBroadPhaseType::eGPU))
-			return false;
-	}
-#endif
 
 	if(contactPairSlabSize == 0)
 		return false;

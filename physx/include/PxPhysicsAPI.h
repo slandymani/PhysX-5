@@ -118,11 +118,6 @@ Alternatively, one can instead directly #include a subset of the below files.
 //Task Manager
 #include "task/PxTask.h"
 
-// Cuda Mananger
-#if PX_SUPPORT_GPU_PHYSX
-#include "gpu/PxGpu.h"
-#endif
-
 //Geometry Library
 #include "geometry/PxBoxGeometry.h"
 #include "geometry/PxBVH.h"

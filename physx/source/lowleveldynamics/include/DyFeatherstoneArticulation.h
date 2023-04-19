@@ -803,8 +803,6 @@ namespace Dy
 		{
 			mGPUDirtyFlags |= flag;
 		}
-		//void	setGpuRemapId(const PxU32 id) { mGpuRemapId = id; }
-		//PxU32	getGpuRemapId() { return mGpuRemapId; }
 
 		static PX_CUDA_CALLABLE PX_FORCE_INLINE Cm::SpatialVectorF translateSpatialVector(const PxVec3& offset, const Cm::SpatialVectorF& vec)
 		{

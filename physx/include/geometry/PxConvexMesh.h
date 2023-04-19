@@ -158,18 +158,7 @@ public:
 	*/
 	virtual const PxReal* getSDF() const = 0;
 
-
 	virtual	const char*	getConcreteTypeName() const	{ return "PxConvexMesh"; }
-
-	/**
-	\brief This method decides whether a convex mesh is gpu compatible. If the total number of vertices are more than 64 or any number of vertices in a polygon is more than 32, or
-	convex hull data was not cooked with GPU data enabled during cooking or was loaded from a serialized collection, the convex hull is incompatible with GPU collision detection. Otherwise
-	it is compatible.
-
-	\return True if the convex hull is gpu compatible
-	*/
-	virtual bool		isGpuCompatible() const = 0;
-
 
 protected:
 	PX_INLINE			PxConvexMesh(PxType concreteType, PxBaseFlags baseFlags) : PxRefCounted(concreteType, baseFlags) {}

@@ -31,11 +31,6 @@
 #include "PxPvdProfileZoneClient.h"
 #include "PxPvdProfileZone.h"
 
-
-#if PX_SUPPORT_GPU_PHYSX
-#include "gpu/PxGpu.h"
-#endif
-
 #if PX_NVTX
 #include "nvToolsExt.h"
 #endif
@@ -86,7 +81,6 @@ PvdImpl::PvdImpl()
 , mSharedMetaProvider(NULL)
 , mMemClient(NULL)
 , mIsConnected(false)
-, mGPUProfilingWasConnected(false)
 , mIsNVTXSupportEnabled(true)
 , mNVTXContext(0)
 , mNextStreamId(1)
@@ -102,12 +96,6 @@ PvdImpl::~PvdImpl()
 	if((mFlags & PxPvdInstrumentationFlag::ePROFILE) )
 	{
 		PxSetProfilerCallback(NULL);
-#if PX_SUPPORT_GPU_PHYSX
-		if (mGPUProfilingWasConnected)
-		{
-			PxSetPhysXGpuProfilerCallback(NULL);
-		}
-#endif
 	}
 
 	disconnect();
@@ -168,10 +156,6 @@ bool PvdImpl::connect(PxPvdTransport& transport, PxPvdInstrumentationFlags flags
 		if ((mFlags & PxPvdInstrumentationFlag::ePROFILE))
 		{
 			PxSetProfilerCallback(this);
-#if PX_SUPPORT_GPU_PHYSX
-			PxSetPhysXGpuProfilerCallback(this);
-			mGPUProfilingWasConnected = true;
-#endif
 		}
 	}
 	return mIsConnected;

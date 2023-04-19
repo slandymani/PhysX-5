@@ -58,28 +58,6 @@ https://developercommunity.visualstudio.com/content/problem/66047/possible-compi
     #endif
 #endif
 
-#if PX_SUPPORT_GPU_PHYSX
-// define API function declaration
-#if defined PX_PHYSX_GPU_STATIC
-	#define PX_PHYSX_GPU_API
-#else
-	#if PX_WINDOWS 
-	#if defined PX_PHYSX_GPU_EXPORTS
-	#define PX_PHYSX_GPU_API __declspec(dllexport)
-	#else
-	#define PX_PHYSX_GPU_API __declspec(dllimport)
-	#endif
-	#elif PX_UNIX_FAMILY
-	#define PX_PHYSX_GPU_API PX_UNIX_EXPORT
-	#else
-	#define PX_PHYSX_GPU_API
-	#endif
-#endif
-
-#else // PX_SUPPORT_GPU_PHYSX
-#define PX_PHYSX_GPU_API
-#endif // PX_SUPPORT_GPU_PHYSX
-
 #if defined PX_PHYSX_STATIC_LIB
 	#define PX_PHYSX_COMMON_API
 #else

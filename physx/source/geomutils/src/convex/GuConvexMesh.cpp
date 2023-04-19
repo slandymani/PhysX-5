@@ -97,20 +97,6 @@ ConvexMesh::~ConvexMesh()
 	}
 }
 
-bool ConvexMesh::isGpuCompatible() const
-{
-	PxReal maxR = PxMax(mHullData.mInternal.mExtents[0], PxMax(mHullData.mInternal.mExtents[1], mHullData.mInternal.mExtents[2]));
-	PxReal minR = mHullData.mInternal.mRadius;
-
-	PxReal ratio = maxR/minR;
-
-	return mHullData.mNbHullVertices <= 64 &&
-		mHullData.mNbPolygons <= 64 &&
-		mHullData.mPolygons[0].mNbVerts <= 32 &&
-		mHullData.mNbEdges.isBitSet() &&
-		ratio < 100.f;
-}
-
 void ConvexMesh::exportExtraData(PxSerializationContext& context)
 {
 	context.alignData(PX_SERIAL_ALIGN);

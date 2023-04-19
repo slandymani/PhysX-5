@@ -135,7 +135,6 @@ namespace Gu
 		virtual			const PxU8*				getIndexBuffer()								const	{ return mHullData.getVertexData8();	}
 		virtual			PxU32					getNbPolygons()									const	{ return mHullData.mNbPolygons;			}
 		virtual			bool					getPolygonData(PxU32 i, PxHullPolygon& data)	const;
-		virtual			bool					isGpuCompatible()								const;						
 
 		virtual			void					getMassInformation(PxReal& mass, PxMat33& localInertia, PxVec3& localCenterOfMass)	const;
 		virtual			PxBounds3				getLocalBounds()								const;

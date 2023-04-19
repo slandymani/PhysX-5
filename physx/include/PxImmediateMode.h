@@ -42,7 +42,6 @@ namespace physx
 {
 #endif
 
-	class PxCudaContextManager;
 	class PxBaseTask;
 	class PxGeometry;
 
@@ -736,27 +735,6 @@ namespace immediate
 	\param	[in] dt						The timestep
 	*/
 	PX_C_EXPORT PX_PHYSX_CORE_API void PxIntegrateSolverBodiesTGS(PxTGSSolverBodyVel* solverBody, PxTGSSolverBodyTxInertia* txInertia, PxTransform* poses, const PxU32 nbBodiesToIntegrate, const PxReal dt);
-
-	/**
-	 * @deprecated
-	 */
-	typedef PX_DEPRECATED PxArticulationJointDataRC			PxFeatherstoneArticulationJointData;
-	/**
-	 * @deprecated
-	 */
-	typedef PX_DEPRECATED PxArticulationLinkDataRC			PxFeatherstoneArticulationLinkData;
-	/**
-	 * @deprecated
-	 */
-	typedef PX_DEPRECATED PxArticulationDataRC				PxFeatherstoneArticulationData;
-	/**
-	 * @deprecated
-	 */
-	typedef PX_DEPRECATED PxArticulationLinkMutableDataRC	PxMutableLinkData;
-	/**
-	 * @deprecated
-	 */
-	typedef PX_DEPRECATED PxArticulationLinkDerivedDataRC	PxLinkData;
 
 #if !PX_DOXYGEN
 }

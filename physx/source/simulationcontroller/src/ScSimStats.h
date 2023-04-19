@@ -77,10 +77,6 @@ namespace Sc
 		typedef PxI32 TriggerPairCountsNonVolatile[PxGeometryType::eCONVEXMESH+1][PxGeometryType::eGEOMETRY_COUNT];
 		typedef volatile TriggerPairCountsNonVolatile TriggerPairCounts;
 		TriggerPairCounts numTriggerPairs;
-
-		PxU64 gpuMemSizeParticles;
-		PxU64 gpuMemSizeSoftBodies;
-		PxU64 gpuMemSizeFEMCloths;
 	};
 
 } // namespace Sc

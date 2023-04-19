@@ -65,13 +65,6 @@
 #include <ppc_intrinsics.h>
 #endif
 
-#if PX_SUPPORT_GPU_PHYSX
-#include "PxPhysXGpu.h"
-#include "PxsKernelWrangler.h"
-#include "PxsHeapMemoryAllocator.h"
-#include "cudamanager/PxCudaContextManager.h"
-#endif
-
 #include "PxsMemoryManager.h"
 
 ////////////
@@ -158,8 +151,6 @@ public:
 		{
 			PxsRigidBody* rigid = islandSim.getRigidBody(mIndices[i]);
 			Sc::BodySim* bodySim = reinterpret_cast<Sc::BodySim*>(reinterpret_cast<PxU8*>(rigid) - rigidBodyOffset);
-			//This move to PxgPostSolveWorkerTask for the gpu dynamic
-			//bodySim->sleepCheck(mDt, mOneOverDt, mEnableStabilization);
 		
 			PxsBodyCore& bodyCore = bodySim->getBodyCore().getCore();
 			//If we got in this code, then this is an active object this frame. The solver computed the new wakeCounter and we 
@@ -173,8 +164,6 @@ public:
 			{
 				bpUpdates[nbBpUpdates++] = bodySim;
 
-				// PT: TODO: remove duplicate "isFrozen" test inside updateCached
-//				bodySim->updateCached(NULL);
 				bodySim->updateCached(mCache, boundsArray);
 			}
 
@@ -530,22 +519,6 @@ static Bp::AABBManagerBase* createAABBManagerCPU(const PxSceneDesc& desc, Bp::Br
 		desc.kineKineFilteringMode, desc.staticKineFilteringMode);
 }
 
-#if PX_SUPPORT_GPU_PHYSX
-static Bp::AABBManagerBase* createAABBManagerGPU(PxsKernelWranglerManager* kernelWrangler, PxCudaContextManager* cudaContextManager, PxsHeapMemoryAllocatorManager* heapMemoryAllocationManager,
-												const PxSceneDesc& desc, Bp::BroadPhase* broadPhase, Bp::BoundsArray* boundsArray, PxFloatArrayPinned* contactDistances, PxVirtualAllocator& allocator, PxU64 contextID)
-{
-	return PxvGetPhysXGpu(true)->createGpuAABBManager(
-		kernelWrangler,
-		cudaContextManager,
-		desc.gpuComputeVersion,
-		desc.gpuDynamicsConfig,
-		heapMemoryAllocationManager,
-		*broadPhase, *boundsArray, *contactDistances,
-		desc.limits.maxNbAggregates, desc.limits.maxNbStaticShapes + desc.limits.maxNbDynamicShapes, allocator, contextID,
-		desc.kineKineFilteringMode, desc.staticKineFilteringMode);
-}
-#endif
-
 Sc::Scene::Scene(const PxSceneDesc& desc, PxU64 contextID) :
 	mContextId						(contextID),
 	mActiveBodies					("sceneActiveBodies"),
@@ -651,10 +624,7 @@ Sc::Scene::Scene(const PxSceneDesc& desc, PxU64 contextID) :
 	mPreIntegrate                   (contextID, this, "ScScene.preIntegrate"),
 	mTaskPool						(16384),
 	mTaskManager					(NULL),
-	mCudaContextManager				(desc.cudaContextManager),
 	mContactReportsNeedPostSolverVelocity(false),
-	mUseGpuDynamics(false),
-	mUseGpuBp						(false),
 	mCCDBp							(false),
 	mSimulationStage				(SimulationStage::eCOMPLETE),
 	mTmpConstraintGroupRootBuffer	(NULL),
@@ -694,31 +664,7 @@ Sc::Scene::Scene(const PxSceneDesc& desc, PxU64 contextID) :
 	for(PxU32 i=0; i<PxGeometryType::eGEOMETRY_COUNT; i++)
 		mNbGeometries[i] = 0;
 
-	bool useGpuDynamics = false;
-	bool useGpuBroadphase = false;
-
-#if PX_SUPPORT_GPU_PHYSX
-	if(desc.flags & PxSceneFlag::eENABLE_GPU_DYNAMICS)
-	{
-		if(!mCudaContextManager)
-			outputError<PxErrorCode::eDEBUG_WARNING>(__LINE__, "GPU solver pipeline failed, switching to software");
-		else if(mCudaContextManager->supportsArchSM30())
-			useGpuDynamics = true;
-	}
-
-	if(desc.broadPhaseType == PxBroadPhaseType::eGPU)
-	{
-		if(!mCudaContextManager)
-			outputError<PxErrorCode::eDEBUG_WARNING>(__LINE__, "GPU Bp pipeline failed, switching to software");
-		else if(mCudaContextManager->supportsArchSM30())
-			useGpuBroadphase = true;
-	}
-#endif
-
-	mUseGpuDynamics = useGpuDynamics;
-	mUseGpuBp = useGpuBroadphase;
-
-	mLLContext = PX_NEW(PxsContext)(desc, mTaskManager, mTaskPool, mCudaContextManager, desc.contactPairSlabSize, contextID);
+	mLLContext = PX_NEW(PxsContext)(desc, mTaskManager, mTaskPool, desc.contactPairSlabSize, contextID);
 	
 	if (mLLContext == 0)
 	{
@@ -727,53 +673,19 @@ Sc::Scene::Scene(const PxSceneDesc& desc, PxU64 contextID) :
 	}
 	mLLContext->setMaterialManager(&getMaterialManager());
 
-#if PX_SUPPORT_GPU_PHYSX
-	if (useGpuBroadphase || useGpuDynamics)
-	{
-		PxPhysXGpu* physxGpu = PxvGetPhysXGpu(true);
-
-		// PT: this creates a PxgMemoryManager, whose host memory allocator is a PxgCudaHostMemoryAllocatorCallback
-		mMemoryManager = physxGpu->createGpuMemoryManager(mLLContext->getCudaContextManager());
-		mGpuWranglerManagers = physxGpu->createGpuKernelWranglerManager(mLLContext->getCudaContextManager(), *PxGetErrorCallback(), desc.gpuComputeVersion);
-		// PT: this creates a PxgHeapMemoryAllocatorManager
-		mHeapMemoryAllocationManager = physxGpu->createGpuHeapMemoryAllocatorManager(desc.gpuDynamicsConfig.heapCapacity, mMemoryManager, desc.gpuComputeVersion);
-	}
-	else
-#endif
-	{
-		// PT: this creates a PxsDefaultMemoryManager
-		mMemoryManager = createDefaultMemoryManager();
-	}
+	// PT: this creates a PxsDefaultMemoryManager
+	mMemoryManager = createDefaultMemoryManager();
 
 	Bp::BroadPhase* broadPhase = NULL;
+	PxBroadPhaseType::Enum broadPhaseType = desc.broadPhaseType;
 
-	//Note: broadphase should be independent of AABBManager.  MBP uses it to call getBPBounds but it has 
-	//already been passed all bounds in BroadPhase::update() so should use that instead.
-	// PT: above comment is obsolete: MBP now doesn't call getBPBounds anymore (except in commented out code)
-	// and it is instead the GPU broadphase which is not independent from the GPU AABB manager.......
-	if(!useGpuBroadphase)
-	{
-		PxBroadPhaseType::Enum broadPhaseType = desc.broadPhaseType;
-
-		if (broadPhaseType == PxBroadPhaseType::eGPU)
-			broadPhaseType = PxBroadPhaseType::eABP;
-
-		broadPhase = Bp::BroadPhase::create(
-			broadPhaseType, 
-			desc.limits.maxNbRegions, 
-			desc.limits.maxNbBroadPhaseOverlaps, 
-			desc.limits.maxNbStaticShapes, 
-			desc.limits.maxNbDynamicShapes,
-			contextID);
-	}
-#if PX_SUPPORT_GPU_PHYSX
-	else
-	{
-		broadPhase = PxvGetPhysXGpu(true)->createGpuBroadPhase(	mGpuWranglerManagers, mLLContext->getCudaContextManager(),
-																desc.gpuComputeVersion, desc.gpuDynamicsConfig,
-																mHeapMemoryAllocationManager, contextID);
-	}
-#endif
+	broadPhase = Bp::BroadPhase::create(
+		broadPhaseType, 
+		desc.limits.maxNbRegions, 
+		desc.limits.maxNbBroadPhaseOverlaps, 
+		desc.limits.maxNbStaticShapes, 
+		desc.limits.maxNbDynamicShapes,
+		contextID);
 
 	//create allocator
 	PxVirtualAllocatorCallback* allocatorCallback = mMemoryManager->getHostMemoryAllocator();
@@ -809,16 +721,7 @@ Sc::Scene::Scene(const PxSceneDesc& desc, PxU64 contextID) :
 	mSimulationControllerCallback = PX_NEW(ScSimulationControllerCallback)(this);
 	mSimulationController = PX_NEW(SimulationController)(mSimulationControllerCallback);
 
-	if (!useGpuBroadphase)
-		mAABBManager = createAABBManagerCPU(desc, broadPhase, mBoundsArray, mContactDistance, allocator, contextID);
-
-	bool suppressReadback = mPublicFlags & PxSceneFlag::eSUPPRESS_READBACK;
-	bool forceReadback = mPublicFlags & PxSceneFlag::eFORCE_READBACK;
-
-	if(suppressReadback && forceReadback)
-		suppressReadback = false;
-
-	mDynamicsContext->setSuppressReadback(suppressReadback);
+	mAABBManager = createAABBManagerCPU(desc, broadPhase, mBoundsArray, mContactDistance, allocator, contextID);
 
 	//Construct the bitmap of updated actors required as input to the broadphase update
 	if(desc.limits.maxNbBodies)
@@ -874,9 +777,6 @@ Sc::Scene::Scene(const PxSceneDesc& desc, PxU64 contextID) :
 
 	mWokeBodyListValid = true;
 	mSleepBodyListValid = true;
-
-	mWokeSoftBodyListValid = true;
-	mSleepSoftBodyListValid = true;
 
 	//load from desc:
 	setLimits(desc.limits);
@@ -2169,9 +2069,6 @@ void Sc::Scene::rigidBodyNarrowPhase(PxBaseTask* continuation)
 
 void Sc::Scene::unblockNarrowPhase(PxBaseTask*)
 {
-	/*if (!mCCDBp && mUseGpuRigidBodies)
-		mSimulationController->updateParticleSystemsAndSoftBodies();*/
-	//
 	mLLContext->getNphaseImplementationContext()->startNarrowPhaseTasks();
 }
 
@@ -2586,12 +2483,9 @@ void Sc::Scene::postThirdPassIslandGen(PxBaseTask* continuation)
 		//KS - only deactivate contact managers based on speculative state to trigger contact gen. When the actors were deactivated based on accurate state
 		//joints should have been deactivated.
 
-		const PxU32 NbTypes = 5;
+		const PxU32 NbTypes = 1;
 		const IG::Edge::EdgeType types[NbTypes] = {
-			IG::Edge::eCONTACT_MANAGER,
-			IG::Edge::eSOFT_BODY_CONTACT,
-			IG::Edge::eFEM_CLOTH_CONTACT,
-			IG::Edge::ePARTICLE_SYSTEM_CONTACT };
+			IG::Edge::eCONTACT_MANAGER};
 
 		for(PxU32 t = 0; t < NbTypes; ++t)
 		{

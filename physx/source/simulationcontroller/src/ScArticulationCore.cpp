@@ -45,7 +45,6 @@ Sc::ArticulationCore::ArticulationCore() :
 	mCore.sleepThreshold			= 5e-5f * scale.speed * scale.speed;
 	mCore.freezeThreshold			= 5e-6f * scale.speed * scale.speed;
 	mCore.wakeCounter				= Physics::sWakeCounterOnCreation;
-	mCore.gpuRemapIndex				= 0xffffffff;
 	mCore.maxLinearVelocity			= 1e+6f;
 	mCore.maxAngularVelocity		= 1e+6f;
 }

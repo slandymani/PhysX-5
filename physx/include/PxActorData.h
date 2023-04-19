@@ -68,31 +68,6 @@ namespace physx
 	PX_FLAGS_OPERATORS(PxActorCacheFlag::Enum, PxU16)
 
 	/**
-	\brief State of a body used when interfacing with the GPU rigid body pipeline
-	@see PxScene.copyBodyData()
-	*/
-	PX_ALIGN_PREFIX(16)
-	struct PxGpuBodyData
-	{
-		PxQuat			quat;		/*!< actor global pose quaternion in world frame */
-		PxVec4			pos;		/*!< (x,y,z members): actor global pose position in world frame */
-		PxVec4			linVel;		/*!< (x,y,z members): linear velocity at center of gravity in world frame */
-		PxVec4			angVel;		/*!< (x,y,z members): angular velocity in world frame */
-	}
-	PX_ALIGN_SUFFIX(16);
-
-	/**
-	\brief Pair correspondence used for matching array indices with body node indices
-	*/
-	PX_ALIGN_PREFIX(8)
-	struct PxGpuActorPair
-	{
-		PxU32 srcIndex;					//Defines which index in src array we read
-		PxNodeIndex nodeIndex;			//Defines which actor this entry in src array is updating
-	}
-	PX_ALIGN_SUFFIX(8);
-
-	/**
 	\brief Maps numeric index to a data pointer.
 
 	@see PxScene::computeDenseJacobians(), PxScene::computeGeneralizedMassMatrices(), PxScene::computeGeneralizedGravityForces(), PxScene::computeCoriolisAndCentrifugalForces()

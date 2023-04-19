@@ -142,8 +142,6 @@ namespace Sc
 
 						PxSpatialVelocity			getLinkAcceleration(const PxU32 linkId) const;
 
-						PxU32						getGpuArticulationIndex() const;				
-
 						void						updateKinematic(PxArticulationKinematicFlags flags);
 		//---------------------------------------------------------------------------------
 		// Internal API
