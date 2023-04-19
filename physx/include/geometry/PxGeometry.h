@@ -59,7 +59,6 @@ struct PxGeometryType
 		eTETRAHEDRONMESH,
 		eTRIANGLEMESH,
 		eHEIGHTFIELD,
-		eHAIRSYSTEM,
 		eCUSTOM,
 		
 		eGEOMETRY_COUNT,	//!< internal use only!

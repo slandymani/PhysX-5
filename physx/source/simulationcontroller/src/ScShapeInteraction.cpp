@@ -108,8 +108,6 @@ Sc::ShapeInteraction::ShapeInteraction(ShapeSimBase& s1, ShapeSimBase& s2, PxPai
 			type = IG::Edge::eFEM_CLOTH_CONTACT;
 		else if (isParticleSystem(actorTypeLargest))
 			type = IG::Edge::ePARTICLE_SYSTEM_CONTACT;
-		else if (actorTypeLargest == PxActorType::eHAIRSYSTEM)
-			type = IG::Edge::eHAIR_SYSTEM_CONTACT;
 
 		mEdgeIndex = simpleIslandManager->addContactManager(NULL, indexA, indexB, this, type);
 

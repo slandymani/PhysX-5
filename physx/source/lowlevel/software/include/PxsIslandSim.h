@@ -43,12 +43,6 @@ namespace Dy
 {
 	struct Constraint;
 	class FeatherstoneArticulation;
-#if PX_SUPPORT_GPU_PHYSX
-	class SoftBody;
-	class FEMCloth;
-	class ParticleSystem;
-	class HairSystem;
-#endif
 }
 
 namespace Sc
@@ -89,7 +83,6 @@ struct Edge
 		eSOFT_BODY_CONTACT,
 		eFEM_CLOTH_CONTACT, 
 		ePARTICLE_SYSTEM_CONTACT,
-		eHAIR_SYSTEM_CONTACT,
 		eEDGE_TYPE_COUNT
 	};
 	
@@ -216,7 +209,6 @@ public:
 		eSOFTBODY_TYPE,
 		eFEMCLOTH_TYPE,
 		ePARTICLESYSTEM_TYPE,
-		eHAIRSYSTEM_TYPE,
 		eTYPE_COUNT
 	};
 	enum State
@@ -249,12 +241,6 @@ public:
 	{
 		PxsRigidBody*							mRigidBody;
 		Dy::FeatherstoneArticulation*			mLLArticulation;
-#if PX_SUPPORT_GPU_PHYSX
-		Dy::SoftBody*							mLLSoftBody;
-		Dy::FEMCloth*							mLLFEMCloth;
-		Dy::ParticleSystem*						mLLParticleSystem;
-		Dy::HairSystem*							mLLHairSystem;
-#endif
 	};
 
 
@@ -280,12 +266,6 @@ public:
 	PX_FORCE_INLINE PxsRigidBody* getRigidBody() const { return mRigidBody; }
 
 	PX_FORCE_INLINE Dy::FeatherstoneArticulation* getArticulation() const { return mLLArticulation; }
-
-#if PX_SUPPORT_GPU_PHYSX
-	PX_FORCE_INLINE Dy::SoftBody* getSoftBody() const { return mLLSoftBody; }
-	PX_FORCE_INLINE Dy::FEMCloth* getFEMCloth() const { return mLLFEMCloth; }
-	PX_FORCE_INLINE Dy::HairSystem* getHairSystem() const { return mLLHairSystem; }
-#endif
 
 	PX_FORCE_INLINE void setActive() { mFlags |= eACTIVE; }
 	PX_FORCE_INLINE void clearActive() { mFlags &= ~eACTIVE; }
@@ -486,16 +466,6 @@ public:
 
 	void addArticulation(Sc::ArticulationSim* articulation, Dy::FeatherstoneArticulation* llArtic, bool isActive, PxNodeIndex nodeIndex);
 
-#if PX_SUPPORT_GPU_PHYSX
-	void addSoftBody(Dy::SoftBody* llArtic, bool isActive, PxNodeIndex nodeIndex);
-
-	void addFEMCloth(Dy::FEMCloth* llArtic, bool isActive, PxNodeIndex nodeIndex);
-
-	void addParticleSystem(Dy::ParticleSystem* llArtic, bool isActive, PxNodeIndex nodeIndex);
-
-	void addHairSystem(Dy::HairSystem* llHairSystem, bool isActive, PxNodeIndex nodeIndex);
-#endif
-
 	void addContactManager(PxsContactManager* manager, PxNodeIndex nodeHandle1, PxNodeIndex nodeHandle2, EdgeIndex handle);
 
 	void addConstraint(Dy::Constraint* constraint, PxNodeIndex nodeHandle1, PxNodeIndex nodeHandle2, EdgeIndex handle);
@@ -550,29 +520,6 @@ public:
 	}
 
 	Sc::ArticulationSim* getArticulationSim(PxNodeIndex nodeIndex) const;
-
-#if PX_SUPPORT_GPU_PHYSX
-	PX_FORCE_INLINE Dy::SoftBody* getLLSoftBody(PxNodeIndex nodeIndex) const
-	{
-		const Node& node = mNodes[nodeIndex.index()];
-		PX_ASSERT(node.mType == Node::eSOFTBODY_TYPE);
-		return node.mLLSoftBody;
-	}
-
-	PX_FORCE_INLINE Dy::FEMCloth* getLLFEMCloth(PxNodeIndex nodeIndex) const
-	{
-		const Node& node = mNodes[nodeIndex.index()];
-		PX_ASSERT(node.mType == Node::eFEMCLOTH_TYPE);
-		return node.mLLFEMCloth;
-	}
-
-	PX_FORCE_INLINE Dy::HairSystem* getLLHairSystem(PxNodeIndex nodeIndex) const
-	{
-		const Node& node = mNodes[nodeIndex.index()];
-		PX_ASSERT(node.mType == Node::eHAIRSYSTEM_TYPE);
-		return node.mLLHairSystem;
-	}
-#endif
 
 	PX_FORCE_INLINE void clearDeactivations()
 	{

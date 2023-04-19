@@ -112,12 +112,6 @@ void GeometryUnion::set(const PxGeometry& g)
 		}
 		break;
 
-		case PxGeometryType::eHAIRSYSTEM:
-		{
-			reinterpret_cast<PxHairSystemGeometry&>(mGeometry) = static_cast<const PxHairSystemGeometry&>(g);
-		}
-		break;
-
 		case PxGeometryType::eCUSTOM:
 		{
 			reinterpret_cast<PxCustomGeometry&>(mGeometry) = static_cast<const PxCustomGeometry&>(g);
@@ -386,7 +380,6 @@ void ShapeCore::resolveReferences(PxDeserializationContext& context)
 	break;
 	case PxGeometryType::eTETRAHEDRONMESH:
 	case PxGeometryType::ePARTICLESYSTEM:
-	case PxGeometryType::eHAIRSYSTEM:
 	case PxGeometryType::eCUSTOM:
 	{
 		// implement

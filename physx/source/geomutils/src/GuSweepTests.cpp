@@ -39,7 +39,7 @@
 using namespace physx;
 using namespace Gu;
 using namespace Cm;
-using namespace physx::aos;  
+using namespace physx::aos;
 
 //#define USE_VIRTUAL_GJK
 #ifdef USE_VIRTUAL_GJK
@@ -654,7 +654,6 @@ Gu::GeomSweepFuncs gGeomSweepFuncs =
 		sweepCapsule_InvalidGeom,
 		sweepCapsule_MeshGeom,
 		sweepCapsule_HeightfieldUnregistered,
-		sweepCapsule_InvalidGeom,
 		sweepCapsule_CustomGeom
 	},
 	{
@@ -667,7 +666,6 @@ Gu::GeomSweepFuncs gGeomSweepFuncs =
 		sweepCapsule_InvalidGeom,
 		sweepCapsule_MeshGeom ,
 		sweepCapsule_HeightfieldUnregistered,
-		sweepCapsule_InvalidGeom,
 		sweepCapsule_CustomGeom
 	},
 	{
@@ -680,7 +678,6 @@ Gu::GeomSweepFuncs gGeomSweepFuncs =
 		sweepBox_InvalidGeom,
 		sweepBox_MeshGeom,		
 		sweepBox_HeightfieldUnregistered,
-		sweepBox_InvalidGeom,
 		sweepBox_CustomGeom
 	},
 	{
@@ -691,9 +688,8 @@ Gu::GeomSweepFuncs gGeomSweepFuncs =
 		sweepBox_ConvexGeom,
 		sweepBox_InvalidGeom,
 		sweepBox_InvalidGeom,
-		sweepBox_MeshGeom,		
+		sweepBox_MeshGeom,
 		sweepBox_HeightfieldUnregistered,
-		sweepBox_InvalidGeom,
 		sweepBox_CustomGeom
 	},
 	{
@@ -706,7 +702,6 @@ Gu::GeomSweepFuncs gGeomSweepFuncs =
 		sweepConvex_InvalidGeom,	// 6
 		sweepConvex_MeshGeom,		// 7			
 		sweepConvex_HeightfieldUnregistered,	// 8
-		sweepConvex_InvalidGeom,	// 9
 		sweepConvex_CustomGeom		// 10
 	}
 };

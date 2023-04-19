@@ -62,12 +62,6 @@ namespace physx
 		struct ArticulationJointCore;
 		class ParticleSystemCore;
 		class ParticleSystem;
-		
-#if PX_SUPPORT_GPU_PHYSX
-		class SoftBody;
-		class FEMCloth;
-		class HairSystem;
-#endif
 	}
 
 	namespace Cm
@@ -140,121 +134,6 @@ namespace physx
 		virtual void releaseArticulation(Dy::FeatherstoneArticulation* articulation, const PxNodeIndex& nodeIndex) = 0;
 		virtual void releaseDeferredArticulationIds() = 0;
 
-#if PX_SUPPORT_GPU_PHYSX
-		virtual void addSoftBody(Dy::SoftBody* softBody, const PxNodeIndex& nodeIndex) = 0;
-		virtual void releaseSoftBody(Dy::SoftBody* softBody) = 0;
-		virtual void releaseDeferredSoftBodyIds() = 0;
-		virtual void activateSoftbody(Dy::SoftBody*) = 0;
-		virtual void deactivateSoftbody(Dy::SoftBody*) = 0;
-		virtual void activateSoftbodySelfCollision(Dy::SoftBody*) = 0;
-		virtual void deactivateSoftbodySelfCollision(Dy::SoftBody*) = 0;
-		virtual void setSoftBodyWakeCounter(Dy::SoftBody*) = 0;
-
-		virtual void addParticleFilter(Dy::SoftBody*softBodySystem, Dy::ParticleSystem* particleSystem,
-			PxU32 particleId, PxU32 userBufferId, PxU32 tetId) = 0;
-		virtual void removeParticleFilter(Dy::SoftBody* softBodySystem,
-			const Dy::ParticleSystem* particleSystem, PxU32 particleId, PxU32 userBufferId, PxU32 tetId) = 0;
-
-		virtual PxU32 addParticleAttachment(Dy::SoftBody*softBodySystem, const Dy::ParticleSystem* particleSystem,
-			PxU32 particleId, PxU32 userBufferId, PxU32 tetId, const PxVec4& barycentrics, const bool isActive) = 0;
-		virtual void removeParticleAttachment(Dy::SoftBody* softBody, PxU32 handle) = 0;
-
-		virtual void addRigidFilter(Dy::SoftBody*softBodySystem, const PxNodeIndex& softBodyNodeIndex,
-			const PxNodeIndex& rigidNodeIndex, PxU32 vertIndex) = 0;
-		virtual void removeRigidFilter(Dy::SoftBody* softBodySystem, 
-			const PxNodeIndex& rigidNodeIndex, PxU32 vertIndex) = 0;
-
-		virtual PxU32 addRigidAttachment(Dy::SoftBody*softBodySystem, const PxNodeIndex& softBodyNodeIndex,
-			PxsRigidBody* rigidBody, const PxNodeIndex& rigidNodeIndex, PxU32 vertIndex, const PxVec3& actorSpacePose,
-			PxConeLimitedConstraint* constraint, const bool isActive) = 0;
-		virtual void removeRigidAttachment(Dy::SoftBody* softBody, PxU32 handle) = 0;
-
-		virtual void addTetRigidFilter(Dy::SoftBody* softBodySystem,
-			const PxNodeIndex& rigidNodeIndex, PxU32 tetId) = 0;
-
-		virtual PxU32 addTetRigidAttachment(Dy::SoftBody* softBodySystem,
-			PxsRigidBody* rigidBody, const PxNodeIndex& rigidNodeIndex, PxU32 tetIdx, 
-			const PxVec4& barycentrics, const PxVec3& actorSpacePose, PxConeLimitedConstraint* constraint,
-			const bool isActive) = 0;
-
-		virtual void removeTetRigidFilter(Dy::SoftBody* softBody, 
-			const PxNodeIndex& rigidNodeIndex, PxU32 tetId) = 0;
-
-		virtual void addSoftBodyFilter(Dy::SoftBody* softBody0, Dy::SoftBody* softBody1, PxU32 tetIdx0, 
-			PxU32 tetIdx1) = 0;
-		virtual void removeSoftBodyFilter(Dy::SoftBody* softBody0, Dy::SoftBody* softBody1, PxU32 tetIdx0,
-			PxU32 tetId1) = 0;
-		virtual void addSoftBodyFilters(Dy::SoftBody* softBody0, Dy::SoftBody* softBody1, PxU32* tetIndices0, PxU32* tetIndices1,
-			PxU32 tetIndicesSize) = 0;
-		virtual void removeSoftBodyFilters(Dy::SoftBody* softBody0, Dy::SoftBody* softBody1, PxU32* tetIndices0, PxU32* tetIndices1,
-			PxU32 tetIndicesSize) = 0;
-
-		virtual PxU32 addSoftBodyAttachment(Dy::SoftBody* softBody0, Dy::SoftBody* softBody1, PxU32 tetIdx0, PxU32 tetIdx1,
-			const PxVec4& tetBarycentric0, const PxVec4& tetBarycentric1, PxConeLimitedConstraint* constraint, const bool isActive) = 0;
-		virtual void removeSoftBodyAttachment(Dy::SoftBody* softBody0, PxU32 handle) = 0;
-
-		virtual void addClothFilter(Dy::SoftBody* softBody, Dy::FEMCloth* cloth, PxU32 triIdx,
-			PxU32 tetIdx) = 0;
-		virtual void removeClothFilter(Dy::SoftBody* softBody, Dy::FEMCloth*, PxU32 triId,
-			PxU32 tetId) = 0;
-
-		virtual PxU32 addClothAttachment(Dy::SoftBody* softBody, Dy::FEMCloth* cloth, PxU32 triIdx,
-			const PxVec4& triBarycentric, PxU32 tetIdx, const PxVec4& tetBarycentric, PxConeLimitedConstraint* constraint,
-			const bool isActive) = 0;
-		virtual void removeClothAttachment(Dy::SoftBody* softBody,PxU32 handle) = 0;
-
-		virtual void addFEMCloth(Dy::FEMCloth* femCloth, const PxNodeIndex& nodeIndex) = 0;
-		virtual void releaseFEMCloth(Dy::FEMCloth* femCloth) = 0;
-		virtual void releaseDeferredFEMClothIds() = 0;
-		virtual void activateCloth(Dy::FEMCloth* femCloth) = 0;
-		virtual void deactivateCloth(Dy::FEMCloth* femCloth) = 0;
-		virtual void setClothWakeCounter(Dy::FEMCloth*) = 0;
-
-		virtual void addRigidFilter(Dy::FEMCloth* cloth,
-			const PxNodeIndex& rigidNodeIndex, PxU32 vertId) = 0;
-
-		virtual void removeRigidFilter(Dy::FEMCloth* cloth,
-			const PxNodeIndex& rigidNodeIndex, PxU32 vertId) = 0;
-
-		virtual PxU32 addRigidAttachment(Dy::FEMCloth* cloth, const PxNodeIndex& clothNodeIndex,
-			PxsRigidBody* rigidBody, const PxNodeIndex& rigidNodeIndex, PxU32 vertIndex, const PxVec3& actorSpacePose,
-			PxConeLimitedConstraint* constraint, const bool isActive) = 0;
-		virtual void removeRigidAttachment(Dy::FEMCloth* cloth, PxU32 handle) = 0;
-
-		virtual void addTriRigidFilter(Dy::FEMCloth* cloth,
-			const PxNodeIndex& rigidNodeIndex, PxU32 triIdx) = 0;
-
-		virtual void removeTriRigidFilter(Dy::FEMCloth* cloth, 
-			const PxNodeIndex& rigidNodeIndex, PxU32 triIdx) = 0;
-
-		virtual PxU32 addTriRigidAttachment(Dy::FEMCloth* cloth,
-			PxsRigidBody* rigidBody, const PxNodeIndex& rigidNodeIndex, PxU32 triIdx, const PxVec4& barycentrics, 
-			const PxVec3& actorSpacePose, PxConeLimitedConstraint* constraint,
-			const bool isActive) = 0;
-
-		virtual void removeTriRigidAttachment(Dy::FEMCloth* cloth, PxU32 handle) = 0;
-
-		virtual void addClothFilter(Dy::FEMCloth* cloth0, Dy::FEMCloth* cloth1, PxU32 triIdx0, PxU32 triIdx1) = 0;
-		virtual void removeClothFilter(Dy::FEMCloth* cloth0, Dy::FEMCloth* cloth1, PxU32 triIdx0, PxU32 triId1) = 0;
-
-		virtual PxU32 addTriClothAttachment(Dy::FEMCloth* cloth0, Dy::FEMCloth* cloth1, PxU32 triIdx0, PxU32 triIdx1,
-			const PxVec4& triBarycentric0, const PxVec4& triBarycentric1, const bool addToActive) = 0;
-
-		virtual void removeTriClothAttachment(Dy::FEMCloth* cloth0, PxU32 handle) = 0;
-
-
-		virtual void addParticleSystem(Dy::ParticleSystem* particleSystem, const PxNodeIndex& nodeIndex, PxParticleSolverType::Enum type) = 0;
-		virtual void releaseParticleSystem(Dy::ParticleSystem* particleSystem, PxParticleSolverType::Enum type) = 0;
-		virtual void releaseDeferredParticleSystemIds() = 0;
-
-		virtual void addHairSystem(Dy::HairSystem* hairSystem, const PxNodeIndex& nodeIndex) = 0;
-		virtual void releaseHairSystem(Dy::HairSystem* hairSystem) = 0;
-		virtual void releaseDeferredHairSystemIds() = 0;
-		virtual void activateHairSystem(Dy::HairSystem*) = 0;
-		virtual void deactivateHairSystem(Dy::HairSystem*) = 0;
-		virtual void setHairSystemWakeCounter(Dy::HairSystem*) = 0;
-#endif
-
 		virtual void flush() = 0;
 
 		virtual void updateDynamic(Dy::FeatherstoneArticulation* articulation, const PxNodeIndex& nodeIndex) = 0;
@@ -317,33 +196,6 @@ namespace physx
 		virtual void    applyParticleBufferData(const PxU32* indices, const PxGpuParticleBufferIndexPair* indexPairs, const PxParticleBufferFlags* flags, PxU32 nbUpdatedBuffers, void* waitEvent, void* signalEvent) = 0;
 
 		virtual void	flushInsertions() = 0;
-
-#if PX_SUPPORT_GPU_PHYSX
-		virtual PxU32	getNbDeactivatedFEMCloth() const = 0;
-		virtual PxU32	getNbActivatedFEMCloth() const = 0;
-
-		virtual Dy::FEMCloth**	getDeactivatedFEMCloths() const = 0;
-		virtual Dy::FEMCloth**	getActivatedFEMCloths() const = 0;
-
-
-		virtual PxU32	getNbDeactivatedSoftbodies() const = 0;
-		virtual PxU32	getNbActivatedSoftbodies() const = 0;
-
-		virtual const PxReal*	getSoftBodyWakeCounters() const = 0;
-
-		virtual Dy::SoftBody**	getDeactivatedSoftbodies() const = 0;
-		virtual Dy::SoftBody**	getActivatedSoftbodies() const = 0;
-
-		virtual bool hasFEMCloth() const = 0;
-		virtual bool hasSoftBodies() const = 0;
-
-		virtual PxU32				getNbDeactivatedHairSystems() const = 0;
-		virtual PxU32				getNbActivatedHairSystems() const = 0;
-		virtual Dy::HairSystem**	getDeactivatedHairSystems() const = 0;
-		virtual Dy::HairSystem**	getActivatedHairSystems() const = 0;
-		virtual bool				hasHairSystems() const = 0;
-
-#endif
 
 		virtual void*	getMPMDataPointer(const Dy::ParticleSystem& psLL, PxMPMParticleDataFlag::Enum flags) = 0;
 		virtual void*	getSparseGridDataPointer(const Dy::ParticleSystem& psLL, PxSparseGridDataFlag::Enum flags, PxParticleSolverType::Enum type) = 0;

@@ -139,7 +139,6 @@ OMNI_PVD_ENUM_VALUE		(actortype,				ePBD_PARTICLESYSTEM,					PxActorType::ePBD_P
 OMNI_PVD_ENUM_VALUE		(actortype,				eFLIP_PARTICLESYSTEM,					PxActorType::eFLIP_PARTICLESYSTEM)
 OMNI_PVD_ENUM_VALUE		(actortype,				eMPM_PARTICLESYSTEM,					PxActorType::eMPM_PARTICLESYSTEM)
 OMNI_PVD_ENUM_VALUE		(actortype,				eCUSTOM_PARTICLESYSTEM,					PxActorType::eCUSTOM_PARTICLESYSTEM)
-OMNI_PVD_ENUM_VALUE		(actortype,				eHAIRSYSTEM,							PxActorType::eHAIRSYSTEM)
 
 OMNI_PVD_ENUM			(articulationjointtype,		PxArticulationJointType)
 OMNI_PVD_ENUM_VALUE		(articulationjointtype,		eFIX,						PxArticulationJointType::eFIX)

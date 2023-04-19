@@ -71,24 +71,6 @@ class NpArticulationJointReducedCoordinate;
 class PxSoftBody;
 class PxFEMCloth;
 class PxParticleSystem;
-class PxHairSystem;
-
-#if PX_SUPPORT_GPU_PHYSX
-class NpSoftBody;
-class NpFEMCloth;
-class NpPBDParticleSystem;
-class NpFLIPParticleSystem;
-class NpMPMParticleSystem;
-class NpCustomParticSystem;
-class NpHairSystem;
-
-class NpFEMSoftBodyMaterial;
-class NpFEMClothMaterial;
-class NpPBDMaterial;
-class NpFLIPMaterial;
-class NpMPMMaterial;
-class NpCustomMaterial;
-#endif
 
 class PxMaterial;
 class NpMaterial;
@@ -230,12 +212,6 @@ public:
 				//Particle rigid buffers
 				PxParticleRigidBuffer*					createParticleRigidBuffer(PxU32 maxParticles, PxU32 maxNumVolumes, PxU32 maxNumRigids, PxCudaContextManager* cudaContextManager);
 
-#if PX_ENABLE_FEATURES_UNDER_CONSTRUCTION
-				// HairSystem
-				PxHairSystem*							createHairSystem(PxCudaContextManager& cudaContextManager);
-				void									releaseHairSystemToPool(PxHairSystem& hairSystem);
-#endif
-
 				// Aggregates
 				PxAggregate*							createAggregate(PxU32 maxActors, PxU32 maxShapes, PxAggregateFilterHint filterHint);
 				void									addAggregate(PxAggregate*, bool lock=true);
@@ -372,9 +348,6 @@ private:
 				PxMutex									mCustomMaterialPoolLock;
 				/*PxPool2<NpFEMSoftBodyMaterial, 4096>	mFEMMaterialPool;
 				PxMutex									mFEMMaterialPoolLock;*/
-
-				PxPool2<NpHairSystem, 4096>				mHairSystemPool;
-				PxMutex									mHairSystemPoolLock;
 #endif
 #endif
 
@@ -394,16 +367,6 @@ private:
 	void	NpDestroyAggregate(NpAggregate* np);
 	void	NpDestroyShape(NpShape* np);
 	void	NpDestroyConstraint(NpConstraint* np);
-
-#if PX_SUPPORT_GPU_PHYSX
-	void	NpDestroySoftBody(NpSoftBody* softBody);
-	void	NpDestroyFEMCloth(NpFEMCloth* femCloth);
-	void	NpDestroyParticleSystem(NpPBDParticleSystem* particleSystem);
-	void	NpDestroyParticleSystem(NpFLIPParticleSystem* particleSystem);
-	void	NpDestroyParticleSystem(NpMPMParticleSystem* particleSystem);
-	void	NpDestroyParticleSystem(NpCustomParticleSystem* particleSystem);
-	void	NpDestroyHairSystem(NpHairSystem* hairSystem);
-#endif
 }
 
 #endif

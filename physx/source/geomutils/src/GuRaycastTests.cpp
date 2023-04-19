@@ -430,25 +430,6 @@ PxU32 raycast_triangleMesh(GU_RAY_FUNC_PARAMS)
 	return Midphase::raycastTriangleMesh(meshData, meshGeom, pose, rayOrigin, rayDir, maxDist, hitFlags, maxHits, hits, stride);
 }
 
-PxU32 raycast_hairsystem(GU_RAY_FUNC_PARAMS)
-{
-	PX_ASSERT(geom.getType() == PxGeometryType::eHAIRSYSTEM);
-	PX_ASSERT(PxAbs(rayDir.magnitudeSquared() - 1)<1e-4f);
-
-	PX_UNUSED(threadContext);
-	PX_UNUSED(stride);
-	PX_UNUSED(rayDir);
-	PX_UNUSED(pose);
-	PX_UNUSED(rayOrigin);
-	PX_UNUSED(maxHits);
-	PX_UNUSED(maxDist);
-	PX_UNUSED(hits);
-	PX_UNUSED(hitFlags);
-	PX_UNUSED(geom);
-
-	return 0;
-}
-
 namespace
 {
 	struct HFTraceSegmentCallback 
@@ -638,7 +619,6 @@ RaycastFunc gRaycastMap[] =
 	raycast_softbody,
 	raycast_triangleMesh,	
 	raycast_heightField_unregistered,
-	raycast_hairsystem,
 	raycast_custom
 };
 PX_COMPILE_TIME_ASSERT(sizeof(gRaycastMap) / sizeof(gRaycastMap[0]) == PxGeometryType::eGEOMETRY_COUNT);

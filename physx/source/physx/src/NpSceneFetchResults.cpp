@@ -33,14 +33,6 @@
 #include "NpArticulationTendon.h"
 #include "NpArticulationSensor.h"
 #include "NpAggregate.h"
-#if PX_SUPPORT_GPU_PHYSX
-	#include "NpSoftBody.h"
-	#include "NpParticleSystem.h"
-	#include "NpFEMCloth.h"
-	#include "NpHairSystem.h"
-	#include "cudamanager/PxCudaContextManager.h"
-	#include "cudamanager/PxCudaContext.h"	
-#endif
 #include "ScArticulationSim.h"
 #include "ScArticulationTendonSim.h"
 #include "CmCollection.h"

@@ -43,11 +43,6 @@ using namespace physx;
 #include "NpRigidStatic.h"
 #include "NpRigidDynamic.h"
 #include "NpArticulationReducedCoordinate.h"
-#if PX_SUPPORT_GPU_PHYSX
-	#include "NpSoftBody.h"
-	#include "NpParticleSystem.h"
-	#include "NpHairSystem.h"
-#endif
 #include "foundation/PxVecMath.h"
 #include "geometry/PxMeshQuery.h"
 #include "GuHeightFieldUtil.h"
@@ -705,8 +700,6 @@ static void visualize(const PxGeometry& geometry, PxRenderOutput& out, const PxT
 	case PxGeometryType::ePARTICLESYSTEM:
 		// A.B. missing visualization code
 		break;
-	case PxGeometryType::eHAIRSYSTEM:
-		break;
 	case PxGeometryType::eCUSTOM:
 		PX_ASSERT(static_cast<const PxCustomGeometry&>(geometry).isValid());
 		static_cast<const PxCustomGeometry&>(geometry).callbacks->visualize(geometry, out, absPose, cullbox);
@@ -947,79 +940,6 @@ void NpScene::visualize()
 			Cm::renderOutputDebugBox(out, cullbox);
 		}
 	}
-
-#if PX_SUPPORT_GPU_PHYSX
-	// Visualize particle systems
-	{
-		{
-			PxPBDParticleSystem*const* particleSystems = mPBDParticleSystems.getEntries();
-			const PxU32 particleSystemCount = mPBDParticleSystems.size();
-
-			for (PxU32 i = 0; i < particleSystemCount; i++)
-			{
-				static_cast<NpPBDParticleSystem*>(particleSystems[i])->visualize(out, *this);
-			}
-		}
-
-#if PX_ENABLE_FEATURES_UNDER_CONSTRUCTION
-		{
-			PxFLIPParticleSystem*const* particleSystems = mFLIPParticleSystems.getEntries();
-			const PxU32 particleSystemCount = mFLIPParticleSystems.size();
-
-			for (PxU32 i = 0; i < particleSystemCount; i++)
-			{
-				static_cast<NpFLIPParticleSystem*>(particleSystems[i])->visualize(out, *this);
-
-			}
-		}
-
-		{
-			PxMPMParticleSystem*const* particleSystems = mMPMParticleSystems.getEntries();
-			const PxU32 particleSystemCount = mMPMParticleSystems.size();
-
-			for (PxU32 i = 0; i < particleSystemCount; i++)
-			{
-				static_cast<NpMPMParticleSystem*>(particleSystems[i])->visualize(out, *this);
-			}
-		}
-
-		{
-			PxCustomParticleSystem*const* particleSystems = mCustomParticleSystems.getEntries();
-			const PxU32 particleSystemCount = mCustomParticleSystems.size();
-
-			for (PxU32 i = 0; i < particleSystemCount; i++)
-			{
-				static_cast<NpCustomParticleSystem*>(particleSystems[i])->visualize(out, *this);
-			}
-		}
-#endif
-	}
-
-	// Visualize soft bodies
-	{
-		PxSoftBody*const* softBodies = mSoftBodies.getEntries();
-		const PxU32 softBodyCount = mSoftBodies.size();
-
-		const bool visualize = mScene.getVisualizationParameter(PxVisualizationParameter::eSIMULATION_MESH) != 0.0f;
-		for(PxU32 i=0; i<softBodyCount; i++)
-			softBodies[i]->setSoftBodyFlag(PxSoftBodyFlag::eDISPLAY_SIM_MESH, visualize);		
-	}
-
-	// FEM-cloth
-	// no change
-	// visualize hair systems
-	{
-#if PX_ENABLE_FEATURES_UNDER_CONSTRUCTION
-		const PxHairSystem*const* hairSystems = mHairSystems.getEntries();
-		const PxU32 hairSystemCount = mHairSystems.size();
-		
-		for (PxU32 i = 0; i < hairSystemCount; i++)
-		{
-			static_cast<const NpHairSystem*>(hairSystems[i])->visualize(out, *this);
-		}
-#endif
-	}
-#endif
 
 #if PX_SUPPORT_PVD
 	mScenePvdClient.visualize(mRenderBuffer);

@@ -177,13 +177,6 @@ struct PxActorType
 		*/
 		eCUSTOM_PARTICLESYSTEM PX_DEPRECATED,
 
-		/**
-		\brief A HairSystem
-		\note In development
-		@see PxHairSystem
-		*/
-		eHAIRSYSTEM PX_DEPRECATED,
-
 		//! \brief internal use only!
 		eACTOR_COUNT PX_DEPRECATED,
 

@@ -136,7 +136,6 @@ namespace Sc
 		PX_FORCE_INLINE	bool				isSoftBody()				const	{ const PxActorType::Enum type = getActorType(); return type == PxActorType::eSOFTBODY; }
 		PX_FORCE_INLINE	bool				isFEMCloth()				const   { const PxActorType::Enum type = getActorType(); return type == PxActorType::eFEMCLOTH; }
 		PX_FORCE_INLINE bool				isParticleSystem()			const	{ const PxActorType::Enum type = getActorType(); return type == PxActorType::ePBD_PARTICLESYSTEM || type == PxActorType::eFLIP_PARTICLESYSTEM || type == PxActorType::eMPM_PARTICLESYSTEM || type == PxActorType::eCUSTOM_PARTICLESYSTEM; }
-		PX_FORCE_INLINE	bool				isHairSystem()				const	{ const PxActorType::Enum type = getActorType(); return type == PxActorType::eHAIRSYSTEM; }
 		PX_FORCE_INLINE bool				isNonRigid()				const	{ const PxActorType::Enum type = getActorType(); return type!=PxActorType::eRIGID_STATIC && type!=PxActorType::eRIGID_DYNAMIC && type!=PxActorType::eARTICULATION_LINK; }
 		PX_FORCE_INLINE	bool				isStaticRigid()				const   { const PxActorType::Enum type = getActorType(); return type == PxActorType::eRIGID_STATIC; }
 

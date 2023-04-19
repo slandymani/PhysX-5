@@ -74,10 +74,9 @@ namespace physx
 			AGGREGATE		= 3,
 			SOFTBODY		= 4,
 			PARTICLESYSTEM	= 5,
-			FEMCLOTH        = 6,
-			HAIRSYSTEM		= 7,
+			FEMCLOTH		= 6,
 
-			COUNT			= 8
+			COUNT,
 		};
 	};
 

@@ -40,7 +40,6 @@
 #include "task/PxTask.h"
 #include "PxArticulationFlag.h"
 #include "PxSoftBodyFlag.h"
-#include "PxHairSystemFlag.h"
 #include "PxActorData.h"
 #include "PxParticleSystemFlag.h"
 #include "PxParticleSolverType.h"
@@ -69,7 +68,6 @@ class PxPvdSceneClient;
 
 class PxSoftBody;
 class PxFEMCloth;
-class PxHairSystem;
 
 /**
 \brief Expresses the dominance relationship of a contact.
@@ -555,25 +553,6 @@ class PxScene : public PxSceneSQSystem
 	\return Number of FEM cloths written to the buffer
 	*/
 	PX_DEPRECATED virtual PxU32				getFEMCloths(PxFEMCloth** userBuffer, PxU32 bufferSize, PxU32 startIndex = 0) const = 0;
-
-	/**
-	\brief Retrieve the number of hair systems in the scene.
-	\warning Feature under development, only for internal usage.
-	\return the number of hair systems
-	@see getActors()
-	*/
-	PX_DEPRECATED virtual	PxU32				getNbHairSystems() const = 0;
-
-	/**
-	\brief Retrieve an array of all the hair systems in the scene.
-	\warning Feature under development, only for internal usage.
-
-	\param[out] userBuffer The buffer to write the actor pointers to
-	\param[in] bufferSize Size of the provided user buffer
-	\param[in] startIndex Index of first actor pointer to be retrieved
-	\return Number of actors written to the buffer
-	*/
-	PX_DEPRECATED virtual	PxU32				getHairSystems(PxHairSystem** userBuffer, PxU32 bufferSize, PxU32 startIndex = 0) const = 0;
 
 	/**
 	\brief Returns the number of articulations in the scene.

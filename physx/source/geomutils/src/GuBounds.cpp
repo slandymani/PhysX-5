@@ -443,13 +443,6 @@ void Gu::computeBounds(PxBounds3& bounds, const PxGeometry& geometry, const PxTr
 			PX_ASSERT(0);			
 		}
 		break;
-		
-		case PxGeometryType::eHAIRSYSTEM:
-		{
-			// jcarius: Hairsystem bounds only available on GPU
-			bounds.setEmpty();
-		}
-		break;
 
 		case PxGeometryType::eCUSTOM:
 		{

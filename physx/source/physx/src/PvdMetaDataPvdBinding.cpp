@@ -1136,8 +1136,6 @@ static void setGeometry(PvdMetaDataBinding& metaBind, PvdDataStream& inStream, c
 	case PxGeometryType::ePARTICLESYSTEM:
 		// A.B. implement later
 		break;
-	case PxGeometryType::eHAIRSYSTEM:
-		break;
 	case PxGeometryType::eGEOMETRY_COUNT:
 	case PxGeometryType::eINVALID:
 		PX_ASSERT(false);
@@ -1568,28 +1566,6 @@ void PvdMetaDataBinding::destroyInstance(PvdDataStream& inStream, const PxCustom
 	PX_UNUSED(ownerScene);
 }
 
-void PvdMetaDataBinding::createInstance(PvdDataStream& inStream, const PxHairSystem& inObj, const PxScene& ownerScene, const PxPhysics& ownerPhysics, PsPvd* pvd)
-{
-	PX_UNUSED(inStream);
-	PX_UNUSED(inObj);
-	PX_UNUSED(ownerScene);
-	PX_UNUSED(ownerPhysics);
-	PX_UNUSED(pvd);
-}
-
-void PvdMetaDataBinding::sendAllProperties(PvdDataStream& inStream, const PxHairSystem& inObj)
-{
-	PX_UNUSED(inStream);
-	PX_UNUSED(inObj);
-}
-
-void PvdMetaDataBinding::destroyInstance(PvdDataStream& inStream, const PxHairSystem& inObj, const PxScene& ownerScene)
-{
-	PX_UNUSED(inStream);
-	PX_UNUSED(inObj);
-	PX_UNUSED(ownerScene);
-}
-
 void PvdMetaDataBinding::originShift(PvdDataStream& inStream, const PxScene* inScene, PxVec3 shift)
 {
 	inStream.originShift(inScene, shift);
@@ -2004,7 +1980,6 @@ void PvdMetaDataBinding::sendSceneQueries(PvdDataStream& inStream, const PxScene
 			case PxGeometryType::eHEIGHTFIELD:
 			case PxGeometryType::eTETRAHEDRONMESH:
 			case PxGeometryType::ePARTICLESYSTEM:
-			case PxGeometryType::eHAIRSYSTEM:
 			case PxGeometryType::eCUSTOM:
 			case PxGeometryType::eGEOMETRY_COUNT:
 			case PxGeometryType::eINVALID:

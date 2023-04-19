@@ -86,22 +86,6 @@
 #include "PxvDynamics.h"
 #include "DyFeatherstoneArticulation.h"
 
-#if PX_SUPPORT_GPU_PHYSX
-#include "PxSoftBody.h"
-#include "ScSoftBodySim.h"
-#include "DySoftBody.h"
-#if PX_ENABLE_FEATURES_UNDER_CONSTRUCTION
-#include "PxFEMCloth.h"
-#include "PxHairSystem.h"
-#endif
-#include "ScFEMClothSim.h"
-#include "DyFEMCloth.h"
-#include "ScParticleSystemSim.h"
-#include "DyParticleSystem.h"
-#include "ScHairSystemSim.h"
-#include "DyHairSystem.h"
-#endif
-
 #include "CmPtrTable.h"
 #include "CmTransformUtils.h"
 
@@ -119,32 +103,6 @@ class LLArticulationRCPool : public PxPool<FeatherstoneArticulation, PxAlignedAl
 public:
 	LLArticulationRCPool() {}
 };
-
-#if PX_SUPPORT_GPU_PHYSX
-	class LLSoftBodyPool : public PxPool<SoftBody, PxAlignedAllocator<64> >
-	{
-	public:
-		LLSoftBodyPool() {}
-	};
-
-	class LLFEMClothPool : public PxPool<FEMCloth, PxAlignedAllocator<64> >
-	{
-	public:
-		LLFEMClothPool() {}
-	};
-
-	class LLParticleSystemPool : public PxPool<ParticleSystem, PxAlignedAllocator<64> >
-	{
-	public:
-		LLParticleSystemPool() {}
-	};
-
-	class LLHairSystemPool : public PxPool<HairSystem, PxAlignedAllocator<64> >
-	{
-	public:
-		LLHairSystemPool() {}
-	};
-#endif
 
 static const char* sFilterShaderDataMemAllocId = "SceneDesc filterShaderData";
 
@@ -557,87 +515,6 @@ public:
 			Sc::ShapeSim* shape = reinterpret_cast<Sc::ShapeSim*>(reinterpret_cast<PxU8*>(shapeLL) - shapeOffset);
 			shape->createSqBounds();
 		}
-
-
-#if PX_SUPPORT_GPU_PHYSX
-		if (simulationController->hasFEMCloth())
-		{
-
-			//KS - technically, there's a race condition calling activateNode/deactivateNode, but we know that it is 
-			//safe because these deactivate/activate calls came from the solver. This means that we know that the 
-			//actors are active currently, so at most we are just clearing/setting the ready for sleeping flag.
-			//None of the more complex logic that touching shared state will be executed.
-			const PxU32 nbActivatedCloth = simulationController->getNbActivatedFEMCloth();
-			Dy::FEMCloth** activatedCloths = simulationController->getActivatedFEMCloths();
-
-			for (PxU32 i = 0; i < nbActivatedCloth; ++i)
-			{
-				PxNodeIndex nodeIndex = activatedCloths[i]->getFEMClothSim()->getNodeIndex();
-
-				islandManager->activateNode(nodeIndex);
-			}
-
-			const PxU32 nbDeactivatedCloth = simulationController->getNbDeactivatedFEMCloth();
-			Dy::FEMCloth** deactivatedCloths = simulationController->getDeactivatedFEMCloths();
-
-			for (PxU32 i = 0; i < nbDeactivatedCloth; ++i)
-			{
-				PxNodeIndex nodeIndex = deactivatedCloths[i]->getFEMClothSim()->getNodeIndex();
-
-				islandManager->deactivateNode(nodeIndex);
-			}
-		}
-
-		if (simulationController->hasSoftBodies())
-		{
-
-			//KS - technically, there's a race condition calling activateNode/deactivateNode, but we know that it is 
-			//safe because these deactivate/activate calls came from the solver. This means that we know that the 
-			//actors are active currently, so at most we are just clearing/setting the ready for sleeping flag.
-			//None of the more complex logic that touching shared state will be executed.
-
-			const PxU32 nbDeactivatedSB = simulationController->getNbDeactivatedSoftbodies();
-			Dy::SoftBody** deactivatedSB = simulationController->getDeactivatedSoftbodies();
-
-			for (PxU32 i = 0; i < nbDeactivatedSB; ++i)
-			{
-				PxNodeIndex nodeIndex = deactivatedSB[i]->getSoftBodySim()->getNodeIndex();
-				
-				islandManager->deactivateNode(nodeIndex);
-			}
-
-			const PxU32 nbActivatedSB = simulationController->getNbActivatedSoftbodies();
-			Dy::SoftBody** activatedSB = simulationController->getActivatedSoftbodies();
-
-			for (PxU32 i = 0; i < nbActivatedSB; ++i)
-			{
-				PxNodeIndex nodeIndex = activatedSB[i]->getSoftBodySim()->getNodeIndex();
-
-				islandManager->activateNode(nodeIndex);
-			}
-		}
-
-		if (simulationController->hasHairSystems())
-		{
-			// comment from KS regarding race condition applies here, too
-			const PxU32 nbDeactivatedHS = simulationController->getNbDeactivatedHairSystems();
-			Dy::HairSystem** deactivatedHS = simulationController->getDeactivatedHairSystems();
-			for (PxU32 i = 0; i < nbDeactivatedHS; ++i)
-			{
-				PxNodeIndex nodeIndex = deactivatedHS[i]->getHairSystemSim()->getNodeIndex();
-				islandManager->deactivateNode(nodeIndex);
-			}
-
-			const PxU32 nbActivatedHS = simulationController->getNbActivatedHairSystems();
-			Dy::HairSystem** activatedHS = simulationController->getActivatedHairSystems();
-			for (PxU32 i = 0; i < nbActivatedHS; ++i)
-			{
-				PxNodeIndex nodeIndex = activatedHS[i]->getHairSystemSim()->getNodeIndex();
-				islandManager->activateNode(nodeIndex);
-			}
-		}
-#endif
-
 	}
 
 	virtual PxU32	getNbCcdBodies()
@@ -687,10 +564,6 @@ Sc::Scene::Scene(const PxSceneDesc& desc, PxU64 contextID) :
 	mSimpleIslandManager			(NULL),
 	mDynamicsContext				(NULL),
 	mMemoryManager					(NULL),
-#if PX_SUPPORT_GPU_PHYSX
-	mGpuWranglerManagers			(NULL),
-	mHeapMemoryAllocationManager	(NULL),
-#endif
 	mSimulationController			(NULL),
 	mSimulationControllerCallback	(NULL),
 	mGravity						(PxVec3(0.0f)),
@@ -701,12 +574,6 @@ Sc::Scene::Scene(const PxSceneDesc& desc, PxU64 contextID) :
 	mReportShapePairTimeStamp		(0),
 	mTriggerBufferAPI				("sceneTriggerBufferAPI"),
 	mArticulations					("sceneArticulations"),
-#if PX_SUPPORT_GPU_PHYSX
-	mSoftBodies						("sceneSoftBodies"),
-	mFEMCloths       	            ("sceneFEMCloths"), 
-	mParticleSystems				("sceneParticleSystems"),
-	mHairSystems					("sceneHairSystems"),
-#endif
 	mBrokenConstraints				("sceneBrokenConstraints"),
 	mActiveBreakableConstraints		("sceneActiveBreakableConstraints"),
 	mMemBlock128Pool				("PxsContext ConstraintBlock128Pool"),
@@ -816,12 +683,6 @@ Sc::Scene::Scene(const PxSceneDesc& desc, PxU64 contextID) :
 	mConstraintSimPool			= PX_NEW(PxPool<ConstraintSim>)("ScScene::ConstraintSim");
 	mConstraintInteractionPool	= PX_NEW(PxPool<ConstraintInteraction>)("ScScene::ConstraintInteraction");
 	mLLArticulationRCPool		= PX_NEW(LLArticulationRCPool);
-#if PX_SUPPORT_GPU_PHYSX
-	mLLSoftBodyPool				= PX_NEW(LLSoftBodyPool);
-	mLLFEMClothPool             = PX_NEW(LLFEMClothPool);
-	mLLParticleSystemPool		= PX_NEW(LLParticleSystemPool);
-	mLLHairSystemPool			= PX_NEW(LLHairSystemPool);
-#endif
 	mSimStateDataPool			= PX_NEW(PxPool<SimStateData>)("ScScene::SimStateData");
 
 	mProjectionManager			= PX_NEW(ConstraintProjectionManager)();
@@ -926,81 +787,30 @@ Sc::Scene::Scene(const PxSceneDesc& desc, PxU64 contextID) :
 
 	mSimpleIslandManager = PX_NEW(IG::SimpleIslandManager)(useEnhancedDeterminism, contextID);
 
-	if (!useGpuDynamics)
+	if (desc.solverType == PxSolverType::ePGS)
 	{
-		if (desc.solverType == PxSolverType::ePGS)
-		{
-			mDynamicsContext = createDynamicsContext
-			(&mLLContext->getNpMemBlockPool(), mLLContext->getScratchAllocator(),
-				mLLContext->getTaskPool(), mLLContext->getSimStats(), &mLLContext->getTaskManager(), allocatorCallback, &getMaterialManager(),
-				mSimpleIslandManager, contextID, mEnableStabilization, useEnhancedDeterminism, desc.maxBiasCoefficient,
-				!!(desc.flags & PxSceneFlag::eENABLE_FRICTION_EVERY_ITERATION), desc.getTolerancesScale().length);
-		}
-		else
-		{
-			mDynamicsContext = createTGSDynamicsContext
-			(&mLLContext->getNpMemBlockPool(), mLLContext->getScratchAllocator(),
-				mLLContext->getTaskPool(), mLLContext->getSimStats(), &mLLContext->getTaskManager(), allocatorCallback, &getMaterialManager(),
-				mSimpleIslandManager, contextID, mEnableStabilization, useEnhancedDeterminism,
-				desc.getTolerancesScale().length);
-		}
-
-		mLLContext->setNphaseImplementationContext(createNphaseImplementationContext(*mLLContext, &mSimpleIslandManager->getAccurateIslandSim(), allocatorCallback));
-
-		mSimulationControllerCallback = PX_NEW(ScSimulationControllerCallback)(this);
-		mSimulationController = PX_NEW(SimulationController)(mSimulationControllerCallback);
-
-		if (!useGpuBroadphase)
-			mAABBManager = createAABBManagerCPU(desc, broadPhase, mBoundsArray, mContactDistance, allocator, contextID);
-#if PX_SUPPORT_GPU_PHYSX
-		else
-			mAABBManager = createAABBManagerGPU(mGpuWranglerManagers, mLLContext->getCudaContextManager(), mHeapMemoryAllocationManager, desc, broadPhase, mBoundsArray, mContactDistance, allocator, contextID);
-#endif
+		mDynamicsContext = createDynamicsContext
+		(&mLLContext->getNpMemBlockPool(), mLLContext->getScratchAllocator(),
+			mLLContext->getTaskPool(), mLLContext->getSimStats(), &mLLContext->getTaskManager(), allocatorCallback, &getMaterialManager(),
+			mSimpleIslandManager, contextID, mEnableStabilization, useEnhancedDeterminism, desc.maxBiasCoefficient,
+			!!(desc.flags & PxSceneFlag::eENABLE_FRICTION_EVERY_ITERATION), desc.getTolerancesScale().length);
 	}
 	else
 	{
-#if PX_SUPPORT_GPU_PHYSX
-		mDynamicsContext = PxvGetPhysXGpu(true)->createGpuDynamicsContext(mLLContext->getTaskPool(), mGpuWranglerManagers, mLLContext->getCudaContextManager(),
-			desc.gpuDynamicsConfig, mSimpleIslandManager, desc.gpuMaxNumPartitions, desc.gpuMaxNumStaticPartitions, mEnableStabilization, useEnhancedDeterminism, desc.maxBiasCoefficient, desc.gpuComputeVersion, mLLContext->getSimStats(),
-			mHeapMemoryAllocationManager, !!(desc.flags & PxSceneFlag::eENABLE_FRICTION_EVERY_ITERATION), desc.solverType, desc.getTolerancesScale().length);
-
-		void* contactStreamBase = NULL;
-		void* patchStreamBase = NULL;
-		void* forceAndIndiceStreamBase = NULL;
-
-		mDynamicsContext->getDataStreamBase(contactStreamBase, patchStreamBase, forceAndIndiceStreamBase);
-
-		PxvNphaseImplementationContextUsableAsFallback* cpuNphaseImplementation = createNphaseImplementationContext(*mLLContext, &mSimpleIslandManager->getAccurateIslandSim(), allocatorCallback);
-		mLLContext->setNphaseFallbackImplementationContext(cpuNphaseImplementation);
-
-		PxvNphaseImplementationContext* gpuNphaseImplementation = PxvGetPhysXGpu(true)->createGpuNphaseImplementationContext(*mLLContext, mGpuWranglerManagers, cpuNphaseImplementation, desc.gpuDynamicsConfig, contactStreamBase, patchStreamBase,
-			forceAndIndiceStreamBase, getBoundsArray().getBounds(), &mSimpleIslandManager->getAccurateIslandSim(), mDynamicsContext, desc.gpuComputeVersion, mHeapMemoryAllocationManager, useGpuBroadphase);
-
-		mSimulationControllerCallback = PX_NEW(PxgSimulationControllerCallback)(this);
-
-		mSimulationController = PxvGetPhysXGpu(true)->createGpuSimulationController(mGpuWranglerManagers, mLLContext->getCudaContextManager(),
-			mDynamicsContext, gpuNphaseImplementation, broadPhase, useGpuBroadphase, mSimpleIslandManager, mSimulationControllerCallback, desc.gpuComputeVersion, mHeapMemoryAllocationManager,
-			desc.gpuDynamicsConfig.maxSoftBodyContacts, desc.gpuDynamicsConfig.maxFemClothContacts, desc.gpuDynamicsConfig.maxParticleContacts, desc.gpuDynamicsConfig.maxHairContacts);
-
-		mSimulationController->setBounds(mBoundsArray);
-		mDynamicsContext->setSimulationController(mSimulationController);
-
-		mLLContext->setNphaseImplementationContext(gpuNphaseImplementation);
-
-		mLLContext->mContactStreamPool = &mDynamicsContext->getContactStreamPool();
-		mLLContext->mPatchStreamPool = &mDynamicsContext->getPatchStreamPool();
-		mLLContext->mForceAndIndiceStreamPool = &mDynamicsContext->getForceStreamPool();
-
-		// PT: TODO: what's the difference between this allocator and "allocator" above?
-		PxVirtualAllocator tAllocator(mHeapMemoryAllocationManager->mMappedMemoryAllocators, PxsHeapStats::eBROADPHASE);
-
-		if (!useGpuBroadphase)
-			// PT: TODO: we're using a CUDA allocator in the CPU broadphase, and a different allocator for the bounds array?
-			mAABBManager = createAABBManagerCPU(desc, broadPhase, mBoundsArray, mContactDistance, tAllocator, contextID);
-		else
-			mAABBManager = createAABBManagerGPU(mGpuWranglerManagers, mLLContext->getCudaContextManager(), mHeapMemoryAllocationManager, desc, broadPhase, mBoundsArray, mContactDistance, tAllocator, contextID);
-#endif
+		mDynamicsContext = createTGSDynamicsContext
+		(&mLLContext->getNpMemBlockPool(), mLLContext->getScratchAllocator(),
+			mLLContext->getTaskPool(), mLLContext->getSimStats(), &mLLContext->getTaskManager(), allocatorCallback, &getMaterialManager(),
+			mSimpleIslandManager, contextID, mEnableStabilization, useEnhancedDeterminism,
+			desc.getTolerancesScale().length);
 	}
+
+	mLLContext->setNphaseImplementationContext(createNphaseImplementationContext(*mLLContext, &mSimpleIslandManager->getAccurateIslandSim(), allocatorCallback));
+
+	mSimulationControllerCallback = PX_NEW(ScSimulationControllerCallback)(this);
+	mSimulationController = PX_NEW(SimulationController)(mSimulationControllerCallback);
+
+	if (!useGpuBroadphase)
+		mAABBManager = createAABBManagerCPU(desc, broadPhase, mBoundsArray, mContactDistance, allocator, contextID);
 
 	bool suppressReadback = mPublicFlags & PxSceneFlag::eSUPPRESS_READBACK;
 	bool forceReadback = mPublicFlags & PxSceneFlag::eFORCE_READBACK;
@@ -1067,9 +877,6 @@ Sc::Scene::Scene(const PxSceneDesc& desc, PxU64 contextID) :
 
 	mWokeSoftBodyListValid = true;
 	mSleepSoftBodyListValid = true;
-
-	mWokeHairSystemListValid = true;
-	mSleepHairSystemListValid = true;
 
 	//load from desc:
 	setLimits(desc.limits);
@@ -1173,12 +980,6 @@ void Sc::Scene::release()
 	PX_DELETE(mShapeSimPool);
 	PX_DELETE(mBodySimPool);
 	PX_DELETE(mLLArticulationRCPool);
-#if PX_SUPPORT_GPU_PHYSX
-	PX_DELETE(mLLSoftBodyPool);
-	PX_DELETE(mLLFEMClothPool);
-	PX_DELETE(mLLParticleSystemPool);
-	PX_DELETE(mLLHairSystemPool);
-#endif
 	mTriggerBufferExtraData->~TriggerBufferExtraData();
 	PX_FREE(mTriggerBufferExtraData);
 
@@ -1199,11 +1000,6 @@ void Sc::Scene::release()
 	PX_DELETE(mCCDContext);
 
 	PX_DELETE(mSimpleIslandManager);
-
-#if PX_SUPPORT_GPU_PHYSX
-	PX_DELETE(mGpuWranglerManagers);
-	PX_DELETE(mHeapMemoryAllocationManager);
-#endif
 
 	PX_RELEASE(mTaskManager);
 	PX_DELETE(mLLContext);
@@ -1282,32 +1078,6 @@ void Sc::Scene::addToActiveList(ActorSim& actorSim)
 		actorSim.setActiveListIndex(incomingBodyActiveListIndex);			// PT: will be 'size' or 'nbKinematics', 'dynamicIndex'
 		mActiveBodies.pushBack(static_cast<BodyCore*>(appendedActorCore));	// PT: will be the incoming object or the first dynamic we moved out.
 	}
-#if PX_SUPPORT_GPU_PHYSX
-	else if (actorSim.isSoftBody())
-	{
-		PxU32 activeListIndex = mActiveSoftBodies.size();
-		actorSim.setActiveListIndex(activeListIndex);
-		mActiveSoftBodies.pushBack(static_cast<SoftBodyCore*>(appendedActorCore));
-	}
-	else if (actorSim.isFEMCloth())
-	{
-		PxU32 activeListIndex = mActiveFEMCloths.size();
-		actorSim.setActiveListIndex(activeListIndex);
-		mActiveFEMCloths.pushBack(static_cast<FEMClothCore*>(appendedActorCore));
-	}
-	else if (actorSim.isParticleSystem())
-	{
-		PxU32 activeListIndex = mActiveParticleSystems.size();
-		actorSim.setActiveListIndex(activeListIndex);
-		mActiveParticleSystems.pushBack(static_cast<ParticleSystemCore*>(appendedActorCore));
-	}
-	else if (actorSim.isHairSystem())
-	{
-		PxU32 activeListIndex = mActiveHairSystems.size();
-		actorSim.setActiveListIndex(activeListIndex);
-		mActiveHairSystems.pushBack(static_cast<HairSystemCore*>(appendedActorCore));
-	}
-#endif
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1379,65 +1149,13 @@ void Sc::Scene::removeFromActiveList(ActorSim& actorSim)
 		}
 		mActiveBodies.forceSize_Unsafe(newSize);
 	}
-#if PX_SUPPORT_GPU_PHYSX
-	else if(actorSim.isSoftBody())
-	{
-		const PxU32 newSoftBodySize = mActiveSoftBodies.size() - 1;
-
-		if (removedActiveIndex != newSoftBodySize)
-		{
-			Sc::SoftBodyCore* lastBody = mActiveSoftBodies[newSoftBodySize];
-			mActiveSoftBodies[removedActiveIndex] = lastBody;
-			lastBody->getSim()->setActiveListIndex(removedActiveIndex);
-		}
-		mActiveSoftBodies.forceSize_Unsafe(newSoftBodySize);
-	}
-	else if (actorSim.isFEMCloth())
-	{
-		const PxU32 newFEMClothSize = mActiveFEMCloths.size() - 1;
-
-		if (removedActiveIndex != newFEMClothSize)
-		{
-			Sc::FEMClothCore* lastBody = mActiveFEMCloths[newFEMClothSize];
-			mActiveFEMCloths[removedActiveIndex] = lastBody;
-			lastBody->getSim()->setActiveListIndex(removedActiveIndex);
-		}
-		mActiveFEMCloths.forceSize_Unsafe(newFEMClothSize);
-	}
-	else if (actorSim.isParticleSystem())
-	{
-		
-		const PxU32 newParticleSystemSize = mActiveParticleSystems.size() - 1;
-
-		if (removedActiveIndex != newParticleSystemSize)
-		{
-			Sc::ParticleSystemCore* lastBody = mActiveParticleSystems[newParticleSystemSize];
-			mActiveParticleSystems[removedActiveIndex] = lastBody;
-			lastBody->getSim()->setActiveListIndex(removedActiveIndex);
-		}
-		mActiveParticleSystems.forceSize_Unsafe(newParticleSystemSize);
-		
-	}
-	else if (actorSim.isHairSystem())
-	{
-		const PxU32 newHairSystemSize = mActiveHairSystems.size() - 1;
-
-		if (removedActiveIndex != newHairSystemSize)
-		{
-			Sc::HairSystemCore* lastHairSystem = mActiveHairSystems[newHairSystemSize];
-			mActiveHairSystems[removedActiveIndex] = lastHairSystem;
-			lastHairSystem->getSim()->setActiveListIndex(removedActiveIndex);
-		}
-		mActiveHairSystems.forceSize_Unsafe(newHairSystemSize);
-	}
-#endif
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void Sc::Scene::swapInActiveBodyList(BodySim& body)
 {
-	PX_ASSERT(!body.isStaticRigid() && !body.isSoftBody() && !body.isFEMCloth() && !body.isParticleSystem() && !body.isHairSystem());
+	PX_ASSERT(!body.isStaticRigid() && !body.isSoftBody() && !body.isFEMCloth() && !body.isParticleSystem());
 	const PxU32 activeListIndex = body.getActiveListIndex();
 	PX_ASSERT(activeListIndex < SC_NOT_IN_ACTIVE_LIST_INDEX);
 
@@ -1761,18 +1479,6 @@ void Sc::Scene::endSimulation()
 
 	mSimulationController->releaseDeferredArticulationIds();
 
-#if PX_SUPPORT_GPU_PHYSX
-	mSimulationController->releaseDeferredSoftBodyIds();
-
-	mSimulationController->releaseDeferredFEMClothIds();
-
-	mSimulationController->releaseDeferredParticleSystemIds();
-
-	mSimulationController->releaseDeferredHairSystemIds();
-
-	mAABBManager->releaseDeferredAggregateIds();
-#endif
-
 	endStep();	// - Update time stamps
 
 	PxcDisplayContactCacheStats();
@@ -1835,26 +1541,6 @@ void Sc::Scene::setSimulationEventCallback(PxSimulationEventCallback* callback)
 		{
 			sleepingBodies[i]->getSim()->raiseInternalFlag(BodySim::BF_SLEEP_NOTIFY);
 		}
-
-#if PX_SUPPORT_GPU_PHYSX
-		SoftBodyCore* const* sleepingSoftBodies = mSleepSoftBodies.getEntries();
-		for (PxU32 i = 0; i < mSleepSoftBodies.size(); i++)
-		{
-			sleepingSoftBodies[i]->getSim()->raiseInternalFlag(BodySim::BF_SLEEP_NOTIFY);
-		}
-
-		//FEMClothCore* const* sleepingFEMCloths = mSleepFEMCloths.getEntries();
-		//for (PxU32 i = 0; i < mSleepFEMCloths.size(); i++)
-		//{
-		//	sleepingFEMCloths[i]->getSim()->raiseInternalFlag(BodySim::BF_SLEEP_NOTIFY);
-		//}
-
-		HairSystemCore* const* sleepingHairSystems = mSleepHairSystems.getEntries();
-		for (PxU32 i = 0; i < mSleepHairSystems.size(); i++)
-		{
-			sleepingHairSystems[i]->getSim()->raiseInternalFlag(BodySim::BF_SLEEP_NOTIFY);
-		}
-#endif
 	}
 
 	mSimulationEventCallback = callback;
@@ -1993,98 +1679,6 @@ void Sc::Scene::removeConstraint(ConstraintCore& constraint)
 
 	mConstraints.erase(&constraint);
 }
-
-#if PX_SUPPORT_GPU_PHYSX
-void Sc::Scene::addSoftBody(SoftBodyCore& softBody)
-{
-	SoftBodySim* sim = PX_NEW(SoftBodySim)(softBody, *this);
-
-	if (sim && (sim->getLowLevelSoftBody() == NULL))
-	{
-		PX_DELETE(sim);
-		return;
-	}
-
-	mSoftBodies.insert(&softBody);
-	mStats->gpuMemSizeSoftBodies += softBody.getGpuMemStat();
-}
-
-void Sc::Scene::removeSoftBody(SoftBodyCore& softBody)
-{
-	SoftBodySim* a = softBody.getSim();
-	PX_DELETE(a);
-	mSoftBodies.erase(&softBody);
-	mStats->gpuMemSizeSoftBodies -= softBody.getGpuMemStat();
-}
-
-void Sc::Scene::addFEMCloth(FEMClothCore& femCloth)
-{
-	FEMClothSim* sim = PX_NEW(FEMClothSim)(femCloth, *this);
-
-	if (sim && (sim->getLowLevelFEMCloth() == NULL))
-	{
-		PX_DELETE(sim);
-		return;
-	}
-
-	mFEMCloths.insert(&femCloth);
-	mStats->gpuMemSizeFEMCloths += femCloth.getGpuMemStat();
-}
-
-void Sc::Scene::removeFEMCloth(FEMClothCore& femCloth)
-{
-	FEMClothSim* a = femCloth.getSim();
-	PX_DELETE(a);
-	mFEMCloths.erase(&femCloth);
-	mStats->gpuMemSizeFEMCloths -= femCloth.getGpuMemStat();
-}
-
-void Sc::Scene::addParticleSystem(ParticleSystemCore& particleSystem)
-{
-	ParticleSystemSim* sim = PX_NEW(ParticleSystemSim)(particleSystem, *this);
-
-	Dy::ParticleSystem* dyParticleSystem = sim->getLowLevelParticleSystem();
-
-	if (sim && (dyParticleSystem == NULL))
-	{
-		PX_DELETE(sim);
-		return;
-	}
-
-	mParticleSystems.insert(&particleSystem);
-	mStats->gpuMemSizeParticles += particleSystem.getShapeCore().getGpuMemStat();
-}
-
-void Sc::Scene::removeParticleSystem(ParticleSystemCore& particleSystem)
-{
-	ParticleSystemSim* a = particleSystem.getSim();
-	PX_DELETE(a);
-	mParticleSystems.erase(&particleSystem);
-	mStats->gpuMemSizeParticles -= particleSystem.getShapeCore().getGpuMemStat();
-}
-
-void Sc::Scene::addHairSystem(HairSystemCore& hairSystem)
-{
-	HairSystemSim* sim = PX_NEW(HairSystemSim)(hairSystem, *this);
-
-	if (sim && (sim->getLowLevelHairSystem() == NULL))
-	{
-		PX_DELETE(sim);
-		return;
-	}
-
-	mHairSystems.insert(&hairSystem);
-	mStats->gpuMemSizeHairSystems += hairSystem.getShapeCore().getGpuMemStat();
-}
-
-void Sc::Scene::removeHairSystem(HairSystemCore& hairSystem)
-{
-	HairSystemSim* sim = hairSystem.getSim();
-	PX_DELETE(sim);
-	mHairSystems.erase(&hairSystem);
-	mStats->gpuMemSizeHairSystems -= hairSystem.getShapeCore().getGpuMemStat();
-}
-#endif
 
 void Sc::Scene::addArticulation(ArticulationCore& articulation, BodyCore& root)
 {
@@ -2764,72 +2358,6 @@ void Sc::Scene::removeRigidAttachment(Sc::BodyCore* core, Sc::ParticleSystemSim&
 		mParticleOrSoftBodyRigidInteractionMap.erase(pair);
 	}
 }
-
-void Sc::Scene::addHairSystemSimControl(Sc::HairSystemCore& core)
-{
-	Sc::HairSystemSim* sim = core.getSim();
-
-	if (sim)
-	{
-		mSimulationController->addHairSystem(sim->getLowLevelHairSystem(), sim->getNodeIndex());
-		mLLContext->getNphaseImplementationContext()->registerShape(sim->getNodeIndex(), sim->getShapeSim().getCore().getCore(), sim->getShapeSim().getElementID(), sim->getPxActor());
-	}
-}
-
-void Sc::Scene::removeHairSystemSimControl(Sc::HairSystemCore& core)
-{
-	Sc::HairSystemSim* sim = core.getSim();
-
-	if (sim)
-	{
-		mLLContext->getNphaseImplementationContext()->unregisterShape(sim->getShapeSim().getCore().getCore(), sim->getShapeSim().getElementID());
-		mSimulationController->releaseHairSystem(sim->getLowLevelHairSystem());
-	}
-}
-
-void Sc::Scene::addRigidAttachment(const Sc::BodyCore* core, const Sc::HairSystemSim& sim)
-{
-	PxNodeIndex nodeIndex;
-
-	if (core)
-	{
-		nodeIndex = core->getSim()->getNodeIndex();
-	}
-
-	PxPair<PxU32, PxU32> pair(sim.getNodeIndex().index(), nodeIndex.index());
-	ParticleOrSoftBodyRigidInteraction& interaction = mParticleOrSoftBodyRigidInteractionMap[pair];
-
-	if (interaction.mCount == 0)
-	{
-		IG::EdgeIndex edgeIdx = mSimpleIslandManager->addContactManager(NULL, sim.getNodeIndex(), nodeIndex, NULL, IG::Edge::eHAIR_SYSTEM_CONTACT);
-		mSimpleIslandManager->setEdgeConnected(edgeIdx, IG::Edge::eHAIR_SYSTEM_CONTACT);
-		interaction.mIndex = edgeIdx;
-	}
-	interaction.mCount++;
-}
-
-void Sc::Scene::removeRigidAttachment(const Sc::BodyCore* core, const Sc::HairSystemSim& sim)
-{
-	PxNodeIndex nodeIndex;
-
-	if(core)
-	{
-		nodeIndex = core->getSim()->getNodeIndex();
-	}
-
-	PxPair<PxU32, PxU32> pair(sim.getNodeIndex().index(), nodeIndex.index());
-	if(mParticleOrSoftBodyRigidInteractionMap.find(pair)) // find returns pointer to const so we cannot use it directly
-	{
-		ParticleOrSoftBodyRigidInteraction& interaction = mParticleOrSoftBodyRigidInteractionMap[pair];
-		PX_ASSERT(interaction.mCount > 0);
-		interaction.mCount--;
-		if(interaction.mCount == 0)
-		{
-			mSimpleIslandManager->removeConnection(interaction.mIndex);
-			mParticleOrSoftBodyRigidInteractionMap.erase(pair);
-		}
-	}
-}
 #endif
 
 void Sc::Scene::addBrokenConstraint(Sc::ConstraintCore* c)
@@ -2989,78 +2517,6 @@ void Sc::Scene::broadPhase(PxBaseTask* continuation)
 
 	mProcessLostPatchesTask.setContinuation(&mPostNarrowPhase);
 	mProcessLostPatchesTask.removeReference();
-
-#if PX_SUPPORT_GPU_PHYSX
-	//update soft bodies world bound
-	Sc::SoftBodyCore* const* softBodies = mSoftBodies.getEntries();
-	PxU32 size = mSoftBodies.size();
-	if (mUseGpuBp)
-	{
-		for (PxU32 i = 0; i < size; ++i)
-		{
-			softBodies[i]->getSim()->updateBoundsInAABBMgr();
-		}
-	}
-	else
-	{
-		for (PxU32 i = 0; i < size; ++i)
-		{
-			softBodies[i]->getSim()->updateBounds();
-		}
-	}
-
-	// update FEM-cloth world bound
-	Sc::FEMClothCore* const* femCloths = mFEMCloths.getEntries();
-	size = mFEMCloths.size();
-	if (mUseGpuBp)
-	{
-		for (PxU32 i = 0; i < size; ++i)
-		{
-			femCloths[i]->getSim()->updateBoundsInAABBMgr();
-		}
-	}
-	else
-	{
-		for (PxU32 i = 0; i < size; ++i)
-		{
-			femCloths[i]->getSim()->updateBounds();
-		}
-	}
-
-	//upate the actor handle of particle system in AABB manager 
-	Sc::ParticleSystemCore* const* particleSystems = mParticleSystems.getEntries();
-
-	size = mParticleSystems.size();
-	if (mUseGpuBp)
-	{
-		for (PxU32 i = 0; i < size; ++i)
-			particleSystems[i]->getSim()->updateBoundsInAABBMgr();
-	}
-	else
-	{
-		for (PxU32 i = 0; i < size; ++i)
-			particleSystems[i]->getSim()->updateBounds();
-	}
-
-	//update hair system world bound
-	Sc::HairSystemCore* const* hairSystems = mHairSystems.getEntries();
-	PxU32 nHairSystems = mHairSystems.size();
-	if (mUseGpuBp)
-	{
-		for (PxU32 i = 0; i < nHairSystems; ++i)
-		{
-			hairSystems[i]->getSim()->updateBoundsInAABBMgr();
-		}
-	}
-	else
-	{
-		for (PxU32 i = 0; i < nHairSystems; ++i)
-		{
-			hairSystems[i]->getSim()->updateBounds();
-		}
-	}
-
-#endif
 
 	mCCDBp = false;
 
@@ -3567,47 +3023,6 @@ void Sc::Scene::putObjectsToSleep(PxU32 infoFlag)
 		}
 	}
 
-#if PX_SUPPORT_GPU_PHYSX
-	const PxU32 nbSoftBodiesToSleep = islandSim.getNbNodesToDeactivate(IG::Node::eSOFTBODY_TYPE);
-	const PxNodeIndex*const softBodiesIndices = islandSim.getNodesToDeactivate(IG::Node::eSOFTBODY_TYPE);
-
-	for (PxU32 i = 0; i<nbSoftBodiesToSleep; i++)
-	{
-		Sc::SoftBodySim* softBodySim = islandSim.getLLSoftBody(softBodiesIndices[i])->getSoftBodySim();
-		if (softBodySim && !islandSim.getNode(softBodiesIndices[i]).isActive())
-		{
-			softBodySim->setActive(false, infoFlag);
-			nbBodiesDeactivated++;
-		}
-	}
-
-	const PxU32 nbFemClothesToSleep = islandSim.getNbNodesToDeactivate(IG::Node::eFEMCLOTH_TYPE);
-	const PxNodeIndex*const femClothesIndices = islandSim.getNodesToDeactivate(IG::Node::eFEMCLOTH_TYPE);
-
-	for (PxU32 i = 0; i < nbFemClothesToSleep; i++)
-	{
-		Sc::FEMClothSim* femClothSim = islandSim.getLLFEMCloth(femClothesIndices[i])->getFEMClothSim();
-		if (femClothSim && !islandSim.getNode(femClothesIndices[i]).isActive())
-		{
-			femClothSim->setActive(false, infoFlag);
-			nbBodiesDeactivated++;
-		}
-	}
-
-	const PxU32 nbHairSystemsToSleep = islandSim.getNbNodesToDeactivate(IG::Node::eHAIRSYSTEM_TYPE);
-	const PxNodeIndex*const hairSystemIndices = islandSim.getNodesToDeactivate(IG::Node::eHAIRSYSTEM_TYPE);
-
-	for (PxU32 i = 0; i < nbHairSystemsToSleep; i++)
-	{
-		Sc::HairSystemSim* hairSystemSim = islandSim.getLLHairSystem(hairSystemIndices[i])->getHairSystemSim();
-		if (hairSystemSim && !islandSim.getNode(hairSystemIndices[i]).isActive())
-		{
-			hairSystemSim->setActive(false, infoFlag);
-			nbBodiesDeactivated++;
-		}
-	}
-#endif
-
 	if (nbBodiesDeactivated != 0)
 		mDynamicsContext->setStateDirty(true);
 }
@@ -3646,47 +3061,6 @@ void Sc::Scene::wakeObjectsUp(PxU32 infoFlag)
 			nbBodiesWoken++;
 		}
 	}
-
-#if PX_SUPPORT_GPU_PHYSX
-	const PxU32 nbSoftBodyToWake = islandSim.getNbNodesToActivate(IG::Node::eSOFTBODY_TYPE);
-	const PxNodeIndex*const softBodyIndices = islandSim.getNodesToActivate(IG::Node::eSOFTBODY_TYPE);
-
-	for (PxU32 i = 0; i<nbSoftBodyToWake; i++)
-	{
-		Sc::SoftBodySim* softBodySim = islandSim.getLLSoftBody(softBodyIndices[i])->getSoftBodySim();
-		if (softBodySim && islandSim.getNode(softBodyIndices[i]).isActive())
-		{
-			softBodySim->setActive(true, infoFlag);
-			nbBodiesWoken++;
-		}
-	}
-
-	const PxU32 nbFEMClothToWake = islandSim.getNbNodesToActivate(IG::Node::eFEMCLOTH_TYPE);
-	const PxNodeIndex*const femClothIndices = islandSim.getNodesToActivate(IG::Node::eFEMCLOTH_TYPE);
-
-	for (PxU32 i = 0; i < nbFEMClothToWake; i++)
-	{
-		Sc::FEMClothSim* femClothSim = islandSim.getLLFEMCloth(femClothIndices[i])->getFEMClothSim();
-		if (femClothSim && islandSim.getNode(femClothIndices[i]).isActive())
-		{
-			femClothSim->setActive(true, infoFlag);
-			nbBodiesWoken++;
-		}
-	}
-
-	const PxU32 nbHairSystemsToWake = islandSim.getNbNodesToActivate(IG::Node::eHAIRSYSTEM_TYPE);
-	const PxNodeIndex*const hairSystemIndices = islandSim.getNodesToActivate(IG::Node::eHAIRSYSTEM_TYPE);
-
-	for (PxU32 i = 0; i < nbHairSystemsToWake; i++)
-	{
-		Sc::HairSystemSim* hairSystemSim = islandSim.getLLHairSystem(hairSystemIndices[i])->getHairSystemSim();
-		if (hairSystemSim && islandSim.getNode(hairSystemIndices[i]).isActive())
-		{
-			hairSystemSim->setActive(true, infoFlag);
-			nbBodiesWoken++;
-		}
-	}
-#endif
 
 	if(nbBodiesWoken != 0)
 		mDynamicsContext->setStateDirty(true);
@@ -3809,8 +3183,7 @@ void Sc::Scene::postThirdPassIslandGen(PxBaseTask* continuation)
 			IG::Edge::eCONTACT_MANAGER,
 			IG::Edge::eSOFT_BODY_CONTACT,
 			IG::Edge::eFEM_CLOTH_CONTACT,
-			IG::Edge::ePARTICLE_SYSTEM_CONTACT,
-			IG::Edge::eHAIR_SYSTEM_CONTACT };
+			IG::Edge::ePARTICLE_SYSTEM_CONTACT };
 
 		for(PxU32 t = 0; t < NbTypes; ++t)
 		{
@@ -5156,7 +4529,6 @@ void Sc::Scene::beforeSolver(PxBaseTask* continuation)
 	mNumDeactivatingNodes[IG::Node::eSOFTBODY_TYPE] = 0;
 	mNumDeactivatingNodes[IG::Node::eFEMCLOTH_TYPE] = 0;
 	mNumDeactivatingNodes[IG::Node::ePARTICLESYSTEM_TYPE] = 0;
-	mNumDeactivatingNodes[IG::Node::eHAIRSYSTEM_TYPE] = 0;
 
 	const PxU32 MaxBodiesPerTask = ScBeforeSolverTask::MaxBodiesPerTask;
 
@@ -5783,34 +5155,12 @@ void Sc::Scene::fireCallbacksPostSync()
 	if(!mWokeBodyListValid)
 		cleanUpWokenBodies();
 
-#if PX_SUPPORT_GPU_PHYSX
-	if (!mSleepSoftBodyListValid)
-		cleanUpSleepSoftBodies();
-
-	if (!mWokeBodyListValid)
-		cleanUpWokenSoftBodies();
-
-	if (!mSleepHairSystemListValid)
-		cleanUpSleepHairSystems();
-
-	if (!mWokeHairSystemListValid) // TODO(jcarius) should this be mWokeBodyListValid?
-		cleanUpWokenHairSystems();
-#endif
-
 	if(mSimulationEventCallback || mOnSleepingStateChanged)
 	{
 		// allocate temporary data
 		const PxU32 nbSleep = mSleepBodies.size();
 		const PxU32 nbWoken = mWokeBodies.size();
-#if PX_SUPPORT_GPU_PHYSX
-		const PxU32 nbHairSystemSleep = mSleepHairSystems.size();
-		const PxU32 nbHairSystemWoken = mWokeHairSystems.size();
-		const PxU32 nbSoftBodySleep = mSleepSoftBodies.size();
-		const PxU32 nbSoftBodyWoken = mWokeSoftBodies.size();
-		const PxU32 arrSize = PxMax(PxMax(nbSleep, nbWoken), PxMax(nbSoftBodySleep, nbHairSystemSleep));
-#else
 		const PxU32 arrSize = PxMax(nbSleep, nbWoken);
-#endif
 		PxActor** actors = arrSize ? reinterpret_cast<PxActor**>(PX_ALLOC(arrSize*sizeof(PxActor*), "PxActor*")) : NULL;
 		if(actors)
 		{
@@ -5840,43 +5190,6 @@ void Sc::Scene::fireCallbacksPostSync()
 				//}
 			}
 
-#if PX_SUPPORT_GPU_PHYSX
-			//ML: need to create and API for the onSleep for softbody
-			if (nbSoftBodySleep)
-			{
-				PxU32 destSlot = 0;
-				SoftBodyCore* const* sleepingSoftBodies = mSleepSoftBodies.getEntries();
-				for (PxU32 i = 0; i<nbSoftBodySleep; i++)
-				{
-					SoftBodyCore* body = sleepingSoftBodies[i];
-					if (body->getActorFlags() & PxActorFlag::eSEND_SLEEP_NOTIFIES)
-						actors[destSlot++] = body->getPxActor();
-					if (mOnSleepingStateChanged)
-						mOnSleepingStateChanged(body->getPxActor(), true);
-				}
-
-				if (destSlot && mSimulationEventCallback)
-					mSimulationEventCallback->onSleep(actors, destSlot);
-			}
-
-			if (nbHairSystemSleep)
-			{
-				PxU32 destSlot = 0;
-				HairSystemCore* const* sleepingHairSystems = mSleepHairSystems.getEntries();
-				for (PxU32 i = 0; i<nbHairSystemSleep; i++)
-				{
-					HairSystemCore* body = sleepingHairSystems[i];
-					if (body->getActorFlags() & PxActorFlag::eSEND_SLEEP_NOTIFIES)
-						actors[destSlot++] = body->getPxActor();
-					if (mOnSleepingStateChanged)
-						mOnSleepingStateChanged(body->getPxActor(), true);
-				}
-
-				if (destSlot && mSimulationEventCallback)
-					mSimulationEventCallback->onSleep(actors, destSlot);
-			}
-#endif
-
 			// do the same thing for bodies that have just woken up
 
 			if(nbWoken)
@@ -5896,42 +5209,6 @@ void Sc::Scene::fireCallbacksPostSync()
 					mSimulationEventCallback->onWake(actors, destSlot);
 			}
 
-#if PX_SUPPORT_GPU_PHYSX
-			//ML: need to create an API for woken soft body
-			if (nbSoftBodyWoken)
-			{
-				PxU32 destSlot = 0;
-				SoftBodyCore* const* wokenSoftBodies = mWokeSoftBodies.getEntries();
-				for (PxU32 i = 0; i<nbSoftBodyWoken; i++)
-				{
-					SoftBodyCore* body = wokenSoftBodies[i];
-					if (body->getActorFlags() & PxActorFlag::eSEND_SLEEP_NOTIFIES)
-						actors[destSlot++] = body->getPxActor();
-					if (mOnSleepingStateChanged)
-						mOnSleepingStateChanged(body->getPxActor(), false);
-				}
-
-				if (destSlot && mSimulationEventCallback)
-					mSimulationEventCallback->onWake(actors, destSlot);
-			}
-
-			if (nbHairSystemWoken)
-			{
-				PxU32 destSlot = 0;
-				HairSystemCore* const* wokenHairSystems = mWokeHairSystems.getEntries();
-				for (PxU32 i = 0; i<nbHairSystemWoken; i++)
-				{
-					HairSystemCore* body = wokenHairSystems[i];
-					if (body->getActorFlags() & PxActorFlag::eSEND_SLEEP_NOTIFIES)
-						actors[destSlot++] = body->getPxActor();
-					if (mOnSleepingStateChanged)
-						mOnSleepingStateChanged(body->getPxActor(), false);
-				}
-
-				if (destSlot && mSimulationEventCallback)
-					mSimulationEventCallback->onWake(actors, destSlot);
-			}
-#endif
 			PX_FREE(actors);
 		}
 	}
@@ -6114,53 +5391,6 @@ void Sc::Scene::getStats(PxSimulationStatistics& s) const
 	s.nbAggregates = mAABBManager->getNbActiveAggregates();
 	for(PxU32 i=0; i<PxGeometryType::eGEOMETRY_COUNT; i++)
 		s.nbShapes[i] = mNbGeometries[i];
-
-#if PX_SUPPORT_GPU_PHYSX
-	if (mHeapMemoryAllocationManager)
-	{
-		s.gpuMemHeap = mHeapMemoryAllocationManager->getDeviceMemorySize();
-
-		const PxsHeapStats& deviceHeapStats = mHeapMemoryAllocationManager->getDeviceHeapStats();
-		s.gpuMemHeapBroadPhase = deviceHeapStats.stats[PxsHeapStats::eBROADPHASE];
-		s.gpuMemHeapNarrowPhase = deviceHeapStats.stats[PxsHeapStats::eNARROWPHASE];
-		s.gpuMemHeapSolver = deviceHeapStats.stats[PxsHeapStats::eSOLVER];
-		s.gpuMemHeapArticulation = deviceHeapStats.stats[PxsHeapStats::eARTICULATION];
-		s.gpuMemHeapSimulation = deviceHeapStats.stats[PxsHeapStats::eSIMULATION];
-		s.gpuMemHeapSimulationArticulation = deviceHeapStats.stats[PxsHeapStats::eSIMULATION_ARTICULATION];
-		s.gpuMemHeapSimulationParticles = deviceHeapStats.stats[PxsHeapStats::eSIMULATION_PARTICLES];
-		s.gpuMemHeapSimulationSoftBody = deviceHeapStats.stats[PxsHeapStats::eSIMULATION_SOFTBODY];
-		s.gpuMemHeapSimulationFEMCloth = deviceHeapStats.stats[PxsHeapStats::eSIMULATION_FEMCLOTH];
-		s.gpuMemHeapSimulationHairSystem = deviceHeapStats.stats[PxsHeapStats::eSIMULATION_HAIRSYSTEM];
-		s.gpuMemHeapParticles = deviceHeapStats.stats[PxsHeapStats::eSHARED_PARTICLES];
-		s.gpuMemHeapFEMCloths = deviceHeapStats.stats[PxsHeapStats::eSHARED_FEMCLOTH];
-		s.gpuMemHeapSoftBodies = deviceHeapStats.stats[PxsHeapStats::eSHARED_SOFTBODY];
-		s.gpuMemHeapHairSystems = deviceHeapStats.stats[PxsHeapStats::eSHARED_HAIRSYSTEM];
-		s.gpuMemHeapOther = deviceHeapStats.stats[PxsHeapStats::eOTHER];
-	}
-	else
-#endif
-	{
-		s.gpuMemHeap = 0;
-		s.gpuMemParticles = 0;
-		s.gpuMemSoftBodies = 0;
-		s.gpuMemFEMCloths = 0;
-		s.gpuMemHairSystems = 0;
-		s.gpuMemHeapBroadPhase = 0;
-		s.gpuMemHeapNarrowPhase = 0;
-		s.gpuMemHeapSolver = 0;
-		s.gpuMemHeapArticulation = 0;
-		s.gpuMemHeapSimulation = 0;
-		s.gpuMemHeapSimulationArticulation = 0;
-		s.gpuMemHeapSimulationParticles = 0;
-		s.gpuMemHeapSimulationSoftBody = 0;
-		s.gpuMemHeapSimulationFEMCloth = 0;
-		s.gpuMemHeapSimulationHairSystem = 0;
-		s.gpuMemHeapParticles = 0;
-		s.gpuMemHeapSoftBodies = 0;
-		s.gpuMemHeapFEMCloths = 0;
-		s.gpuMemHeapHairSystems = 0;
-		s.gpuMemHeapOther = 0;
-	}
 }
 
 void Sc::Scene::addShapes(NpShape *const* shapes, PxU32 nbShapes, size_t ptrOffset, RigidSim& bodySim, PxBounds3* outBounds)
@@ -6574,34 +5804,6 @@ void Sc::Scene::buildActiveActors()
 			}
 		}
 	}
-
-#if PX_SUPPORT_GPU_PHYSX
-	{
-		PxU32 numActiveSoftBodies = getNumActiveSoftBodies();
-		SoftBodyCore*const* PX_RESTRICT activeSoftBodies = getActiveSoftBodiesArray();
-
-		mActiveSoftBodyActors.clear();
-
-		for (PxU32 i = 0; i < numActiveSoftBodies; i++)
-		{
-			PxActor* ra = activeSoftBodies[i]->getPxActor();
-			mActiveSoftBodyActors.pushBack(ra);
-		}
-	}
-	{
-		PxU32 numActiveHairSystems = getNumActiveHairSystems();
-		HairSystemCore*const* PX_RESTRICT activeHairSystems = getActiveHairSystemsArray();
-
-		mActiveHairSystemActors.clear();
-
-		for (PxU32 i = 0; i < numActiveHairSystems; i++)
-		{
-			PxActor* ra = activeHairSystems[i]->getPxActor();
-			mActiveHairSystemActors.pushBack(ra);
-		}
-	}
-
-#endif
 }
 
 // PT: TODO: unify buildActiveActors & buildActiveAndFrozenActors
@@ -6635,33 +5837,6 @@ void Sc::Scene::buildActiveAndFrozenActors()
 				mFrozenActors.pushBack(ra);
 		}
 	}
-
-#if PX_SUPPORT_GPU_PHYSX
-	{
-		PxU32 numActiveSoftBodies = getNumActiveSoftBodies();
-		SoftBodyCore*const* PX_RESTRICT activeSoftBodies = getActiveSoftBodiesArray();
-		
-		mActiveSoftBodyActors.clear();
-
-		for (PxU32 i = 0; i < numActiveSoftBodies; i++)
-		{
-			PxActor* ra = activeSoftBodies[i]->getPxActor();
-			mActiveActors.pushBack(ra);
-		}
-	}
-	{
-		PxU32 numActiveHairSystems = getNumActiveHairSystems();
-		HairSystemCore*const* PX_RESTRICT activeHairSystems = getActiveHairSystemsArray();
-
-		mActiveHairSystemActors.clear();
-
-		for (PxU32 i = 0; i < numActiveHairSystems; i++)
-		{
-			PxActor* ra = activeHairSystems[i]->getPxActor();
-			mActiveHairSystemActors.pushBack(ra);
-		}
-	}
-#endif
 }
 
 PxActor** Sc::Scene::getActiveActors(PxU32& nbActorsOut)
@@ -6760,34 +5935,6 @@ void Sc::Scene::clearSleepWakeBodies(void)
         body->clearInternalFlag(ActorSim::BF_IS_IN_WAKEUP_LIST);
 	}
 
-#if PX_SUPPORT_GPU_PHYSX
-	SoftBodyCore* const* sleepingSoftBodies = mSleepSoftBodies.getEntries();
-	for (PxU32 i = 0; i < mSleepSoftBodies.size(); i++)
-	{
-		ActorSim* body = sleepingSoftBodies[i]->getSim();
-
-		PX_ASSERT(!body->readInternalFlag(ActorSim::BF_WAKEUP_NOTIFY));
-		body->clearInternalFlag(ActorSim::BF_SLEEP_NOTIFY);
-
-		// A body can be in both lists depending on the sequence of events
-		body->clearInternalFlag(ActorSim::BF_IS_IN_SLEEP_LIST);
-		body->clearInternalFlag(ActorSim::BF_IS_IN_WAKEUP_LIST);
-	}
-
-	HairSystemCore* const* sleepingHairSystems = mSleepHairSystems.getEntries();
-	for (PxU32 i = 0; i < mSleepHairSystems.size(); i++)
-	{
-		ActorSim* body = sleepingHairSystems[i]->getSim();
-
-		PX_ASSERT(!body->readInternalFlag(ActorSim::BF_WAKEUP_NOTIFY));
-		body->clearInternalFlag(ActorSim::BF_SLEEP_NOTIFY);
-
-		// A body can be in both lists depending on the sequence of events
-		body->clearInternalFlag(ActorSim::BF_IS_IN_SLEEP_LIST);
-		body->clearInternalFlag(ActorSim::BF_IS_IN_WAKEUP_LIST);
-	}
-#endif
-
 	BodyCore* const* wokenBodies = mWokeBodies.getEntries();
 	for(PxU32 i=0; i < mWokeBodies.size(); i++)
 	{
@@ -6801,34 +5948,6 @@ void Sc::Scene::clearSleepWakeBodies(void)
         body->clearInternalFlag(BodySim::BF_IS_IN_WAKEUP_LIST);
 	}
 
-#if PX_SUPPORT_GPU_PHYSX
-	SoftBodyCore* const* wokenSoftBodies = mWokeSoftBodies.getEntries();
-	for (PxU32 i = 0; i < mWokeSoftBodies.size(); i++)
-	{
-		SoftBodySim* body = wokenSoftBodies[i]->getSim();
-
-		PX_ASSERT(!body->readInternalFlag(BodySim::BF_SLEEP_NOTIFY));
-		body->clearInternalFlag(BodySim::BF_WAKEUP_NOTIFY);
-
-		// A body can be in both lists depending on the sequence of events
-		body->clearInternalFlag(BodySim::BF_IS_IN_SLEEP_LIST);
-		body->clearInternalFlag(BodySim::BF_IS_IN_WAKEUP_LIST);
-	}
-
-	HairSystemCore* const* wokenHairSystems = mWokeHairSystems.getEntries();
-	for (PxU32 i = 0; i < mWokeHairSystems.size(); i++)
-	{
-		HairSystemSim* body = wokenHairSystems[i]->getSim();
-
-		PX_ASSERT(!body->readInternalFlag(BodySim::BF_SLEEP_NOTIFY));
-		body->clearInternalFlag(BodySim::BF_WAKEUP_NOTIFY);
-
-		// A body can be in both lists depending on the sequence of events
-		body->clearInternalFlag(BodySim::BF_IS_IN_SLEEP_LIST);
-		body->clearInternalFlag(BodySim::BF_IS_IN_WAKEUP_LIST);
-	}
-#endif
-
 	mSleepBodies.clear();
 	mWokeBodies.clear();
 	mWokeBodyListValid = true;
@@ -6839,12 +5958,6 @@ void Sc::Scene::clearSleepWakeBodies(void)
 	mWokeSoftBodies.clear();
 	mWokeSoftBodyListValid = true;
 	mSleepSoftBodyListValid = true;
-
-	// PT: TODO: why aren't these inside PX_SUPPORT_GPU_PHYSX?
-	mSleepHairSystems.clear();
-	mWokeHairSystems.clear();
-	mWokeHairSystemListValid = true;
-	mSleepHairSystemListValid = true;
 }
 
 void Sc::Scene::onBodySleep(BodySim* body)
@@ -6958,112 +6071,6 @@ PX_INLINE void Sc::Scene::cleanUpSleepOrWokenBodies(PxCoalescedHashSet<BodyCore*
 	validMarker = true;
 }
 
-#if PX_SUPPORT_GPU_PHYSX
-void Sc::Scene::cleanUpSleepHairSystems()
-{
-	HairSystemCore* const* hairSystemArray = mSleepHairSystems.getEntries();
-	PxU32 bodyCount = mSleepBodies.size();
-
-	IG::IslandSim& islandSim = mSimpleIslandManager->getAccurateIslandSim();
-
-	while (bodyCount--)
-	{
-		
-		HairSystemSim* hairSystem = hairSystemArray[bodyCount]->getSim();
-
-		if (hairSystem->readInternalFlag(static_cast<BodySim::InternalFlags>(ActorSim::BF_WAKEUP_NOTIFY)))
-		{
-			hairSystem->clearInternalFlag(static_cast<BodySim::InternalFlags>(ActorSim::BF_IS_IN_WAKEUP_LIST));
-			mSleepHairSystems.erase(hairSystemArray[bodyCount]);
-		}
-		else if (islandSim.getNode(hairSystem->getNodeIndex()).isActive())
-		{
-			//This hairSystem is still active in the island simulation, so the request to deactivate the actor by the application must have failed. Recover by undoing this
-			mSleepHairSystems.erase(hairSystemArray[bodyCount]);
-			hairSystem->internalWakeUp();
-		}
-	}
-	mSleepBodyListValid = true;
-}
-
-void Sc::Scene::cleanUpWokenHairSystems()
-{
-	cleanUpSleepOrWokenHairSystems(mWokeHairSystems, BodySim::BF_SLEEP_NOTIFY, mWokeHairSystemListValid);
-}
-
-void Sc::Scene::cleanUpSleepOrWokenHairSystems(PxCoalescedHashSet<HairSystemCore*>& bodyList, PxU32 removeFlag, bool& validMarker)
-{
-	HairSystemCore* const* hairSystemArray = bodyList.getEntries();
-	PxU32 bodyCount = bodyList.size();
-	while (bodyCount--)
-	{
-		HairSystemSim* hairSystem = hairSystemArray[bodyCount]->getSim();
-
-		if (hairSystem->readInternalFlag(static_cast<BodySim::InternalFlags>(removeFlag)))
-			bodyList.erase(hairSystemArray[bodyCount]);
-	}
-
-	validMarker = true;
-}
-
-PX_INLINE void Sc::Scene::cleanUpSleepSoftBodies()
-{
-	SoftBodyCore* const* bodyArray = mSleepSoftBodies.getEntries();
-	PxU32 bodyCount = mSleepBodies.size();
-
-	IG::IslandSim& islandSim = mSimpleIslandManager->getAccurateIslandSim();
-
-	while (bodyCount--)
-	{
-		SoftBodySim* body = bodyArray[bodyCount]->getSim();
-
-		if (body->readInternalFlag(static_cast<BodySim::InternalFlags>(ActorSim::BF_WAKEUP_NOTIFY)))
-		{
-			body->clearInternalFlag(static_cast<BodySim::InternalFlags>(ActorSim::BF_IS_IN_WAKEUP_LIST));
-			mSleepSoftBodies.erase(bodyArray[bodyCount]);
-		}
-		else if (islandSim.getNode(body->getNodeIndex()).isActive())
-		{
-			//This body is still active in the island simulation, so the request to deactivate the actor by the application must have failed. Recover by undoing this
-			mSleepSoftBodies.erase(bodyArray[bodyCount]);
-			body->internalWakeUp();
-		}
-	}
-
-	mSleepBodyListValid = true;
-}
-
-PX_INLINE void Sc::Scene::cleanUpWokenSoftBodies()
-{
-	cleanUpSleepOrWokenSoftBodies(mWokeSoftBodies, BodySim::BF_SLEEP_NOTIFY, mWokeSoftBodyListValid);
-}
-
-PX_INLINE void Sc::Scene::cleanUpSleepOrWokenSoftBodies(PxCoalescedHashSet<SoftBodyCore*>& bodyList, PxU32 removeFlag, bool& validMarker)
-{
-	// With our current logic it can happen that a body is added to the sleep as well as the woken body list in the
-	// same frame.
-	//
-	// Examples:
-	// - Kinematic is created (added to woken list) but has not target (-> deactivation -> added to sleep list)
-	// - Dynamic is created (added to woken list) but is forced to sleep by user (-> deactivation -> added to sleep list)
-	//
-	// This code traverses the sleep/woken body list and removes bodies which have been initially added to the given
-	// list but do not belong to it anymore.
-
-	SoftBodyCore* const* bodyArray = bodyList.getEntries();
-	PxU32 bodyCount = bodyList.size();
-	while (bodyCount--)
-	{
-		SoftBodySim* body = bodyArray[bodyCount]->getSim();
-
-		if (body->readInternalFlag(static_cast<BodySim::InternalFlags>(removeFlag)))
-			bodyList.erase(bodyArray[bodyCount]);
-	}
-
-	validMarker = true;
-}
-#endif //PX_SUPPORT_GPU_PHYSX
-
 void Sc::Scene::releaseConstraints(bool endOfScene)
 {
 	PX_ASSERT(mLLContext);
@@ -7111,50 +6118,6 @@ void Sc::Scene::destroyLLArticulation(FeatherstoneArticulation& articulation)
 {
 	mLLArticulationRCPool->destroy(static_cast<Dy::FeatherstoneArticulation*>(&articulation));
 }
-
-#if PX_SUPPORT_GPU_PHYSX
-
-Dy::SoftBody* Sc::Scene::createLLSoftBody(Sc::SoftBodySim* sim)
-{
-	return mLLSoftBodyPool->construct(sim, sim->getCore().getCore());
-}
-
-void Sc::Scene::destroyLLSoftBody(Dy::SoftBody& softBody)
-{
-	mLLSoftBodyPool->destroy(&softBody);
-}
-
-Dy::FEMCloth* Sc::Scene::createLLFEMCloth(Sc::FEMClothSim* sim)
-{
-	return mLLFEMClothPool->construct(sim, sim->getCore().getCore());
-}
-
-void Sc::Scene::destroyLLFEMCloth(Dy::FEMCloth& femCloth)
-{
-	mLLFEMClothPool->destroy(&femCloth);
-}
-
-Dy::ParticleSystem*	Sc::Scene::createLLParticleSystem(Sc::ParticleSystemSim* sim)
-{
-	return mLLParticleSystemPool->construct(sim->getCore().getShapeCore().getLLCore());
-}
-
-void Sc::Scene::destroyLLParticleSystem(Dy::ParticleSystem& particleSystem)
-{
-	return mLLParticleSystemPool->destroy(&particleSystem);
-}
-
-Dy::HairSystem* Sc::Scene::createLLHairSystem(Sc::HairSystemSim* sim)
-{
-	return mLLHairSystemPool->construct(sim, sim->getCore().getShapeCore().getLLCore());
-}
-
-void Sc::Scene::destroyLLHairSystem(Dy::HairSystem& hairSystem)
-{
-	mLLHairSystemPool->destroy(&hairSystem);
-}
-
-#endif //PX_SUPPORT_GPU_PHYSX
 
 PxU32 Sc::Scene::createAggregate(void* userData, PxU32 maxNumShapes, PxAggregateFilterHint filterHint)
 {
@@ -7248,8 +6211,6 @@ void Sc::Scene::islandInsertion(PxBaseTask* /*continuation*/)
 					type = IG::Edge::eFEM_CLOTH_CONTACT;
 				else if(isParticleSystem(actorTypeLargest))
 					type = IG::Edge::ePARTICLE_SYSTEM_CONTACT;
-				else if (actorTypeLargest == PxActorType::eHAIRSYSTEM)
-					type = IG::Edge::eHAIR_SYSTEM_CONTACT;
 
 				IG::EdgeIndex edgeIdx = mSimpleIslandManager->addContactManager(contactManager, bs0.getNodeIndex(), nodeIndexB, interaction, type);
 
@@ -7837,7 +6798,6 @@ void Sc::Scene::secondPassNarrowPhase(PxBaseTask* /*continuation*/)
 				activateEdgesInternal(speculativeSim.getActivatedEdges(IG::Edge::eSOFT_BODY_CONTACT), speculativeSim.getNbActivatedEdges(IG::Edge::eSOFT_BODY_CONTACT));
 				activateEdgesInternal(speculativeSim.getActivatedEdges(IG::Edge::eFEM_CLOTH_CONTACT), speculativeSim.getNbActivatedEdges(IG::Edge::eFEM_CLOTH_CONTACT));
 				activateEdgesInternal(speculativeSim.getActivatedEdges(IG::Edge::ePARTICLE_SYSTEM_CONTACT), speculativeSim.getNbActivatedEdges(IG::Edge::ePARTICLE_SYSTEM_CONTACT));
-				activateEdgesInternal(speculativeSim.getActivatedEdges(IG::Edge::eHAIR_SYSTEM_CONTACT), speculativeSim.getNbActivatedEdges(IG::Edge::eHAIR_SYSTEM_CONTACT));
 			}
 		}
 	}

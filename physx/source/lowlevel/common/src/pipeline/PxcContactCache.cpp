@@ -73,7 +73,6 @@ namespace physx
 			true,		//SoftBody
 			true,		//PxcContactSphereMesh
 			true,		//PxcContactSphereHeightField
-			false,		//PxcInvalidContactPair (hair)
 			false,		//PxcContactGeometryCustomGeometry
 		},
 
@@ -88,7 +87,6 @@ namespace physx
 			true,		//SoftBody
 			false,		//PxcInvalidContactPair
 			false,		//PxcInvalidContactPair
-			false,		//PxcInvalidContactPair (hair)
 			false,		//PxcContactGeometryCustomGeometry
 		},
 
@@ -103,7 +101,6 @@ namespace physx
 			true,		//SoftBody
 			true,		//PxcContactCapsuleMesh
 			true,		//PxcContactCapsuleHeightField
-			false,		//PxcInvalidContactPair (hair)
 			false,		//PxcContactGeometryCustomGeometry
 		},
 
@@ -118,7 +115,6 @@ namespace physx
 			true,		//SoftBody
 			true,		//PxcContactBoxMesh
 			true,		//PxcContactBoxHeightField
-			false,		//PxcInvalidContactPair (hair)
 			false,		//PxcContactGeometryCustomGeometry
 		},
 
@@ -133,7 +129,6 @@ namespace physx
 			true,		//-
 			true,		//PxcContactConvexMesh2
 			true,		//PxcContactConvexHeightField
-			false,		//PxcInvalidContactPair (hair)
 			false,		//PxcContactGeometryCustomGeometry
 		},
 
@@ -148,7 +143,6 @@ namespace physx
 			false,		//-
 			false,		//PxcInvalidContactPair
 			false,		//PxcInvalidContactPair
-			false,		//PxcInvalidContactPair (hair)
 			false,		//PxcInvalidContactPair
 		},
 
@@ -163,7 +157,6 @@ namespace physx
 			false,		//-
 			false,		//PxcInvalidContactPair
 			false,		//PxcInvalidContactPair
-			false,		//PxcInvalidContactPair (hair)
 			false,		//PxcInvalidContactPair
 		},
 
@@ -178,7 +171,6 @@ namespace physx
 			true,		//-
 			false,		//PxcInvalidContactPair
 			false,		//PxcInvalidContactPair
-			false,		//PxcInvalidContactPair (hair)
 			false,		//PxcInvalidContactPair
 		},
 
@@ -193,22 +185,6 @@ namespace physx
 			true,		//-
 			false,		//-
 			false,		//PxcInvalidContactPair
-			false,		//PxcInvalidContactPair (hair)
-			false,		//PxcInvalidContactPair
-		},
-
-		//PxGeometryType::eHAIRSYSTEM
-		{
-			false,		//-
-			false,		//-
-			false,		//-
-			false,		//-
-			false,		//-
-			false,		//-
-			true,		//-
-			false,		//-
-			false,		//PxcInvalidContactPair
-			false,		//PxcInvalidContactPair
 			false,		//PxcInvalidContactPair
 		},
 
@@ -222,7 +198,6 @@ namespace physx
 			false,		//-
 			true,		//-
 			false,		//-
-			false,		//PxcInvalidContactPair
 			false,		//PxcInvalidContactPair
 			false,		//PxcInvalidContactPair
 		},

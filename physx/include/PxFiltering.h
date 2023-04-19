@@ -480,13 +480,6 @@ struct PxFilterObjectType
 		*/
 		eFEMCLOTH,
 
-		/**
-		\brief A hair system
-		\note In development
-		@see PxHairSystem
-		*/
-		eHAIRSYSTEM,
-
 		//! \brief internal use only!
 		eMAX_TYPE_COUNT = 16,
 

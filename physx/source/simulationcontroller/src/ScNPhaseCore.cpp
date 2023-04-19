@@ -133,8 +133,6 @@ static void getFilterInfo_ShapeSim(PxFilterObjectAttributes& filterAttr, PxFilte
 			setFilterObjectAttributeType(filterAttr, PxFilterObjectType::eSOFTBODY);
 		else if (shape.getActor().isParticleSystem())
 			setFilterObjectAttributeType(filterAttr, PxFilterObjectType::ePARTICLESYSTEM);
-		else if (shape.getActor().isHairSystem())
-			setFilterObjectAttributeType(filterAttr, PxFilterObjectType::eHAIRSYSTEM);
 		else
 			setFilterObjectAttributeType(filterAttr, PxFilterObjectType::eRIGID_STATIC);
 	}
@@ -580,7 +578,6 @@ static const PxU32 gTypeData[] = {
 	(PxFilterObjectType::ePARTICLESYSTEM<<1)|1, //FLIP
 	(PxFilterObjectType::ePARTICLESYSTEM<<1)|1, //MPM
 	(PxFilterObjectType::ePARTICLESYSTEM<<1)|1, //Custom
-	(PxFilterObjectType::eHAIRSYSTEM<<1)|1,
 };
 
 static PX_FORCE_INLINE bool isParticleSystem(const PxActorType::Enum actorType)
@@ -638,10 +635,6 @@ static PX_FORCE_INLINE PxFilterInfo filterRbCollisionPair(const FilteringContext
 
 	if(isParticleSystem(actorType0) && isParticleSystem(actorType1))
 		return PxFilterInfo(PxFilterFlag::eKILL);
-
-	if(actorType0 == PxActorType::eHAIRSYSTEM && actorType1 == PxActorType::eHAIRSYSTEM)
-		return PxFilterInfo(PxFilterFlag::eKILL);
-
 
 	if ((actorType0 == PxActorType::eARTICULATION_LINK) ^ (actorType1 == PxActorType::eARTICULATION_LINK))
 	{

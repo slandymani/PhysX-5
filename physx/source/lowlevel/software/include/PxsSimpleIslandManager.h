@@ -126,16 +126,6 @@ public:
 
 	PxNodeIndex addArticulation(Sc::ArticulationSim* articulation, Dy::FeatherstoneArticulation* llArtic, bool isActive);
 
-#if PX_SUPPORT_GPU_PHYSX
-	PxNodeIndex addSoftBody(Dy::SoftBody* llSoftBody, bool isActive);
-
-	PxNodeIndex addFEMCloth(Dy::FEMCloth* llFEMCloth, bool isActive);
-
-	PxNodeIndex addParticleSystem(Dy::ParticleSystem* llParticleSystem, bool isActive);
-
-	PxNodeIndex addHairSystem(Dy::HairSystem* llHairSystem, bool isActive);
-#endif
-
 	EdgeIndex addContactManager(PxsContactManager* manager, PxNodeIndex nodeHandle1, PxNodeIndex nodeHandle2, Sc::Interaction* interaction,
 		Edge::EdgeType edgeType);
 

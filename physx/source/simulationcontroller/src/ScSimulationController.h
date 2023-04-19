@@ -42,7 +42,6 @@ namespace Dy
 	struct ArticulationJointCore;
 	class ParticleSystem;
 	class FEMCloth;
-	class HairSystem;
 }
 
 namespace Sc
@@ -68,118 +67,6 @@ namespace Sc
 		virtual void addArticulation(Dy::FeatherstoneArticulation* /*articulation*/, const PxNodeIndex& /*nodeIndex*/) {}
 		virtual void releaseArticulation(Dy::FeatherstoneArticulation* /*articulation*/, const PxNodeIndex& /*nodeIndex*/) {}
 		virtual void releaseDeferredArticulationIds() {}
-
-#if PX_SUPPORT_GPU_PHYSX
-		virtual void addSoftBody(Dy::SoftBody*, const PxNodeIndex&) {}
-		virtual void releaseSoftBody(Dy::SoftBody*) {}
-		virtual void releaseDeferredSoftBodyIds() {}
-		virtual void activateSoftbody(Dy::SoftBody*) {}
-		virtual void deactivateSoftbody(Dy::SoftBody*) {}
-		virtual void activateSoftbodySelfCollision(Dy::SoftBody*) {}
-		virtual void deactivateSoftbodySelfCollision(Dy::SoftBody*) {}
-		virtual void setSoftBodyWakeCounter(Dy::SoftBody*) {}
-
-
-		virtual void addParticleFilter(Dy::SoftBody*, Dy::ParticleSystem* ,
-			PxU32, PxU32, PxU32){}
-		virtual void removeParticleFilter(Dy::SoftBody*,
-			const Dy::ParticleSystem*, PxU32, PxU32, PxU32){}
-
-		virtual PxU32 addParticleAttachment(Dy::SoftBody*, const Dy::ParticleSystem*,
-			PxU32, PxU32, PxU32, const PxVec4&, const bool) { return 0xFFFFFFFF; }
-		virtual void removeParticleAttachment(Dy::SoftBody*, PxU32){}
-
-		virtual void addRigidFilter(Dy::SoftBody*, const PxNodeIndex&, const PxNodeIndex&, PxU32) {}
-		virtual void removeRigidFilter(Dy::SoftBody*, const PxNodeIndex&,  PxU32){}
-
-
-		virtual PxU32 addRigidAttachment(Dy::SoftBody*, const PxNodeIndex&,
-			PxsRigidBody*, const PxNodeIndex&, PxU32, const PxVec3&, PxConeLimitedConstraint*, const bool) {return 0xFFFFFFFF;}
-		virtual void removeRigidAttachment(Dy::SoftBody*, PxU32) {}
-
-		virtual void addTetRigidFilter(Dy::SoftBody*,
-			const PxNodeIndex&, PxU32) {}
-		virtual void removeTetRigidFilter(Dy::SoftBody* ,
-			const PxNodeIndex&, PxU32) {}
-
-		virtual PxU32 addTetRigidAttachment(Dy::SoftBody*, PxsRigidBody*, const PxNodeIndex&, 
-			PxU32, const PxVec4& , const PxVec3&, PxConeLimitedConstraint*, const bool) { return 0xFFFFFFFF;}
-		
-		virtual void addSoftBodyFilter(Dy::SoftBody*, Dy::SoftBody*, PxU32,
-			PxU32) {}
-		virtual void removeSoftBodyFilter(Dy::SoftBody*, Dy::SoftBody*, PxU32,
-			PxU32) {}
-		virtual void addSoftBodyFilters(Dy::SoftBody*, Dy::SoftBody*, PxU32*, PxU32*,
-			PxU32) {}
-		virtual void removeSoftBodyFilters(Dy::SoftBody*, Dy::SoftBody*, PxU32*, PxU32*,
-			PxU32) {}
-
-		virtual PxU32 addSoftBodyAttachment(Dy::SoftBody* , Dy::SoftBody* , PxU32, PxU32,
-			const PxVec4&, const PxVec4&, PxConeLimitedConstraint*, const bool){ return 0xFFFFFFFF;}
-		virtual void removeSoftBodyAttachment(Dy::SoftBody*, PxU32) {}
-
-		virtual void addClothFilter(Dy::SoftBody*, Dy::FEMCloth*, PxU32,
-			PxU32) {}
-		virtual void removeClothFilter(Dy::SoftBody*, Dy::FEMCloth*, PxU32,
-			PxU32) {}
-
-		virtual PxU32 addClothAttachment(Dy::SoftBody*, Dy::FEMCloth*, PxU32,
-			const PxVec4&, PxU32, const PxVec4&, PxConeLimitedConstraint* , const bool) { return 0xFFFFFFFF;}
-		virtual void removeClothAttachment(Dy::SoftBody*, PxU32) {}
-
-
-		virtual void addFEMCloth(Dy::FEMCloth* , const PxNodeIndex&) {}
-		virtual void releaseFEMCloth(Dy::FEMCloth*) {}
-		virtual void releaseDeferredFEMClothIds() {}
-		virtual void activateCloth(Dy::FEMCloth*) {}
-		virtual void deactivateCloth(Dy::FEMCloth*) {}
-		virtual void setClothWakeCounter(Dy::FEMCloth*) {}
-
-
-		virtual void addRigidFilter(Dy::FEMCloth*,
-			const PxNodeIndex&, PxU32){}
-
-		virtual void removeRigidFilter(Dy::FEMCloth*,
-			const PxNodeIndex&, PxU32){}
-
-		virtual PxU32 addRigidAttachment(Dy::FEMCloth* , const PxNodeIndex& ,
-			PxsRigidBody* , const PxNodeIndex& , PxU32, const PxVec3& , PxConeLimitedConstraint*, const bool){ return 0xFFFFFFFF; }
-
-		virtual void removeRigidAttachment(Dy::FEMCloth*, PxU32 ){}
-
-
-		virtual void addTriRigidFilter(Dy::FEMCloth*,
-			const PxNodeIndex&, PxU32) {}
-
-		virtual void removeTriRigidFilter(Dy::FEMCloth*,
-			const PxNodeIndex&, PxU32) {}
-
-		virtual PxU32 addTriRigidAttachment(Dy::FEMCloth*, PxsRigidBody*, const PxNodeIndex& , 
-			PxU32 , const PxVec4& , const PxVec3&, PxConeLimitedConstraint*, const bool){ return 0xFFFFFFFF;}
-
-		virtual void removeTriRigidAttachment(Dy::FEMCloth*, PxU32){}
-
-		virtual void addClothFilter(Dy::FEMCloth*, Dy::FEMCloth*, PxU32, PxU32) {}
-		virtual void removeClothFilter(Dy::FEMCloth*, Dy::FEMCloth*, PxU32, PxU32){}
-
-		virtual PxU32 addTriClothAttachment(Dy::FEMCloth*, Dy::FEMCloth*,  PxU32, PxU32,
-			const PxVec4&, const PxVec4&, const bool){ return 0xFFFFFFFF;}
-
-		virtual void removeTriClothAttachment(Dy::FEMCloth*, PxU32) {}
-
-		virtual void addParticleSystem(Dy::ParticleSystem*, const PxNodeIndex&, PxParticleSolverType::Enum) {}
-		virtual void releaseParticleSystem(Dy::ParticleSystem*, PxParticleSolverType::Enum) {}
-		virtual void releaseDeferredParticleSystemIds() {}
-
-		virtual void addHairSystem(Dy::HairSystem *, const PxNodeIndex&) {}
-		virtual void releaseHairSystem(Dy::HairSystem*) {}
-		virtual void releaseDeferredHairSystemIds() {}
-		virtual void activateHairSystem(Dy::HairSystem*) {}
-		virtual void deactivateHairSystem(Dy::HairSystem*) {}
-		virtual void setHairSystemWakeCounter(Dy::HairSystem*) {}
-		virtual void copyHairSystemData(void** , void* , void* , PxHairSystemData::Enum , const PxU32 , const PxU32 , void* ) {}
-		virtual void applyHairSystemData(void** , void* , void* , PxHairSystemData::Enum , const PxU32 , const PxU32 , void* ) {}
-#endif
 
 		virtual void flush() {}
 		virtual void updateDynamic(Dy::FeatherstoneArticulation* /*articulation*/, const PxNodeIndex& /*nodeIndex*/) {}
@@ -251,32 +138,6 @@ namespace Sc
 		virtual void    applyParticleBufferData(const PxU32* /*indices*/, const PxGpuParticleBufferIndexPair* /*indexPairs*/, const PxParticleBufferFlags* /*flags*/, PxU32 /*nbUpdatedBuffers*/, void* /*waitEvent*/, void* /*signalEvent*/) {}
 
 		virtual void flushInsertions() {}
-
-#if PX_SUPPORT_GPU_PHYSX
-		virtual PxU32	getNbDeactivatedFEMCloth() const { return 0; }
-		virtual PxU32	getNbActivatedFEMCloth() const { return 0; }
-
-		virtual Dy::FEMCloth**	getDeactivatedFEMCloths() const { return NULL; }
-		virtual Dy::FEMCloth**	getActivatedFEMCloths() const { return NULL; }
-
-		virtual bool hasFEMCloth() const { return false; }
-
-		virtual PxU32	getNbDeactivatedSoftbodies() const { return 0; }
-		virtual PxU32	getNbActivatedSoftbodies() const { return 0; }
-
-		virtual const PxReal*	getSoftBodyWakeCounters() const { return NULL; }
-
-		virtual Dy::SoftBody**	getDeactivatedSoftbodies() const { return NULL; }
-		virtual Dy::SoftBody**	getActivatedSoftbodies() const { return NULL; }
-
-		virtual bool hasSoftBodies() const { return false; }
-
-		virtual PxU32	getNbDeactivatedHairSystems() const { return 0; }
-		virtual PxU32	getNbActivatedHairSystems() const { return 0; }
-		virtual Dy::HairSystem**	getDeactivatedHairSystems() const { return NULL; }
-		virtual Dy::HairSystem**	getActivatedHairSystems() const { return NULL; }
-		virtual bool hasHairSystems() const { return false; }
-#endif
 
 	};
 }

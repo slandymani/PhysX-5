@@ -31,9 +31,6 @@
 #include "common/PxRenderBuffer.h"
 #include "PxParticleSystem.h"
 #include "PxPBDParticleSystem.h"
-//#include "PxFLIPParticleSystem.h"
-//#include "PxMPMParticleSystem.h"
-//#include "PxCustomParticleSystem.h"
 #include "PxPhysics.h"
 #include "PxConstraintDesc.h"
 #include "NpPvdSceneClient.h"
@@ -49,8 +46,6 @@
 #include "NpRigidDynamic.h"
 #include "NpArticulationLink.h"
 #include "NpSoftBody.h"
-//#include "NpFEMCloth.h"
-#include "NpHairSystem.h"
 #include "NpAggregate.h"
 #include "NpScene.h"
 #include "NpArticulationJointReducedCoordinate.h"
@@ -186,9 +181,6 @@ namespace
 			break;
 		case PxActorType::eCUSTOM_PARTICLESYSTEM:
 			//op(*static_cast<const PxCustomParticleSystem*>(actor));
-			break;
-		case PxActorType::eHAIRSYSTEM:
-			//op(*static_cast<const PxHairSystem*>(actor));
 			break;
 		case PxActorType::eACTOR_COUNT:
 		case PxActorType::eACTOR_FORCE_DWORD:
@@ -1006,243 +998,6 @@ void PvdSceneClient::releasePvdInstance(const NpAggregate* npAggregate)
 		mMetaDataBinding.destroyInstance(*mPvdDataStream, *npAggregate, mScene);
 	}
 }
-
-///////////////////////////////////////////////////////////////////////////////
-
-#if PX_SUPPORT_GPU_PHYSX
-void PvdSceneClient::createPvdInstance(const NpSoftBody* softBody)
-{
-	PX_UNUSED(softBody);
-	//Todo
-}
-
-void PvdSceneClient::updatePvdProperties(const NpSoftBody* softBody)
-{
-	PX_UNUSED(softBody);
-	//Todo
-}
-
-void PvdSceneClient::attachAggregateActor(const NpSoftBody* softBody, NpActor* actor)
-{
-	PX_UNUSED(softBody);
-	PX_UNUSED(actor);
-	//Todo
-}
-
-void PvdSceneClient::detachAggregateActor(const NpSoftBody* softBody, NpActor* actor)
-{
-	PX_UNUSED(softBody);
-	PX_UNUSED(actor);
-	//Todo
-}
-
-void PvdSceneClient::releasePvdInstance(const NpSoftBody* softBody)
-{
-	PX_UNUSED(softBody);
-	//Todo
-}
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-void PvdSceneClient::createPvdInstance(const NpFEMCloth* femCloth)
-{
-	PX_UNUSED(femCloth);
-	//Todo
-}
-
-void PvdSceneClient::updatePvdProperties(const NpFEMCloth* femCloth)
-{
-	PX_UNUSED(femCloth);
-	//Todo
-}
-
-void PvdSceneClient::attachAggregateActor(const NpFEMCloth* femCloth, NpActor* actor)
-{
-	PX_UNUSED(femCloth);
-	PX_UNUSED(actor);
-	//Todo
-}
-
-void PvdSceneClient::detachAggregateActor(const NpFEMCloth* femCloth, NpActor* actor)
-{
-	PX_UNUSED(femCloth);
-	PX_UNUSED(actor);
-	//Todo
-}
-
-void PvdSceneClient::releasePvdInstance(const NpFEMCloth* femCloth)
-{
-	PX_UNUSED(femCloth);
-	//Todo
-}
-
-///////////////////////////////////////////////////////////////////////////////
-void PvdSceneClient::createPvdInstance(const NpPBDParticleSystem* particleSystem)
-{
-	PX_UNUSED(particleSystem);
-	//Todo
-}
-
-void PvdSceneClient::updatePvdProperties(const NpPBDParticleSystem* particleSystem)
-{
-	PX_UNUSED(particleSystem);
-	//Todo
-}
-
-void PvdSceneClient::attachAggregateActor(const NpPBDParticleSystem* particleSystem, NpActor* actor)
-{
-	PX_UNUSED(particleSystem);
-	PX_UNUSED(actor);
-	//Todo
-}
-
-void PvdSceneClient::detachAggregateActor(const NpPBDParticleSystem* particleSystem, NpActor* actor)
-{
-	PX_UNUSED(particleSystem);
-	PX_UNUSED(actor);
-	//Todo
-}
-
-void PvdSceneClient::releasePvdInstance(const NpPBDParticleSystem* particleSystem)
-{
-	PX_UNUSED(particleSystem);
-	//Todo
-}
-
-///////////////////////////////////////////////////////////////////////////////
-void PvdSceneClient::createPvdInstance(const NpFLIPParticleSystem* particleSystem)
-{
-	PX_UNUSED(particleSystem);
-	//Todo
-}
-
-void PvdSceneClient::updatePvdProperties(const NpFLIPParticleSystem* particleSystem)
-{
-	PX_UNUSED(particleSystem);
-	//Todo
-}
-
-void PvdSceneClient::attachAggregateActor(const NpFLIPParticleSystem* particleSystem, NpActor* actor)
-{
-	PX_UNUSED(particleSystem);
-	PX_UNUSED(actor);
-	//Todo
-}
-
-void PvdSceneClient::detachAggregateActor(const NpFLIPParticleSystem* particleSystem, NpActor* actor)
-{
-	PX_UNUSED(particleSystem);
-	PX_UNUSED(actor);
-	//Todo
-}
-
-void PvdSceneClient::releasePvdInstance(const NpFLIPParticleSystem* particleSystem)
-{
-	PX_UNUSED(particleSystem);
-	//Todo
-}
-
-///////////////////////////////////////////////////////////////////////////////
-void PvdSceneClient::createPvdInstance(const NpMPMParticleSystem* particleSystem)
-{
-	PX_UNUSED(particleSystem);
-	//Todo
-}
-
-void PvdSceneClient::updatePvdProperties(const NpMPMParticleSystem* particleSystem)
-{
-	PX_UNUSED(particleSystem);
-	//Todo
-}
-
-void PvdSceneClient::attachAggregateActor(const NpMPMParticleSystem* particleSystem, NpActor* actor)
-{
-	PX_UNUSED(particleSystem);
-	PX_UNUSED(actor);
-	//Todo
-}
-
-void PvdSceneClient::detachAggregateActor(const NpMPMParticleSystem* particleSystem, NpActor* actor)
-{
-	PX_UNUSED(particleSystem);
-	PX_UNUSED(actor);
-	//Todo
-}
-
-void PvdSceneClient::releasePvdInstance(const NpMPMParticleSystem* particleSystem)
-{
-	PX_UNUSED(particleSystem);
-	//Todo
-}
-
-///////////////////////////////////////////////////////////////////////////////
-void PvdSceneClient::createPvdInstance(const NpCustomParticleSystem* particleSystem)
-{
-	PX_UNUSED(particleSystem);
-	//Todo
-}
-
-void PvdSceneClient::updatePvdProperties(const NpCustomParticleSystem* particleSystem)
-{
-	PX_UNUSED(particleSystem);
-	//Todo
-}
-
-void PvdSceneClient::attachAggregateActor(const NpCustomParticleSystem* particleSystem, NpActor* actor)
-{
-	PX_UNUSED(particleSystem);
-	PX_UNUSED(actor);
-	//Todo
-}
-
-void PvdSceneClient::detachAggregateActor(const NpCustomParticleSystem* particleSystem, NpActor* actor)
-{
-	PX_UNUSED(particleSystem);
-	PX_UNUSED(actor);
-	//Todo
-}
-
-void PvdSceneClient::releasePvdInstance(const NpCustomParticleSystem* particleSystem)
-{
-	PX_UNUSED(particleSystem);
-	//Todo
-}
-
-///////////////////////////////////////////////////////////////////////////////
-
-void PvdSceneClient::createPvdInstance(const NpHairSystem* hairSystem)
-{
-	PX_UNUSED(hairSystem);
-	//Todo
-}
-
-void PvdSceneClient::updatePvdProperties(const NpHairSystem* hairSystem)
-{
-	PX_UNUSED(hairSystem);
-	//Todo
-}
-
-void PvdSceneClient::attachAggregateActor(const NpHairSystem* hairSystem, NpActor* actor)
-{
-	PX_UNUSED(hairSystem);
-	PX_UNUSED(actor);
-	//Todo
-}
-
-void PvdSceneClient::detachAggregateActor(const NpHairSystem* hairSystem, NpActor* actor)
-{
-	PX_UNUSED(hairSystem);
-	PX_UNUSED(actor);
-	//Todo
-}
-
-void PvdSceneClient::releasePvdInstance(const NpHairSystem* hairSystem)
-{
-	PX_UNUSED(hairSystem);
-	//Todo
-}
-
-#endif
 
 ///////////////////////////////////////////////////////////////////////////////
 

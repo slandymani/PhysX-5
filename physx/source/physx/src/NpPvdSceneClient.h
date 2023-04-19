@@ -69,16 +69,6 @@ class NpArticulationSensor;
 class NpActor;
 class NpScene;
 
-#if PX_SUPPORT_GPU_PHYSX
-class NpSoftBody;
-class NpFEMCloth;
-class NpPBDParticleSystem;
-class NpFLIPParticleSystem;
-class NpMPMParticleSystem;
-class NpCustomParticleSystem;
-class NpHairSystem;
-#endif
-
 namespace Sc
 {
 class ConstraintCore;
@@ -217,50 +207,6 @@ class PvdSceneClient : public PxPvdSceneClient, public PvdClient, public PvdVisu
 	void attachAggregateActor	(const NpAggregate* aggregate, NpActor* actor);
 	void detachAggregateActor	(const NpAggregate* aggregate, NpActor* actor);
 	void releasePvdInstance		(const NpAggregate* aggregate);
-
-#if PX_SUPPORT_GPU_PHYSX
-	void createPvdInstance(const NpSoftBody* softBody);
-	void updatePvdProperties(const NpSoftBody* softBody);
-	void attachAggregateActor(const NpSoftBody* softBody, NpActor* actor);
-	void detachAggregateActor(const NpSoftBody* softBody, NpActor* actor);
-	void releasePvdInstance(const NpSoftBody* softBody);
-
-	void createPvdInstance(const NpFEMCloth* femCloth);
-	void updatePvdProperties(const NpFEMCloth* femCloth);
-	void attachAggregateActor(const NpFEMCloth* femCloth, NpActor* actor);
-	void detachAggregateActor(const NpFEMCloth* femCloth, NpActor* actor);
-	void releasePvdInstance(const NpFEMCloth* femCloth);
-
-	void createPvdInstance(const NpPBDParticleSystem* particleSystem);
-	void updatePvdProperties(const NpPBDParticleSystem* particleSystem);
-	void attachAggregateActor(const NpPBDParticleSystem* particleSystem, NpActor* actor);
-	void detachAggregateActor(const NpPBDParticleSystem* particleSystem, NpActor* actor);
-	void releasePvdInstance(const NpPBDParticleSystem* particleSystem);
-
-	void createPvdInstance(const NpFLIPParticleSystem* particleSystem);
-	void updatePvdProperties(const NpFLIPParticleSystem* particleSystem);
-	void attachAggregateActor(const NpFLIPParticleSystem* particleSystem, NpActor* actor);
-	void detachAggregateActor(const NpFLIPParticleSystem* particleSystem, NpActor* actor);
-	void releasePvdInstance(const NpFLIPParticleSystem* particleSystem);
-
-	void createPvdInstance(const NpMPMParticleSystem* particleSystem);
-	void updatePvdProperties(const NpMPMParticleSystem* particleSystem);
-	void attachAggregateActor(const NpMPMParticleSystem* particleSystem, NpActor* actor);
-	void detachAggregateActor(const NpMPMParticleSystem* particleSystem, NpActor* actor);
-	void releasePvdInstance(const NpMPMParticleSystem* particleSystem);
-
-	void createPvdInstance(const NpCustomParticleSystem* particleSystem);
-	void updatePvdProperties(const NpCustomParticleSystem* particleSystem);
-	void attachAggregateActor(const NpCustomParticleSystem* particleSystem, NpActor* actor);
-	void detachAggregateActor(const NpCustomParticleSystem* particleSystem, NpActor* actor);
-	void releasePvdInstance(const NpCustomParticleSystem* particleSystem);
-
-	void createPvdInstance(const NpHairSystem* hairSystem);
-	void updatePvdProperties(const NpHairSystem* hairSystem);
-	void attachAggregateActor(const NpHairSystem* hairSystem, NpActor* actor);
-	void detachAggregateActor(const NpHairSystem* hairSystem, NpActor* actor);
-	void releasePvdInstance(const NpHairSystem* hairSystem);
-#endif
 
 	void originShift(PxVec3 shift);
 	void updateJoints();

@@ -107,12 +107,6 @@ namespace Dy
 {
 	class FeatherstoneArticulation;
 	class Context;
-#if PX_SUPPORT_GPU_PHYSX
-	class SoftBody;
-	class FEMCloth;
-	class ParticleSystem;
-	class HairSystem;
-#endif
 }
 
 namespace Sc
@@ -135,13 +129,11 @@ namespace Sc
 	class LLSoftBodyPool;
 	class LLFEMClothPool;
 	class LLParticleSystemPool;
-	class LLHairSystemPool;
 
 	class BodyCore;
 	class SoftBodyCore;
 	class FEMClothCore;
 	class ParticleSystemCore;
-	class HairSystemCore;
 
 	class NPhaseCore;
 	class ConstraintInteraction;
@@ -164,7 +156,6 @@ namespace Sc
 	class SoftBodySim;
 	class FEMClothSim;
 	class ParticleSystemSim;
-	class HairSystemSim;
 
 	class SimStats;
 
@@ -304,9 +295,6 @@ namespace Sc
 					void						addParticleSystem(ParticleSystemCore&);
 					void						removeParticleSystem(ParticleSystemCore&);
 
-					void						addHairSystem(HairSystemCore&);
-					void						removeHairSystem(HairSystemCore&);
-
 					void						addArticulation(ArticulationCore&, BodyCore& root);
 					void						removeArticulation(ArticulationCore&);
 
@@ -330,27 +318,11 @@ namespace Sc
 					void						removeFEMClothSimControl(FEMClothCore& core);
 					void						addParticleSystemSimControl(ParticleSystemCore& core);
 					void						removeParticleSystemSimControl(ParticleSystemCore& core);
-					void						addHairSystemSimControl(HairSystemCore& core);
-					void						removeHairSystemSimControl(HairSystemCore& core);
 
 					void						updateBodySim(BodySim& sim);
 
 	PX_FORCE_INLINE	PxU32						getNbArticulations() const	{ return mArticulations.size();			}
 	PX_FORCE_INLINE	ArticulationCore* const*	getArticulations()			{ return mArticulations.getEntries();	}
-
-#if PX_SUPPORT_GPU_PHYSX
-	PX_FORCE_INLINE	PxU32						getNbSoftBodies()	const	{ return mSoftBodies.size();		}
-	PX_FORCE_INLINE	SoftBodyCore* const*		getSoftBodies()				{ return mSoftBodies.getEntries();	}
-
-	PX_FORCE_INLINE	PxU32						getNbFEMCloths()	const	{ return mFEMCloths.size();			}
-	PX_FORCE_INLINE	FEMClothCore* const*		getFEMCloths()				{ return mFEMCloths.getEntries();	}
-
-	PX_FORCE_INLINE	PxU32						getNbParticleSystems()	const	{ return mParticleSystems.size();		}
-	PX_FORCE_INLINE	ParticleSystemCore* const*	getParticleSystems()			{ return mParticleSystems.getEntries();	}
-
-	PX_FORCE_INLINE	PxU32						getNbHairSystems()	const	{ return mHairSystems.size(); }
-	PX_FORCE_INLINE	HairSystemCore* const*		getHairSystems()			{ return mHairSystems.getEntries(); }
-#endif
 	
 	PX_FORCE_INLINE	PxU32						getNbConstraints()	const	{ return mConstraints.size();		}
 	PX_FORCE_INLINE	ConstraintCore*const*		getConstraints()	const	{ return mConstraints.getEntries();	}
@@ -536,17 +508,6 @@ namespace Sc
 	PX_FORCE_INLINE	BodyCore*const*				getActiveBodiesArray()			const	{ return mActiveBodies.begin();			}
 	PX_FORCE_INLINE	PxU32						getNumActiveBodies()			const	{ return mActiveBodies.size();			}
 
-#if PX_SUPPORT_GPU_PHYSX
-	PX_FORCE_INLINE	SoftBodyCore*const*			getActiveSoftBodiesArray() const { return mActiveSoftBodies.begin(); }
-	PX_FORCE_INLINE	PxU32						getNumActiveSoftBodies() const { return mActiveSoftBodies.size(); }
-
-	PX_FORCE_INLINE	FEMClothCore*const*			getActiveFEMClothsArray() const { return mActiveFEMCloths.begin(); }
-	PX_FORCE_INLINE	PxU32						getNumActiveFEMCloths() const { return mActiveFEMCloths.size(); }
-	
-	PX_FORCE_INLINE HairSystemCore*const*		getActiveHairSystemsArray() const { return mActiveHairSystems.begin(); }
-	PX_FORCE_INLINE	PxU32						getNumActiveHairSystems() const { return mActiveHairSystems.size(); }
-#endif
-
 	PX_FORCE_INLINE	BodyCore*const*				getActiveCompoundBodiesArray()	const	{ return mActiveCompoundBodies.begin();	}
 	PX_FORCE_INLINE	PxU32						getNumActiveCompoundBodies()	const	{ return mActiveCompoundBodies.size();	}
 
@@ -623,43 +584,11 @@ namespace Sc
 					Dy::FeatherstoneArticulation*	createLLArticulation(ArticulationSim* sim);
 					void							destroyLLArticulation(Dy::FeatherstoneArticulation&);
 
-#if PX_SUPPORT_GPU_PHYSX
-					Dy::SoftBody*				createLLSoftBody(SoftBodySim* sim);
-					void						destroyLLSoftBody(Dy::SoftBody& softBody);
-
-					Dy::FEMCloth*				createLLFEMCloth(FEMClothSim* sim);
-					void						destroyLLFEMCloth(Dy::FEMCloth& femCloth);
-
-					Dy::ParticleSystem*			createLLParticleSystem(ParticleSystemSim* sim);
-					void						destroyLLParticleSystem(Dy::ParticleSystem& softBody);
-
-					Dy::HairSystem*				createLLHairSystem(HairSystemSim* sim);
-					void						destroyLLHairSystem(Dy::HairSystem& hairSystem);
-#endif
-
 		PX_FORCE_INLINE	PxPool<ConstraintInteraction>*	getConstraintInteractionPool()			const	{ return mConstraintInteractionPool;	}
 	public:
 		PX_FORCE_INLINE	const PxsMaterialManager&			getMaterialManager()				const	{ return mMaterialManager;			}
 		PX_FORCE_INLINE	PxsMaterialManager&					getMaterialManager()						{ return mMaterialManager;			}
-#if PX_SUPPORT_GPU_PHYSX
-		PX_FORCE_INLINE	const PxsFEMMaterialManager&		getFEMMaterialManager()				const	{ return mFEMMaterialManager;		}
-		PX_FORCE_INLINE	PxsFEMMaterialManager&				getFEMMaterialManager()						{ return mFEMMaterialManager;		}
 
-		PX_FORCE_INLINE	const PxsFEMClothMaterialManager&	getFEMClothMaterialManager()		const	{ return mFEMClothMaterialManager;	}
-		PX_FORCE_INLINE	PxsFEMClothMaterialManager&			getFEMClothMaterialManager()				{ return mFEMClothMaterialManager;	}
-
-		PX_FORCE_INLINE	const PxsPBDMaterialManager&		getPBDMaterialManager()				const	{ return mPBDMaterialManager;		}
-		PX_FORCE_INLINE	PxsPBDMaterialManager&				getPBDMaterialManager()						{ return mPBDMaterialManager;		}
-
-		PX_FORCE_INLINE	const PxsFLIPMaterialManager&		getFLIPMaterialManager()			const	{ return mFLIPMaterialManager;		}
-		PX_FORCE_INLINE	PxsFLIPMaterialManager&				getFLIPMaterialManager()					{ return mFLIPMaterialManager;		}
-
-		PX_FORCE_INLINE	const PxsMPMMaterialManager&		getMPMMaterialManager()				const	{ return mMPMMaterialManager;		}
-		PX_FORCE_INLINE	PxsMPMMaterialManager&				getMPMMaterialManager()						{ return mMPMMaterialManager;		}
-
-		PX_FORCE_INLINE	const PxsCustomMaterialManager&		getCustomMaterialManager()			const	{ return mCustomMaterialManager;	}
-		PX_FORCE_INLINE	PxsCustomMaterialManager&			getCustomMaterialManager()					{ return mCustomMaterialManager;	}
-#endif
 		// Collision filtering
 						void						setFilterShaderData(const void* data, PxU32 dataSize);
 		PX_FORCE_INLINE	const void*					getFilterShaderDataFast()				const	{ return mFilterShaderData;				}
@@ -799,9 +728,6 @@ namespace Sc
 						void						addRigidAttachment(BodyCore* core, ParticleSystemSim& sim);
 						void						removeRigidAttachment(BodyCore* core, ParticleSystemSim& sim);
 
-						void						addRigidAttachment(const BodyCore* core, const HairSystemSim& sim);
-						void						removeRigidAttachment(const BodyCore* core, const HairSystemSim& sim);
-
 						ConstraintCore*				findConstraintCore(const ActorSim* sim0, const ActorSim* sim1);
 
 		//internal private methods:
@@ -846,34 +772,11 @@ namespace Sc
 		PX_INLINE	void						cleanUpWokenBodies();
 		PX_INLINE	void						cleanUpSleepOrWokenBodies(PxCoalescedHashSet<BodyCore*>& bodyList, PxU32 removeFlag, bool& validMarker);
 
-#if PX_SUPPORT_GPU_PHYSX
-		// PT: TODO: why inline these ones?
-		PX_INLINE	void						cleanUpSleepSoftBodies();
-		PX_INLINE	void						cleanUpWokenSoftBodies();
-		PX_INLINE	void						cleanUpSleepOrWokenSoftBodies(PxCoalescedHashSet<SoftBodyCore*>& bodyList, PxU32 removeFlag, bool& validMarker);
-
-		PX_INLINE	void						cleanUpSleepHairSystems();
-		PX_INLINE	void						cleanUpWokenHairSystems();
-		PX_INLINE	void						cleanUpSleepOrWokenHairSystems(PxCoalescedHashSet<HairSystemCore*>& bodyList, PxU32 removeFlag, bool& validMarker);
-#endif
-
 		//internal variables:
 	private:
 		// Material manager
 					PX_ALIGN(16, PxsMaterialManager	mMaterialManager);
-#if PX_SUPPORT_GPU_PHYSX
-					PX_ALIGN(16, PxsFEMMaterialManager	mFEMMaterialManager);
 
-					PX_ALIGN(16, PxsFEMClothMaterialManager	mFEMClothMaterialManager);
-
-					PX_ALIGN(16, PxsPBDMaterialManager	mPBDMaterialManager);
-
-					PX_ALIGN(16, PxsFLIPMaterialManager	mFLIPMaterialManager);
-
-					PX_ALIGN(16, PxsMPMMaterialManager	mMPMMaterialManager);
-
-					PX_ALIGN(16, PxsCustomMaterialManager	mCustomMaterialManager);
-#endif
 					PxU64						mContextId;
 
 					PxArray<BodyCore*>			mActiveBodies;  // Sorted: kinematic before dynamic
@@ -884,12 +787,6 @@ namespace Sc
 					BodyCore**					mActiveKinematicsCopy;
 					PxU32						mActiveKinematicsCopyCapacity;
 
-#if PX_SUPPORT_GPU_PHYSX
-					PxArray<SoftBodyCore*>			mActiveSoftBodies;
-					PxArray<FEMClothCore*>			mActiveFEMCloths;
-					PxArray<ParticleSystemCore*>	mActiveParticleSystems;
-					PxArray<HairSystemCore*>		mActiveHairSystems;
-#endif
 					PxArray<Interaction*>		mInteractions[InteractionType::eTRACKED_IN_SCENE_COUNT];
 					PxU32						mActiveInteractionCount[InteractionType::eTRACKED_IN_SCENE_COUNT]; // Interactions with id < activeInteractionCount are active
 
@@ -966,12 +863,6 @@ namespace Sc
 					PxCoalescedHashSet<ArticulationCore*> mArticulations;
 					PxCoalescedHashSet<ArticulationSim*> mDirtyArticulationSims;
 
-#if PX_SUPPORT_GPU_PHYSX
-					PxCoalescedHashSet<SoftBodyCore*> mSoftBodies;
-					PxCoalescedHashSet<FEMClothCore*> mFEMCloths;
-					PxCoalescedHashSet<ParticleSystemCore*> mParticleSystems;
-					PxCoalescedHashSet<HairSystemCore*> mHairSystems;
-#endif
 					PxArray<ConstraintCore*>	mBrokenConstraints;
 					PxCoalescedHashSet<ConstraintSim*> mActiveBreakableConstraints;
 
@@ -1003,24 +894,15 @@ namespace Sc
 
 					PxCoalescedHashSet<SoftBodyCore*> mSleepSoftBodies;
 					PxCoalescedHashSet<SoftBodyCore*> mWokeSoftBodies;
-					PxCoalescedHashSet<HairSystemCore*> mSleepHairSystems;
-					PxCoalescedHashSet<HairSystemCore*> mWokeHairSystems;
 					bool						mWokeBodyListValid;
 					bool						mSleepBodyListValid;
 					bool						mWokeSoftBodyListValid;
 					bool						mSleepSoftBodyListValid;
-					bool						mWokeHairSystemListValid;
-					bool						mSleepHairSystemListValid;
 			const	bool						mEnableStabilization;
 
 						PxArray<PxActor*>				mActiveActors;
 						PxArray<PxActor*>				mFrozenActors;
 
-#if PX_SUPPORT_GPU_PHYSX
-						PxArray<PxActor*>				mActiveSoftBodyActors;
-						PxArray<PxActor*>				mActiveFEMClothActors;
-						PxArray<PxActor*>				mActiveHairSystemActors;
-#endif
 						PxArray<const PxRigidBody*>	mClientPosePreviewBodies;	// buffer for bodies that requested early report of the integrated pose (eENABLE_POSE_INTEGRATION_PREVIEW).
 																			// This buffer gets exposed to users. Is officially accessible from PxSimulationEventCallback::onAdvance()
 																			// until the next simulate()/advance().
@@ -1045,12 +927,7 @@ namespace Sc
 					Cm::PreallocatingPool<BodySim>*		mBodySimPool;
 					PxPool<ConstraintSim>*				mConstraintSimPool;
 					LLArticulationRCPool*				mLLArticulationRCPool;
-#if PX_SUPPORT_GPU_PHYSX
-					LLSoftBodyPool*						mLLSoftBodyPool;
-					LLFEMClothPool*						mLLFEMClothPool;
-					LLParticleSystemPool*				mLLParticleSystemPool;
-					LLHairSystemPool*					mLLHairSystemPool;
-#endif
+
 					PxHashMap<PxPair<PxU32, PxU32>, ParticleOrSoftBodyRigidInteraction> mParticleOrSoftBodyRigidInteractionMap;
 
 					PxHashMap<PxPair<const ActorSim*, const ActorSim*>, ConstraintCore*> mConstraintMap;

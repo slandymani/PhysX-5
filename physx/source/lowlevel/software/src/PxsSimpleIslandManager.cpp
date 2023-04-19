@@ -92,44 +92,6 @@ PxNodeIndex SimpleIslandManager::addArticulation(Sc::ArticulationSim* articulati
 	return nodeIndex;
 }
 
-#if PX_SUPPORT_GPU_PHYSX
-PxNodeIndex SimpleIslandManager::addSoftBody(Dy::SoftBody* llSoftBody, bool isActive)
-{
-	PxU32 handle = mNodeHandles.getHandle();
-	PxNodeIndex nodeIndex(handle);
-	mIslandManager.addSoftBody(llSoftBody, isActive, nodeIndex);
-	mSpeculativeIslandManager.addSoftBody(llSoftBody, isActive, nodeIndex);
-	return nodeIndex;
-}
-
-PxNodeIndex SimpleIslandManager::addFEMCloth(Dy::FEMCloth* llFEMCloth, bool isActive)
-{
-	PxU32 handle = mNodeHandles.getHandle();
-	PxNodeIndex nodeIndex(handle);
-	mIslandManager.addFEMCloth(llFEMCloth, isActive, nodeIndex);
-	mSpeculativeIslandManager.addFEMCloth(llFEMCloth, isActive, nodeIndex);
-	return nodeIndex;
-}
-
-PxNodeIndex SimpleIslandManager::addParticleSystem(Dy::ParticleSystem* llParticleSystem, bool isActive)
-{
-	PxU32 handle = mNodeHandles.getHandle();
-	PxNodeIndex nodeIndex(handle);
-	mIslandManager.addParticleSystem(llParticleSystem, isActive, nodeIndex);
-	mSpeculativeIslandManager.addParticleSystem(llParticleSystem, isActive, nodeIndex);
-	return nodeIndex;
-}
-
-PxNodeIndex SimpleIslandManager::addHairSystem(Dy::HairSystem* llHairSystem, bool isActive)
-{
-	PxU32 handle = mNodeHandles.getHandle();
-	PxNodeIndex nodeIndex(handle);
-	mIslandManager.addHairSystem(llHairSystem, isActive, nodeIndex);
-	mSpeculativeIslandManager.addHairSystem(llHairSystem, isActive, nodeIndex);
-	return nodeIndex;
-}
-#endif //PX_SUPPORT_GPU_PHYSX
-
 EdgeIndex SimpleIslandManager::addContactManager(PxsContactManager* manager, PxNodeIndex nodeHandle1, PxNodeIndex nodeHandle2, Sc::Interaction* interaction,
 	Edge::EdgeType edgeType)
 {

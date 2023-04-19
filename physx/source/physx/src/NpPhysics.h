@@ -142,7 +142,6 @@ public:
 	virtual		PxRigidDynamic*						createRigidDynamic(const PxTransform&)	PX_OVERRIDE;
 	virtual		PxArticulationReducedCoordinate*	createArticulationReducedCoordinate()	PX_OVERRIDE;
 	virtual		PxSoftBody*							createSoftBody(PxCudaContextManager& cudaContextManager)	PX_OVERRIDE;
-	virtual		PxHairSystem*				createHairSystem(PxCudaContextManager& cudaContextManager)	PX_OVERRIDE;
 	virtual		PxFEMCloth*					createFEMCloth(PxCudaContextManager& cudaContextManager)	PX_OVERRIDE;
 	virtual		PxPBDParticleSystem*		createPBDParticleSystem(PxCudaContextManager& cudaContexManager, PxU32 maxNeighborhood)	PX_OVERRIDE;
 	virtual		PxFLIPParticleSystem*		createFLIPParticleSystem(PxCudaContextManager& cudaContexManager)	PX_OVERRIDE;

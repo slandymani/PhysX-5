@@ -51,7 +51,6 @@ class PxTriangleMeshGeometry;
 class PxTetrahedronMeshGeometry;
 class PxHeightFieldGeometry;
 class PxParticleSystemGeometry;
-class PxHairSystemGeometry;
 class PxRigidActor;
 struct PxFilterData;
 class PxBaseMaterial;

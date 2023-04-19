@@ -91,23 +91,6 @@ class NpActor;
 class NpShape;
 class NpPhysics;
 
-#if PX_SUPPORT_GPU_PHYSX
-class NpSoftBody;
-class NpFEMCloth;
-class NpHairSystem;
-
-class NpPBDParticleSystem;
-class NpFLIPParticleSystem;
-class NpMPMParticleSystem;
-class NpCustomParticleSystem;
-class NpFEMSoftBodyMaterial;
-class NpFEMClothMaterial;
-class NpPBDMaterial;
-class NpFLIPMaterial;
-class NpMPMMaterial;
-class NpCustomMaterial;
-#endif
-
 class NpContactCallbackTask : public physx::PxLightCpuTask
 {
 	NpScene*	mScene;
@@ -175,9 +158,6 @@ class NpScene : public NpSceneAccessor, public PxUserAllocated
 
 	virtual			PxU32							getNbFEMCloths() const;
 	virtual			PxU32							getFEMCloths(PxFEMCloth** userBuffer, PxU32 bufferSize, PxU32 startIndex = 0) const;
-
-	virtual			PxU32							getNbHairSystems() const;
-	virtual			PxU32							getHairSystems(PxHairSystem** userBuffer, PxU32 bufferSize, PxU32 startIndex = 0) const;
 
 	// Aggregates
     virtual			bool							addAggregate(PxAggregate&);
@@ -440,7 +420,6 @@ class NpScene : public NpSceneAccessor, public PxUserAllocated
 	PX_FORCE_INLINE	void							removeFromParticleSystemList(PxFLIPParticleSystem&);
 	PX_FORCE_INLINE	void							removeFromParticleSystemList(PxMPMParticleSystem&);
 	PX_FORCE_INLINE	void							removeFromParticleSystemList(PxCustomParticleSystem&);
-	PX_FORCE_INLINE	void							removeFromHairSystemList(PxHairSystem&);
 	PX_FORCE_INLINE	void							removeFromAggregateList(PxAggregate&);
 
 #ifdef NEW_DIRTY_SHADERS_CODE
@@ -521,28 +500,6 @@ class NpScene : public NpSceneAccessor, public PxUserAllocated
 					void 							scAddActor(NpArticulationLink&, bool noSim, PxBounds3* uninflatedBounds, const Gu::BVH* bvh);
 					void 							scRemoveActor(NpArticulationLink&, bool wakeOnLostTouch, bool noSim);
 
-#if PX_SUPPORT_GPU_PHYSX
-					void							scAddSoftBody(NpSoftBody&);
-					void							scRemoveSoftBody(NpSoftBody&);
-#if PX_ENABLE_FEATURES_UNDER_CONSTRUCTION
-					void							scAddFEMCloth(NpScene* npScene, NpFEMCloth&);
-					void							scRemoveFEMCloth(NpFEMCloth&);
-#endif
-					void							scAddParticleSystem(NpPBDParticleSystem&);
-					void							scRemoveParticleSystem(NpPBDParticleSystem&);
-#if PX_ENABLE_FEATURES_UNDER_CONSTRUCTION
-					void							scAddParticleSystem(NpFLIPParticleSystem&);
-					void							scRemoveParticleSystem(NpFLIPParticleSystem&);
-
-					void							scAddParticleSystem(NpMPMParticleSystem&);
-					void							scRemoveParticleSystem(NpMPMParticleSystem&);
-
-					void							scAddParticleSystem(NpCustomParticleSystem&);
-					void							scRemoveParticleSystem(NpCustomParticleSystem&);
-#endif
-					void							scAddHairSystem(NpHairSystem&);
-					void							scRemoveHairSystem(NpHairSystem&);
-#endif
 					void							scAddArticulation(NpArticulationReducedCoordinate&);
 					void							scRemoveArticulation(NpArticulationReducedCoordinate&);
 
@@ -587,13 +544,7 @@ private:
 
 					bool							addParticleSystem(PxParticleSystem& particleSystem);
 					void							removeParticleSystem(PxParticleSystem& particleSystem, bool wakeOnLostTouch);
-#if PX_ENABLE_FEATURES_UNDER_CONSTRUCTION
-					bool							addFEMCloth(PxFEMCloth&);
-					void							removeFEMCloth(PxFEMCloth&, bool wakeOnLostTouch);
 
-					bool							addHairSystem(PxHairSystem&);
-					void							removeHairSystem(PxHairSystem&, bool wakeOnLostTouch);
-#endif
 					void							visualize();
 
 					void							updateDirtyShaders();
@@ -632,7 +583,6 @@ private:
 					PxCoalescedHashSet<PxFLIPParticleSystem*>				mFLIPParticleSystems;
 					PxCoalescedHashSet<PxMPMParticleSystem*>				mMPMParticleSystems;
 					PxCoalescedHashSet<PxCustomParticleSystem*>				mCustomParticleSystems;
-					PxCoalescedHashSet<PxHairSystem*>						mHairSystems;
 					PxCoalescedHashSet<PxAggregate*>						mAggregates;
 
 #ifdef NEW_DIRTY_SHADERS_CODE
@@ -828,13 +778,6 @@ PX_FORCE_INLINE	void NpScene::removeFromParticleSystemList(PxCustomParticleSyste
 	PX_UNUSED(exists);
 }
 #endif
-
-PX_FORCE_INLINE void NpScene::removeFromHairSystemList(PxHairSystem& hairSystem)
-{
-	const bool exists = mHairSystems.erase(&hairSystem);
-	PX_ASSERT(exists);
-	PX_UNUSED(exists);
-}
 
 PX_FORCE_INLINE void NpScene::removeFromAggregateList(PxAggregate& aggregate)
 {

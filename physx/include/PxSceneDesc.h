@@ -386,7 +386,6 @@ struct PxgDynamicsMemoryConfig
 	PxU32 maxFemClothContacts;
 	PxU32 maxParticleContacts;
 	PxU32 collisionStackSize;
-	PxU32 maxHairContacts;
 
 	PxgDynamicsMemoryConfig() :
 		tempBufferCapacity(16 * 1024 * 1024),
@@ -399,8 +398,7 @@ struct PxgDynamicsMemoryConfig
 		maxSoftBodyContacts(1 * 1024 * 1024),
 		maxFemClothContacts(1 * 1024 * 1024),
 		maxParticleContacts(1*1024*1024),
-		collisionStackSize(64*1024*1024),
-		maxHairContacts(1 * 1024 * 1024)
+		collisionStackSize(64*1024*1024)
 	{
 	}
 

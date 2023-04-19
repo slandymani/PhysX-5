@@ -46,14 +46,6 @@
 
 #include "PxvGlobals.h"
 
-#if PX_SUPPORT_GPU_PHYSX
-#include "NpParticleSystem.h"
-#include "NpSoftBody.h"
-#include "NpFEMCloth.h"
-#include "NpHairSystem.h"
-#include "PxPhysXGpu.h"
-#endif
-
 #if PX_SUPPORT_OMNI_PVD
 #	define OMNI_PVD_NOTIFY_ADD(OBJECT) notifyListenersAdd(OBJECT)
 #	define OMNI_PVD_NOTIFY_REMOVE(OBJECT) notifyListenersRemove(OBJECT)
@@ -602,33 +594,6 @@ void NpFactory::onParticleBufferRelease(PxParticleBuffer* buffer)
 {
 	NpFactory::getInstance().onParticleBufferReleaseInternal(buffer);
 }
-
-/////////////////////////////////////////////////////////////////////////////// HairSystem
-
-#if PX_ENABLE_FEATURES_UNDER_CONSTRUCTION
-PxHairSystem* NpFactory::createHairSystem(PxCudaContextManager& cudaContextManager)
-{
-#if PX_SUPPORT_GPU_PHYSX
-	PxMutex::ScopedLock lock(mHairSystemPoolLock);
-	return mHairSystemPool.construct(cudaContextManager);
-#else
-	PX_UNUSED(cudaContextManager);
-	PxGetFoundation().error(PxErrorCode::eINVALID_OPERATION, PX_FL, "PxHairSystem is not supported on this platform.");
-	return NULL;
-#endif
-}
-
-void NpFactory::releaseHairSystemToPool(PxHairSystem& hairSystem)
-{
-#if PX_SUPPORT_GPU_PHYSX
-	PX_ASSERT(hairSystem.getBaseFlags() & PxBaseFlag::eOWNS_MEMORY);
-	PxMutex::ScopedLock lock(mHairSystemPoolLock);
-	mHairSystemPool.destroy(static_cast<NpHairSystem*>(&hairSystem));
-#else
-	PX_UNUSED(hairSystem);
-#endif
-}
-#endif
 
 /////////////////////////////////////////////////////////////////////////////// constraint
 
@@ -1353,53 +1318,6 @@ static PX_FORCE_INLINE void releaseToPool(NpConstraint* np)
 	NpFactory::getInstance().releaseConstraintToPool(*np);
 }
 
-#if PX_SUPPORT_GPU_PHYSX
-static PX_FORCE_INLINE void releaseToPool(NpSoftBody* np)
-{
-	NpFactory::getInstance().releaseSoftBodyToPool(*np);
-}
-
-#if PX_ENABLE_FEATURES_UNDER_CONSTRUCTION
-static PX_FORCE_INLINE void releaseToPool(NpFEMCloth* np)
-{
-	NpFactory::getInstance().releaseFEMClothToPool(*np);
-}
-#endif
-
-static PX_FORCE_INLINE void releaseToPool(NpPBDParticleSystem* np)
-{
-	NpFactory::getInstance().releasePBDParticleSystemToPool(*np);
-}
-
-#if PX_ENABLE_FEATURES_UNDER_CONSTRUCTION
-static PX_FORCE_INLINE void releaseToPool(NpFLIPParticleSystem* np)
-{
-	NpFactory::getInstance().releaseFLIPParticleSystemToPool(*np);
-}
-#endif
-
-#if PX_ENABLE_FEATURES_UNDER_CONSTRUCTION
-static PX_FORCE_INLINE void releaseToPool(NpMPMParticleSystem* np)
-{
-	NpFactory::getInstance().releaseMPMParticleSystemToPool(*np);
-}
-#endif
-
-#if PX_ENABLE_FEATURES_UNDER_CONSTRUCTION
-static PX_FORCE_INLINE void releaseToPool(NpCustomParticleSystem* np)
-{
-	NpFactory::getInstance().releaseCustomParticleSystemToPool(*np);
-}
-#endif
-
-#if PX_ENABLE_FEATURES_UNDER_CONSTRUCTION
-static PX_FORCE_INLINE void releaseToPool(NpHairSystem* np)
-{
-	NpFactory::getInstance().releaseHairSystemToPool(*np);
-}
-#endif
-#endif
-
 template<class T>
 static PX_FORCE_INLINE void NpDestroy(T* np)
 {
@@ -1421,16 +1339,4 @@ void physx::NpDestroyConstraint(NpConstraint* np)									{ NpDestroy(np);	}
 void physx::NpDestroyArticulationLink(NpArticulationLink* np)						{ NpDestroy(np);	}
 void physx::NpDestroyArticulationJoint(PxArticulationJointReducedCoordinate* np)	{ NpDestroy(np);	}
 void physx::NpDestroyArticulation(PxArticulationReducedCoordinate* np)				{ NpDestroy(np);	}
-#if PX_SUPPORT_GPU_PHYSX
-void physx::NpDestroySoftBody(NpSoftBody* np)										{ NpDestroy(np);	}
-#if PX_ENABLE_FEATURES_UNDER_CONSTRUCTION
-void physx::NpDestroyFEMCloth(NpFEMCloth* np)										{ NpDestroy(np);	}
-#endif
-void physx::NpDestroyParticleSystem(NpPBDParticleSystem* np)						{ NpDestroy(np);	}
-#if PX_ENABLE_FEATURES_UNDER_CONSTRUCTION
-void physx::NpDestroyParticleSystem(NpFLIPParticleSystem* np)						{ NpDestroy(np);	}
-void physx::NpDestroyParticleSystem(NpMPMParticleSystem* np)						{ NpDestroy(np);	}
-void physx::NpDestroyParticleSystem(NpCustomParticleSystem* np)						{ NpDestroy(np);	}
-void physx::NpDestroyHairSystem(NpHairSystem* np)									{ NpDestroy(np);	}
-#endif
-#endif
+

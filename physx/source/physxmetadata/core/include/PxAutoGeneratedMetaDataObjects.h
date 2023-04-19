@@ -611,7 +611,6 @@ template<> struct PxEnumTraits< physx::PxCombineMode::Enum > { PxEnumTraits() : 
 		{ "eFLIP_PARTICLESYSTEM", static_cast<PxU32>( physx::PxActorType::eFLIP_PARTICLESYSTEM ) },
 		{ "eMPM_PARTICLESYSTEM", static_cast<PxU32>( physx::PxActorType::eMPM_PARTICLESYSTEM ) },
 		{ "eCUSTOM_PARTICLESYSTEM", static_cast<PxU32>( physx::PxActorType::eCUSTOM_PARTICLESYSTEM ) },
-		{ "eHAIRSYSTEM", static_cast<PxU32>( physx::PxActorType::eHAIRSYSTEM ) },
 		{ NULL, 0 }
 	};
 
@@ -1549,7 +1548,6 @@ template<> struct PxEnumTraits< physx::PxConstraintFlag::Enum > { PxEnumTraits()
 		{ "eTETRAHEDRONMESH", static_cast<PxU32>( physx::PxGeometryType::eTETRAHEDRONMESH ) },
 		{ "eTRIANGLEMESH", static_cast<PxU32>( physx::PxGeometryType::eTRIANGLEMESH ) },
 		{ "eHEIGHTFIELD", static_cast<PxU32>( physx::PxGeometryType::eHEIGHTFIELD ) },
-		{ "eHAIRSYSTEM", static_cast<PxU32>( physx::PxGeometryType::eHAIRSYSTEM ) },
 		{ "eCUSTOM", static_cast<PxU32>( physx::PxGeometryType::eCUSTOM ) },
 		{ NULL, 0 }
 	};
@@ -3561,7 +3559,6 @@ template<> struct PxEnumTraits< physx::PxBVHBuildStrategy::Enum > { PxEnumTraits
 		PxU32 MaxFemClothContacts;
 		PxU32 MaxParticleContacts;
 		PxU32 CollisionStackSize;
-		PxU32 MaxHairContacts;
 		 PX_PHYSX_CORE_API PxgDynamicsMemoryConfigGeneratedValues( const PxgDynamicsMemoryConfig* inSource );
 	};
 	DEFINE_PROPERTY_TO_VALUE_STRUCT_MAP( PxgDynamicsMemoryConfig, IsValid, PxgDynamicsMemoryConfigGeneratedValues)
@@ -3576,7 +3573,6 @@ template<> struct PxEnumTraits< physx::PxBVHBuildStrategy::Enum > { PxEnumTraits
 	DEFINE_PROPERTY_TO_VALUE_STRUCT_MAP( PxgDynamicsMemoryConfig, MaxFemClothContacts, PxgDynamicsMemoryConfigGeneratedValues)
 	DEFINE_PROPERTY_TO_VALUE_STRUCT_MAP( PxgDynamicsMemoryConfig, MaxParticleContacts, PxgDynamicsMemoryConfigGeneratedValues)
 	DEFINE_PROPERTY_TO_VALUE_STRUCT_MAP( PxgDynamicsMemoryConfig, CollisionStackSize, PxgDynamicsMemoryConfigGeneratedValues)
-	DEFINE_PROPERTY_TO_VALUE_STRUCT_MAP( PxgDynamicsMemoryConfig, MaxHairContacts, PxgDynamicsMemoryConfigGeneratedValues)
 	struct PxgDynamicsMemoryConfigGeneratedInfo
 
 	{
@@ -3593,7 +3589,6 @@ template<> struct PxEnumTraits< physx::PxBVHBuildStrategy::Enum > { PxEnumTraits
 		PxPropertyInfo<PX_PROPERTY_INFO_NAME::PxgDynamicsMemoryConfig_MaxFemClothContacts, PxgDynamicsMemoryConfig, PxU32, PxU32 > MaxFemClothContacts;
 		PxPropertyInfo<PX_PROPERTY_INFO_NAME::PxgDynamicsMemoryConfig_MaxParticleContacts, PxgDynamicsMemoryConfig, PxU32, PxU32 > MaxParticleContacts;
 		PxPropertyInfo<PX_PROPERTY_INFO_NAME::PxgDynamicsMemoryConfig_CollisionStackSize, PxgDynamicsMemoryConfig, PxU32, PxU32 > CollisionStackSize;
-		PxPropertyInfo<PX_PROPERTY_INFO_NAME::PxgDynamicsMemoryConfig_MaxHairContacts, PxgDynamicsMemoryConfig, PxU32, PxU32 > MaxHairContacts;
 
 		PX_PHYSX_CORE_API PxgDynamicsMemoryConfigGeneratedInfo();
 		template<typename TReturnType, typename TOperator>
@@ -3632,8 +3627,7 @@ template<> struct PxEnumTraits< physx::PxBVHBuildStrategy::Enum > { PxEnumTraits
 			inOperator( MaxFemClothContacts, inStartIndex + 9 );; 
 			inOperator( MaxParticleContacts, inStartIndex + 10 );; 
 			inOperator( CollisionStackSize, inStartIndex + 11 );; 
-			inOperator( MaxHairContacts, inStartIndex + 12 );; 
-			return 13 + inStartIndex;
+			return 12 + inStartIndex;
 		}
 	};
 	template<> struct PxClassInfoTraits<PxgDynamicsMemoryConfig>
@@ -3677,7 +3671,6 @@ template<> struct PxEnumTraits< physx::PxSimulationStatistics::RbPairStatsType >
 		PxU64 GpuMemParticles;
 		PxU64 GpuMemSoftBodies;
 		PxU64 GpuMemFEMCloths;
-		PxU64 GpuMemHairSystems;
 		PxU64 GpuMemHeap;
 		PxU64 GpuMemHeapBroadPhase;
 		PxU64 GpuMemHeapNarrowPhase;
@@ -3688,11 +3681,9 @@ template<> struct PxEnumTraits< physx::PxSimulationStatistics::RbPairStatsType >
 		PxU64 GpuMemHeapSimulationParticles;
 		PxU64 GpuMemHeapSimulationSoftBody;
 		PxU64 GpuMemHeapSimulationFEMCloth;
-		PxU64 GpuMemHeapSimulationHairSystem;
 		PxU64 GpuMemHeapParticles;
 		PxU64 GpuMemHeapSoftBodies;
 		PxU64 GpuMemHeapFEMCloths;
-		PxU64 GpuMemHeapHairSystems;
 		PxU64 GpuMemHeapOther;
 		PxU32 NbBroadPhaseAdds;
 		PxU32 NbBroadPhaseRemoves;
@@ -3726,7 +3717,6 @@ template<> struct PxEnumTraits< physx::PxSimulationStatistics::RbPairStatsType >
 	DEFINE_PROPERTY_TO_VALUE_STRUCT_MAP( PxSimulationStatistics, GpuMemParticles, PxSimulationStatisticsGeneratedValues)
 	DEFINE_PROPERTY_TO_VALUE_STRUCT_MAP( PxSimulationStatistics, GpuMemSoftBodies, PxSimulationStatisticsGeneratedValues)
 	DEFINE_PROPERTY_TO_VALUE_STRUCT_MAP( PxSimulationStatistics, GpuMemFEMCloths, PxSimulationStatisticsGeneratedValues)
-	DEFINE_PROPERTY_TO_VALUE_STRUCT_MAP( PxSimulationStatistics, GpuMemHairSystems, PxSimulationStatisticsGeneratedValues)
 	DEFINE_PROPERTY_TO_VALUE_STRUCT_MAP( PxSimulationStatistics, GpuMemHeap, PxSimulationStatisticsGeneratedValues)
 	DEFINE_PROPERTY_TO_VALUE_STRUCT_MAP( PxSimulationStatistics, GpuMemHeapBroadPhase, PxSimulationStatisticsGeneratedValues)
 	DEFINE_PROPERTY_TO_VALUE_STRUCT_MAP( PxSimulationStatistics, GpuMemHeapNarrowPhase, PxSimulationStatisticsGeneratedValues)
@@ -3737,11 +3727,9 @@ template<> struct PxEnumTraits< physx::PxSimulationStatistics::RbPairStatsType >
 	DEFINE_PROPERTY_TO_VALUE_STRUCT_MAP( PxSimulationStatistics, GpuMemHeapSimulationParticles, PxSimulationStatisticsGeneratedValues)
 	DEFINE_PROPERTY_TO_VALUE_STRUCT_MAP( PxSimulationStatistics, GpuMemHeapSimulationSoftBody, PxSimulationStatisticsGeneratedValues)
 	DEFINE_PROPERTY_TO_VALUE_STRUCT_MAP( PxSimulationStatistics, GpuMemHeapSimulationFEMCloth, PxSimulationStatisticsGeneratedValues)
-	DEFINE_PROPERTY_TO_VALUE_STRUCT_MAP( PxSimulationStatistics, GpuMemHeapSimulationHairSystem, PxSimulationStatisticsGeneratedValues)
 	DEFINE_PROPERTY_TO_VALUE_STRUCT_MAP( PxSimulationStatistics, GpuMemHeapParticles, PxSimulationStatisticsGeneratedValues)
 	DEFINE_PROPERTY_TO_VALUE_STRUCT_MAP( PxSimulationStatistics, GpuMemHeapSoftBodies, PxSimulationStatisticsGeneratedValues)
 	DEFINE_PROPERTY_TO_VALUE_STRUCT_MAP( PxSimulationStatistics, GpuMemHeapFEMCloths, PxSimulationStatisticsGeneratedValues)
-	DEFINE_PROPERTY_TO_VALUE_STRUCT_MAP( PxSimulationStatistics, GpuMemHeapHairSystems, PxSimulationStatisticsGeneratedValues)
 	DEFINE_PROPERTY_TO_VALUE_STRUCT_MAP( PxSimulationStatistics, GpuMemHeapOther, PxSimulationStatisticsGeneratedValues)
 	DEFINE_PROPERTY_TO_VALUE_STRUCT_MAP( PxSimulationStatistics, NbBroadPhaseAdds, PxSimulationStatisticsGeneratedValues)
 	DEFINE_PROPERTY_TO_VALUE_STRUCT_MAP( PxSimulationStatistics, NbBroadPhaseRemoves, PxSimulationStatisticsGeneratedValues)
@@ -3777,7 +3765,6 @@ template<> struct PxEnumTraits< physx::PxSimulationStatistics::RbPairStatsType >
 		PxPropertyInfo<PX_PROPERTY_INFO_NAME::PxSimulationStatistics_GpuMemParticles, PxSimulationStatistics, PxU64, PxU64 > GpuMemParticles;
 		PxPropertyInfo<PX_PROPERTY_INFO_NAME::PxSimulationStatistics_GpuMemSoftBodies, PxSimulationStatistics, PxU64, PxU64 > GpuMemSoftBodies;
 		PxPropertyInfo<PX_PROPERTY_INFO_NAME::PxSimulationStatistics_GpuMemFEMCloths, PxSimulationStatistics, PxU64, PxU64 > GpuMemFEMCloths;
-		PxPropertyInfo<PX_PROPERTY_INFO_NAME::PxSimulationStatistics_GpuMemHairSystems, PxSimulationStatistics, PxU64, PxU64 > GpuMemHairSystems;
 		PxPropertyInfo<PX_PROPERTY_INFO_NAME::PxSimulationStatistics_GpuMemHeap, PxSimulationStatistics, PxU64, PxU64 > GpuMemHeap;
 		PxPropertyInfo<PX_PROPERTY_INFO_NAME::PxSimulationStatistics_GpuMemHeapBroadPhase, PxSimulationStatistics, PxU64, PxU64 > GpuMemHeapBroadPhase;
 		PxPropertyInfo<PX_PROPERTY_INFO_NAME::PxSimulationStatistics_GpuMemHeapNarrowPhase, PxSimulationStatistics, PxU64, PxU64 > GpuMemHeapNarrowPhase;
@@ -3788,11 +3775,9 @@ template<> struct PxEnumTraits< physx::PxSimulationStatistics::RbPairStatsType >
 		PxPropertyInfo<PX_PROPERTY_INFO_NAME::PxSimulationStatistics_GpuMemHeapSimulationParticles, PxSimulationStatistics, PxU64, PxU64 > GpuMemHeapSimulationParticles;
 		PxPropertyInfo<PX_PROPERTY_INFO_NAME::PxSimulationStatistics_GpuMemHeapSimulationSoftBody, PxSimulationStatistics, PxU64, PxU64 > GpuMemHeapSimulationSoftBody;
 		PxPropertyInfo<PX_PROPERTY_INFO_NAME::PxSimulationStatistics_GpuMemHeapSimulationFEMCloth, PxSimulationStatistics, PxU64, PxU64 > GpuMemHeapSimulationFEMCloth;
-		PxPropertyInfo<PX_PROPERTY_INFO_NAME::PxSimulationStatistics_GpuMemHeapSimulationHairSystem, PxSimulationStatistics, PxU64, PxU64 > GpuMemHeapSimulationHairSystem;
 		PxPropertyInfo<PX_PROPERTY_INFO_NAME::PxSimulationStatistics_GpuMemHeapParticles, PxSimulationStatistics, PxU64, PxU64 > GpuMemHeapParticles;
 		PxPropertyInfo<PX_PROPERTY_INFO_NAME::PxSimulationStatistics_GpuMemHeapSoftBodies, PxSimulationStatistics, PxU64, PxU64 > GpuMemHeapSoftBodies;
 		PxPropertyInfo<PX_PROPERTY_INFO_NAME::PxSimulationStatistics_GpuMemHeapFEMCloths, PxSimulationStatistics, PxU64, PxU64 > GpuMemHeapFEMCloths;
-		PxPropertyInfo<PX_PROPERTY_INFO_NAME::PxSimulationStatistics_GpuMemHeapHairSystems, PxSimulationStatistics, PxU64, PxU64 > GpuMemHeapHairSystems;
 		PxPropertyInfo<PX_PROPERTY_INFO_NAME::PxSimulationStatistics_GpuMemHeapOther, PxSimulationStatistics, PxU64, PxU64 > GpuMemHeapOther;
 		PxPropertyInfo<PX_PROPERTY_INFO_NAME::PxSimulationStatistics_NbBroadPhaseAdds, PxSimulationStatistics, PxU32, PxU32 > NbBroadPhaseAdds;
 		PxPropertyInfo<PX_PROPERTY_INFO_NAME::PxSimulationStatistics_NbBroadPhaseRemoves, PxSimulationStatistics, PxU32, PxU32 > NbBroadPhaseRemoves;
@@ -3850,31 +3835,28 @@ template<> struct PxEnumTraits< physx::PxSimulationStatistics::RbPairStatsType >
 			inOperator( GpuMemParticles, inStartIndex + 20 );; 
 			inOperator( GpuMemSoftBodies, inStartIndex + 21 );; 
 			inOperator( GpuMemFEMCloths, inStartIndex + 22 );; 
-			inOperator( GpuMemHairSystems, inStartIndex + 23 );; 
-			inOperator( GpuMemHeap, inStartIndex + 24 );; 
-			inOperator( GpuMemHeapBroadPhase, inStartIndex + 25 );; 
-			inOperator( GpuMemHeapNarrowPhase, inStartIndex + 26 );; 
-			inOperator( GpuMemHeapSolver, inStartIndex + 27 );; 
-			inOperator( GpuMemHeapArticulation, inStartIndex + 28 );; 
-			inOperator( GpuMemHeapSimulation, inStartIndex + 29 );; 
-			inOperator( GpuMemHeapSimulationArticulation, inStartIndex + 30 );; 
-			inOperator( GpuMemHeapSimulationParticles, inStartIndex + 31 );; 
-			inOperator( GpuMemHeapSimulationSoftBody, inStartIndex + 32 );; 
-			inOperator( GpuMemHeapSimulationFEMCloth, inStartIndex + 33 );; 
-			inOperator( GpuMemHeapSimulationHairSystem, inStartIndex + 34 );; 
-			inOperator( GpuMemHeapParticles, inStartIndex + 35 );; 
-			inOperator( GpuMemHeapSoftBodies, inStartIndex + 36 );; 
-			inOperator( GpuMemHeapFEMCloths, inStartIndex + 37 );; 
-			inOperator( GpuMemHeapHairSystems, inStartIndex + 38 );; 
-			inOperator( GpuMemHeapOther, inStartIndex + 39 );; 
-			inOperator( NbBroadPhaseAdds, inStartIndex + 40 );; 
-			inOperator( NbBroadPhaseRemoves, inStartIndex + 41 );; 
-			inOperator( NbDiscreteContactPairs, inStartIndex + 42 );; 
-			inOperator( NbModifiedContactPairs, inStartIndex + 43 );; 
-			inOperator( NbCCDPairs, inStartIndex + 44 );; 
-			inOperator( NbTriggerPairs, inStartIndex + 45 );; 
-			inOperator( NbShapes, inStartIndex + 46 );; 
-			return 47 + inStartIndex;
+			inOperator( GpuMemHeap, inStartIndex + 23 );; 
+			inOperator( GpuMemHeapBroadPhase, inStartIndex + 24 );; 
+			inOperator( GpuMemHeapNarrowPhase, inStartIndex + 25 );; 
+			inOperator( GpuMemHeapSolver, inStartIndex + 26 );; 
+			inOperator( GpuMemHeapArticulation, inStartIndex + 27 );; 
+			inOperator( GpuMemHeapSimulation, inStartIndex + 28 );; 
+			inOperator( GpuMemHeapSimulationArticulation, inStartIndex + 29 );; 
+			inOperator( GpuMemHeapSimulationParticles, inStartIndex + 30 );; 
+			inOperator( GpuMemHeapSimulationSoftBody, inStartIndex + 31 );; 
+			inOperator( GpuMemHeapSimulationFEMCloth, inStartIndex + 32 );; 
+			inOperator( GpuMemHeapParticles, inStartIndex + 33 );; 
+			inOperator( GpuMemHeapSoftBodies, inStartIndex + 34 );; 
+			inOperator( GpuMemHeapFEMCloths, inStartIndex + 35 );; 
+			inOperator( GpuMemHeapOther, inStartIndex + 36 );; 
+			inOperator( NbBroadPhaseAdds, inStartIndex + 37 );; 
+			inOperator( NbBroadPhaseRemoves, inStartIndex + 38 );; 
+			inOperator( NbDiscreteContactPairs, inStartIndex + 39 );; 
+			inOperator( NbModifiedContactPairs, inStartIndex + 40 );; 
+			inOperator( NbCCDPairs, inStartIndex + 41 );; 
+			inOperator( NbTriggerPairs, inStartIndex + 42 );; 
+			inOperator( NbShapes, inStartIndex + 43 );; 
+			return 44 + inStartIndex;
 		}
 	};
 	template<> struct PxClassInfoTraits<PxSimulationStatistics>

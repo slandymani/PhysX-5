@@ -288,11 +288,6 @@ public:
 	PxU64	gpuMemFEMCloths;
 
 	/**
-	\brief GPU device memory in bytes allocated for hairsystem state accessible through API
-	*/
-	PxU64	gpuMemHairSystems;
-
-	/**
 	\brief GPU device memory in bytes allocated for internal heap allocation
 	*/
 	PxU64	gpuMemHeap;
@@ -343,11 +338,6 @@ public:
 	PxU64	gpuMemHeapSimulationFEMCloth;
 
 	/**
-	\brief GPU device heap memory used for hairsystem in the simulation pipeline in bytes
-	*/
-	PxU64	gpuMemHeapSimulationHairSystem;
-
-	/**
 	\brief GPU device heap memory used for shared buffers in the particles pipeline in bytes
 	*/
 	PxU64	gpuMemHeapParticles;
@@ -361,11 +351,6 @@ public:
 	\brief GPU device heap memory used for shared buffers in the FEM-based cloth pipeline in bytes
 	*/
 	PxU64	gpuMemHeapFEMCloths;
-	
-	/**
-	\brief GPU device heap memory used for shared buffers in the hairsystem pipeline in bytes
-	*/
-	PxU64	gpuMemHeapHairSystems;
 
 	/**
 	\brief GPU device heap memory not covered by other stats in bytes
@@ -396,7 +381,6 @@ public:
 		gpuMemParticles						(0),
 		gpuMemSoftBodies					(0),
 		gpuMemFEMCloths                     (0),
-		gpuMemHairSystems					(0),
 		gpuMemHeap							(0),
 		gpuMemHeapBroadPhase				(0),
 		gpuMemHeapNarrowPhase				(0),
@@ -407,11 +391,9 @@ public:
 		gpuMemHeapSimulationParticles		(0),
 		gpuMemHeapSimulationSoftBody		(0),
 		gpuMemHeapSimulationFEMCloth        (0),
-		gpuMemHeapSimulationHairSystem		(0),
 		gpuMemHeapParticles					(0),
 		gpuMemHeapSoftBodies				(0),
-		gpuMemHeapFEMCloths                 (0), 
-		gpuMemHeapHairSystems				(0),
+		gpuMemHeapFEMCloths                 (0),
 		gpuMemHeapOther						(0)
 	{
 		nbBroadPhaseAdds = 0;

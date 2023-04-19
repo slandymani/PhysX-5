@@ -44,7 +44,6 @@
 #include "geometry/PxConvexMeshGeometry.h"
 #include "geometry/PxHeightFieldGeometry.h"
 #include "geometry/PxParticleSystemGeometry.h"
-#include "geometry/PxHairSystemGeometry.h"
 #include "geometry/PxTetrahedronMeshGeometry.h"
 #include "geometry/PxCustomGeometry.h"
 
@@ -114,9 +113,6 @@ public:
 	PX_FORCE_INLINE PxParticleSystemGeometry&			particleSystem()		{ return get<PxParticleSystemGeometry, PxGeometryType::ePARTICLESYSTEM>();			}
 	PX_FORCE_INLINE const PxParticleSystemGeometry&		particleSystem() const	{ return get<const PxParticleSystemGeometry, PxGeometryType::ePARTICLESYSTEM>();	}
 
-	PX_FORCE_INLINE PxHairSystemGeometry&				hairSystem()			{ return get<PxHairSystemGeometry, PxGeometryType::eHAIRSYSTEM>();					}
-	PX_FORCE_INLINE const PxHairSystemGeometry&			hairSystem()	const	{ return get<const PxHairSystemGeometry, PxGeometryType::eHAIRSYSTEM>();			}
-
 	PX_FORCE_INLINE PxCustomGeometry&					custom()				{ return get<PxCustomGeometry, PxGeometryType::eCUSTOM>();							}
 	PX_FORCE_INLINE const PxCustomGeometry&				custom()		const	{ return get<const PxCustomGeometry, PxGeometryType::eCUSTOM>();					}
 //! @endcond
@@ -138,7 +134,6 @@ public:
 		case PxGeometryType::eTETRAHEDRONMESH:	put<PxTetrahedronMeshGeometry>(geometry);	break;
 		case PxGeometryType::eHEIGHTFIELD:		put<PxHeightFieldGeometry>(geometry);		break;
 		case PxGeometryType::ePARTICLESYSTEM:	put<PxParticleSystemGeometry>(geometry);	break;
-		case PxGeometryType::eHAIRSYSTEM:		put<PxHairSystemGeometry>(geometry);		break;
 		case PxGeometryType::eCUSTOM:			put<PxCustomGeometry>(geometry);			break;
 		case PxGeometryType::eGEOMETRY_COUNT:
 		case PxGeometryType::eINVALID:														break;
@@ -177,7 +172,6 @@ public:
 		PxU8	mesh[sizeof(PxTriangleMeshGeometry)];
 		PxU8	heightfield[sizeof(PxHeightFieldGeometry)];
 		PxU8	particleSystem[sizeof(PxParticleSystemGeometry)];
-		PxU8	hairSystem[sizeof(PxHairSystemGeometry)];
 		PxU8	custom[sizeof(PxCustomGeometry)];
 	} bytes;
 }

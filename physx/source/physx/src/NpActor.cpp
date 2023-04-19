@@ -39,16 +39,6 @@
 #include "NpArticulationLink.h"
 #include "CmTransformUtils.h"
 
-#if PX_SUPPORT_GPU_PHYSX
-#include "NpSoftBody.h"
-#include "NpParticleSystem.h"
-
-#if PX_ENABLE_FEATURES_UNDER_CONSTRUCTION
-#include "NpHairSystem.h"
-#include "NpFEMCloth.h"
-#endif
-#endif
-
 using namespace physx;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -456,18 +446,6 @@ NpActor::Offsets::Offsets()
 	pxActorToNpActor[PxConcreteType::eRIGID_STATIC]			= size_t(pxToNpActor<NpRigidStatic>(n)) - addr;
 	pxActorToNpActor[PxConcreteType::eRIGID_DYNAMIC]		= size_t(pxToNpActor<NpRigidDynamic>(n)) - addr;
 	pxActorToNpActor[PxConcreteType::eARTICULATION_LINK]	= size_t(pxToNpActor<NpArticulationLink>(n)) - addr;
-
-#if PX_SUPPORT_GPU_PHYSX
-	pxActorToNpActor[PxConcreteType::eSOFT_BODY]							= size_t(pxToNpActor<NpSoftBody>(n)) - addr;
-	pxActorToNpActor[PxConcreteType::ePBD_PARTICLESYSTEM]					= size_t(pxToNpActor<NpPBDParticleSystem>(n)) - addr;
-#if PX_ENABLE_FEATURES_UNDER_CONSTRUCTION
-	pxActorToNpActor[PxConcreteType::eFLIP_PARTICLESYSTEM]					= size_t(pxToNpActor<NpFLIPParticleSystem>(n)) - addr;
-	pxActorToNpActor[PxConcreteType::eMPM_PARTICLESYSTEM]					= size_t(pxToNpActor<NpMPMParticleSystem>(n)) - addr;
-	pxActorToNpActor[PxConcreteType::eCUSTOM_PARTICLESYSTEM]				= size_t(pxToNpActor<NpCustomParticleSystem>(n)) - addr;
-	pxActorToNpActor[PxConcreteType::eFEM_CLOTH]							= size_t(pxToNpActor<NpFEMCloth>(n)) - addr;
-	pxActorToNpActor[PxConcreteType::eHAIR_SYSTEM]							= size_t(pxToNpActor<NpHairSystem>(n)) - addr;
-#endif
-#endif
 }
 
 const NpActor::Offsets NpActor::sOffsets;
@@ -496,64 +474,6 @@ NpActor::NpOffsets::NpOffsets()
 		const size_t bodyOffset	= NpArticulationLink::getCoreOffset() - npOffset;
 		npToSc[NpType::eBODY_FROM_ARTICULATION_LINK] = bodyOffset;
 	}
-#if PX_SUPPORT_GPU_PHYSX
-	{
-		size_t addr = 0x100;	// casting the null ptr takes a special-case code path, which we don't want
-		NpSoftBody* n = reinterpret_cast<NpSoftBody*>(addr);
-		const size_t npOffset = size_t(static_cast<NpActor*>(n)) - addr;
-		const size_t bodyOffset = NpSoftBody::getCoreOffset() - npOffset;
-		npToSc[NpType::eSOFTBODY] = bodyOffset;
-	}
-#if PX_ENABLE_FEATURES_UNDER_CONSTRUCTION
-	{
-		size_t addr = 0x100;	// casting the null ptr takes a special-case code path, which we don't want
-		NpFEMCloth* n = reinterpret_cast<NpFEMCloth*>(addr);
-		const size_t npOffset = size_t(static_cast<NpActor*>(n)) - addr;
-		const size_t bodyOffset = NpFEMCloth::getCoreOffset() - npOffset;
-		npToSc[NpType::eFEMCLOTH] = bodyOffset;
-	}
-#endif
-	{
-		size_t addr = 0x100;	// casting the null ptr takes a special-case code path, which we don't want
-		NpPBDParticleSystem* n = reinterpret_cast<NpPBDParticleSystem*>(addr);
-		const size_t npOffset = size_t(static_cast<NpActor*>(n)) - addr;
-		const size_t bodyOffset = NpPBDParticleSystem::getCoreOffset() - npOffset;
-		npToSc[NpType::ePBD_PARTICLESYSTEM] = bodyOffset;
-	}
-#if PX_ENABLE_FEATURES_UNDER_CONSTRUCTION
-	{
-		size_t addr = 0x100;	// casting the null ptr takes a special-case code path, which we don't want
-		NpFLIPParticleSystem* n = reinterpret_cast<NpFLIPParticleSystem*>(addr);
-		const size_t npOffset = size_t(static_cast<NpActor*>(n)) - addr;
-		const size_t bodyOffset = NpFLIPParticleSystem::getCoreOffset() - npOffset;
-		npToSc[NpType::eFLIP_PARTICLESYSTEM] = bodyOffset;
-	}
-
-	{
-		size_t addr = 0x100;	// casting the null ptr takes a special-case code path, which we don't want
-		NpMPMParticleSystem* n = reinterpret_cast<NpMPMParticleSystem*>(addr);
-		const size_t npOffset = size_t(static_cast<NpActor*>(n)) - addr;
-		const size_t bodyOffset = NpMPMParticleSystem::getCoreOffset() - npOffset;
-		npToSc[NpType::eMPM_PARTICLESYSTEM] = bodyOffset;
-	}
-
-	{
-		size_t addr = 0x100;	// casting the null ptr takes a special-case code path, which we don't want
-		NpCustomParticleSystem* n = reinterpret_cast<NpCustomParticleSystem*>(addr);
-		const size_t npOffset = size_t(static_cast<NpActor*>(n)) - addr;
-		const size_t bodyOffset = NpCustomParticleSystem::getCoreOffset() - npOffset;
-		npToSc[NpType::eCUSTOM_PARTICLESYSTEM] = bodyOffset;
-	}
-
-	{
-		size_t addr = 0x100;	// casting the null ptr takes a special-case code path, which we don't want
-		NpHairSystem* n = reinterpret_cast<NpHairSystem*>(addr);
-		const size_t npOffset = size_t(static_cast<NpActor*>(n)) - addr;
-		const size_t bodyOffset = NpHairSystem::getCoreOffset() - npOffset;
-		npToSc[NpType::eHAIRSYSTEM] = bodyOffset;
-	}
-#endif
-#endif
 }
 
 const NpActor::NpOffsets NpActor::sNpOffsets;

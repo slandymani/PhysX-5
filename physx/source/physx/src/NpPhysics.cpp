@@ -39,11 +39,6 @@
 #include "CmUtils.h"
 #include "NpRigidStatic.h"
 #include "NpRigidDynamic.h"
-#if PX_SUPPORT_GPU_PHYSX
-#include "NpSoftBody.h"
-#include "NpParticleSystem.h"
-#include "NpHairSystem.h"
-#endif
 #include "NpArticulationReducedCoordinate.h"
 #include "NpArticulationLink.h"
 #include "NpMaterial.h"
@@ -247,16 +242,6 @@ void NpPhysics::initOffsetTables(PxvOffsetTable& pxvOffsetTable)
 		offsetTable.scRigidStatic2PxActor				= -ptrdiff_t(NpRigidStatic::getCoreOffset());
 		offsetTable.scRigidDynamic2PxActor				= -ptrdiff_t(NpRigidDynamic::getCoreOffset());
 		offsetTable.scArticulationLink2PxActor			= -ptrdiff_t(NpArticulationLink::getCoreOffset());
-#if PX_SUPPORT_GPU_PHYSX
-		offsetTable.scSoftBody2PxActor					= -ptrdiff_t(NpSoftBody::getCoreOffset());
-		offsetTable.scPBDParticleSystem2PxActor			= -ptrdiff_t(NpPBDParticleSystem::getCoreOffset());
-#if PX_ENABLE_FEATURES_UNDER_CONSTRUCTION
-		offsetTable.scFLIPParticleSystem2PxActor		= -ptrdiff_t(NpFLIPParticleSystem::getCoreOffset());
-		offsetTable.scMPMParticleSystem2PxActor			= -ptrdiff_t(NpMPMParticleSystem::getCoreOffset());
-		offsetTable.scCustomParticleSystem2PxActor		= -ptrdiff_t(NpCustomParticleSystem::getCoreOffset());
-		offsetTable.scHairSystem2PxActor				= -ptrdiff_t(NpHairSystem::getCoreOffset());
-#endif
-#endif
 		offsetTable.scArticulationRC2Px					= -ptrdiff_t(NpArticulationReducedCoordinate::getCoreOffset());
 		offsetTable.scArticulationJointRC2Px			= -ptrdiff_t(NpArticulationJointReducedCoordinate::getCoreOffset());
 		offsetTable.scConstraint2Px						= -ptrdiff_t(NpConstraint::getCoreOffset());
@@ -272,7 +257,7 @@ void NpPhysics::initOffsetTables(PxvOffsetTable& pxvOffsetTable)
 		offsetTable.scCore2PxActor[PxActorType::eFLIP_PARTICLESYSTEM] = offsetTable.scFLIPParticleSystem2PxActor;
 		offsetTable.scCore2PxActor[PxActorType::eMPM_PARTICLESYSTEM] = offsetTable.scMPMParticleSystem2PxActor;
 		offsetTable.scCore2PxActor[PxActorType::eCUSTOM_PARTICLESYSTEM] = offsetTable.scCustomParticleSystem2PxActor;
-		offsetTable.scCore2PxActor[PxActorType::eHAIRSYSTEM] = offsetTable.scHairSystem2PxActor;
+
 	}
 	{
 		Sc::OffsetTable& scOffsetTable = Sc::gOffsetTable;
@@ -533,55 +518,24 @@ PxPBDParticleSystem* NpPhysics::createPBDParticleSystem(PxCudaContextManager& cu
 	return NpFactory::getInstance().createPBDParticleSystem(maxNeighborhood, cudaContexManager);
 }
 
-#if PX_ENABLE_FEATURES_UNDER_CONSTRUCTION
-PxFLIPParticleSystem* NpPhysics::createFLIPParticleSystem(PxCudaContextManager& cudaContexManager)
+PxFLIPParticleSystem* NpPhysics::createFLIPParticleSystem(PxCudaContextManager&)
 {
-	return NpFactory::getInstance().createFLIPParticleSystem(cudaContexManager);
+	return NULL;
 }
 
-PxMPMParticleSystem* NpPhysics::createMPMParticleSystem(PxCudaContextManager& cudaContexManager)
+PxMPMParticleSystem* NpPhysics::createMPMParticleSystem(PxCudaContextManager&)
 {
-	return NpFactory::getInstance().createMPMParticleSystem( cudaContexManager);
+	return NULL;
 }
 
-PxCustomParticleSystem* NpPhysics::createCustomParticleSystem(PxCudaContextManager& cudaContexManager, PxU32 maxNeighborhood)
+PxCustomParticleSystem* NpPhysics::createCustomParticleSystem(PxCudaContextManager&, PxU32)
 {
-	return NpFactory::getInstance().createCustomParticleSystem(cudaContexManager, maxNeighborhood);
+	return NULL;
 }
-
-	PxFEMCloth* NpPhysics::createFEMCloth(PxCudaContextManager& cudaContextManager)
-	{
-		return NpFactory::getInstance().createFEMCloth(cudaContextManager);
-	}
-
-PxHairSystem* NpPhysics::createHairSystem(PxCudaContextManager& cudaContextManager)
+PxFEMCloth* NpPhysics::createFEMCloth(PxCudaContextManager&)
 {
-	return NpFactory::getInstance().createHairSystem(cudaContextManager);
+	return NULL;
 }
-#else
-	PxFLIPParticleSystem* NpPhysics::createFLIPParticleSystem(PxCudaContextManager&)
-	{
-		return NULL;
-	}
-
-	PxMPMParticleSystem* NpPhysics::createMPMParticleSystem(PxCudaContextManager&)
-	{
-		return NULL;
-	}
-
-	PxCustomParticleSystem* NpPhysics::createCustomParticleSystem(PxCudaContextManager&, PxU32)
-	{
-		return NULL;
-	}
-	PxFEMCloth* NpPhysics::createFEMCloth(PxCudaContextManager&)
-	{
-		return NULL;
-	}
-	PxHairSystem* NpPhysics::createHairSystem(PxCudaContextManager&)
-	{
-		return NULL;
-	}
-#endif
 
 PxBuffer* NpPhysics::createBuffer(PxU64 byteSize, PxBufferType::Enum bufferType, PxCudaContextManager* cudaContexManager)
 {

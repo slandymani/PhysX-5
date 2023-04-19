@@ -100,7 +100,6 @@ namespace physx
 			true,				//eSOFTBODY,
 			true,				//eTRIANGLEMESH
 			true,				//eHEIGHTFIELD
-			false,				//eHAIRSYSTEM
 			true,				//eCUSTOM
 		},
 
@@ -115,7 +114,6 @@ namespace physx
 			true,				//eSOFTBODY,
 			false,				//eTRIANGLEMESH
 			false,				//eHEIGHTFIELD
-			false,				//eHAIRSYSTEM
 			true,				//eCUSTOM
 		},
 
@@ -130,7 +128,6 @@ namespace physx
 			true,				//eSOFTBODY,
 			true,				//eTRIANGLEMESH
 			true,				//eHEIGHTFIELD
-			false,				//eHAIRSYSTEM
 			true,				//eCUSTOM
 		},
 
@@ -145,7 +142,6 @@ namespace physx
 			true,				//eSOFTBODY,
 			true,				//eTRIANGLEMESH
 			true,				//eHEIGHTFIELD
-			false,				//eHAIRSYSTEM
 			true,				//eCUSTOM
 		},
 
@@ -160,7 +156,6 @@ namespace physx
 			true,				//eSOFTBODY,
 			true,				//eTRIANGLEMESH
 			true,				//eHEIGHTFIELD
-			false,				//eHAIRSYSTEM
 			true,				//eCUSTOM
 		},
 
@@ -175,7 +170,6 @@ namespace physx
 			false,				//eSOFTBODY,
 			false,				//eTRIANGLEMESH
 			false,				//eHEIGHTFIELD
-			false,				//eHAIRSYSTEM
 			false,				//eCUSTOM
 		},
 
@@ -190,7 +184,6 @@ namespace physx
 			false,				//eSOFTBODY,
 			false,				//eTRIANGLEMESH
 			false,				//eHEIGHTFIELD
-			false,				//eHAIRSYSTEM
 			false,				//eCUSTOM
 		},
 
@@ -205,7 +198,6 @@ namespace physx
 			true,				//eSOFTBODY,
 			false,				//eTRIANGLEMESH
 			false,				//eHEIGHTFIELD
-			false,				//eHAIRSYSTEM
 			true,				//eCUSTOM
 		},
 
@@ -220,23 +212,7 @@ namespace physx
 			true,				//eSOFTBODY,
 			false,				//eTRIANGLEMESH
 			false,				//eHEIGHTFIELD
-			false,				//eHAIRSYSTEM
 			true,				//eCUSTOM
-		},
-
-		//eHAIRSYSTEM
-		{
-			false,				//eSPHERE
-			false,				//ePLANE
-			false,				//eCAPSULE
-			false,				//eBOX
-			false,				//eCONVEXMESH
-			false,				//ePARTICLESYSTEM
-			false,				//eSOFTBODY,
-			false,				//eTRIANGLEMESH
-			false,				//eHEIGHTFIELD
-			false,				//eHAIRSYSTEM
-			false,				//eCUSTOM
 		},
 
 		//eCUSTOM,
@@ -250,7 +226,6 @@ namespace physx
 			false,				//eSOFTBODY,
 			true,				//eTRIANGLEMESH
 			true,				//eHEIGHTFIELD
-			false,				//eHAIRSYSTEM
 			true,				//eCUSTOM
 		}
 	};

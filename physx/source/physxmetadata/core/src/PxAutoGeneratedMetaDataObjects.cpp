@@ -1451,8 +1451,6 @@ inline PxU32 getPxgDynamicsMemoryConfigMaxParticleContacts( const PxgDynamicsMem
 inline void setPxgDynamicsMemoryConfigMaxParticleContacts( PxgDynamicsMemoryConfig* inOwner, PxU32 inData) { inOwner->maxParticleContacts = inData; }
 inline PxU32 getPxgDynamicsMemoryConfigCollisionStackSize( const PxgDynamicsMemoryConfig* inOwner ) { return inOwner->collisionStackSize; }
 inline void setPxgDynamicsMemoryConfigCollisionStackSize( PxgDynamicsMemoryConfig* inOwner, PxU32 inData) { inOwner->collisionStackSize = inData; }
-inline PxU32 getPxgDynamicsMemoryConfigMaxHairContacts( const PxgDynamicsMemoryConfig* inOwner ) { return inOwner->maxHairContacts; }
-inline void setPxgDynamicsMemoryConfigMaxHairContacts( PxgDynamicsMemoryConfig* inOwner, PxU32 inData) { inOwner->maxHairContacts = inData; }
 PX_PHYSX_CORE_API PxgDynamicsMemoryConfigGeneratedInfo::PxgDynamicsMemoryConfigGeneratedInfo()
 	: IsValid( "IsValid", getPxgDynamicsMemoryConfig_IsValid)
 	, TempBufferCapacity( "TempBufferCapacity", setPxgDynamicsMemoryConfigTempBufferCapacity, getPxgDynamicsMemoryConfigTempBufferCapacity )
@@ -1466,7 +1464,6 @@ PX_PHYSX_CORE_API PxgDynamicsMemoryConfigGeneratedInfo::PxgDynamicsMemoryConfigG
 	, MaxFemClothContacts( "MaxFemClothContacts", setPxgDynamicsMemoryConfigMaxFemClothContacts, getPxgDynamicsMemoryConfigMaxFemClothContacts )
 	, MaxParticleContacts( "MaxParticleContacts", setPxgDynamicsMemoryConfigMaxParticleContacts, getPxgDynamicsMemoryConfigMaxParticleContacts )
 	, CollisionStackSize( "CollisionStackSize", setPxgDynamicsMemoryConfigCollisionStackSize, getPxgDynamicsMemoryConfigCollisionStackSize )
-	, MaxHairContacts( "MaxHairContacts", setPxgDynamicsMemoryConfigMaxHairContacts, getPxgDynamicsMemoryConfigMaxHairContacts )
 {}
 PX_PHYSX_CORE_API PxgDynamicsMemoryConfigGeneratedValues::PxgDynamicsMemoryConfigGeneratedValues( const PxgDynamicsMemoryConfig* inSource )
 		:IsValid( getPxgDynamicsMemoryConfig_IsValid( inSource ) )
@@ -1481,7 +1478,6 @@ PX_PHYSX_CORE_API PxgDynamicsMemoryConfigGeneratedValues::PxgDynamicsMemoryConfi
 		,MaxFemClothContacts( inSource->maxFemClothContacts )
 		,MaxParticleContacts( inSource->maxParticleContacts )
 		,CollisionStackSize( inSource->collisionStackSize )
-		,MaxHairContacts( inSource->maxHairContacts )
 {
 	PX_UNUSED(inSource);
 }
@@ -1531,8 +1527,6 @@ inline PxU64 getPxSimulationStatisticsGpuMemSoftBodies( const PxSimulationStatis
 inline void setPxSimulationStatisticsGpuMemSoftBodies( PxSimulationStatistics* inOwner, PxU64 inData) { inOwner->gpuMemSoftBodies = inData; }
 inline PxU64 getPxSimulationStatisticsGpuMemFEMCloths( const PxSimulationStatistics* inOwner ) { return inOwner->gpuMemFEMCloths; }
 inline void setPxSimulationStatisticsGpuMemFEMCloths( PxSimulationStatistics* inOwner, PxU64 inData) { inOwner->gpuMemFEMCloths = inData; }
-inline PxU64 getPxSimulationStatisticsGpuMemHairSystems( const PxSimulationStatistics* inOwner ) { return inOwner->gpuMemHairSystems; }
-inline void setPxSimulationStatisticsGpuMemHairSystems( PxSimulationStatistics* inOwner, PxU64 inData) { inOwner->gpuMemHairSystems = inData; }
 inline PxU64 getPxSimulationStatisticsGpuMemHeap( const PxSimulationStatistics* inOwner ) { return inOwner->gpuMemHeap; }
 inline void setPxSimulationStatisticsGpuMemHeap( PxSimulationStatistics* inOwner, PxU64 inData) { inOwner->gpuMemHeap = inData; }
 inline PxU64 getPxSimulationStatisticsGpuMemHeapBroadPhase( const PxSimulationStatistics* inOwner ) { return inOwner->gpuMemHeapBroadPhase; }
@@ -1553,16 +1547,12 @@ inline PxU64 getPxSimulationStatisticsGpuMemHeapSimulationSoftBody( const PxSimu
 inline void setPxSimulationStatisticsGpuMemHeapSimulationSoftBody( PxSimulationStatistics* inOwner, PxU64 inData) { inOwner->gpuMemHeapSimulationSoftBody = inData; }
 inline PxU64 getPxSimulationStatisticsGpuMemHeapSimulationFEMCloth( const PxSimulationStatistics* inOwner ) { return inOwner->gpuMemHeapSimulationFEMCloth; }
 inline void setPxSimulationStatisticsGpuMemHeapSimulationFEMCloth( PxSimulationStatistics* inOwner, PxU64 inData) { inOwner->gpuMemHeapSimulationFEMCloth = inData; }
-inline PxU64 getPxSimulationStatisticsGpuMemHeapSimulationHairSystem( const PxSimulationStatistics* inOwner ) { return inOwner->gpuMemHeapSimulationHairSystem; }
-inline void setPxSimulationStatisticsGpuMemHeapSimulationHairSystem( PxSimulationStatistics* inOwner, PxU64 inData) { inOwner->gpuMemHeapSimulationHairSystem = inData; }
 inline PxU64 getPxSimulationStatisticsGpuMemHeapParticles( const PxSimulationStatistics* inOwner ) { return inOwner->gpuMemHeapParticles; }
 inline void setPxSimulationStatisticsGpuMemHeapParticles( PxSimulationStatistics* inOwner, PxU64 inData) { inOwner->gpuMemHeapParticles = inData; }
 inline PxU64 getPxSimulationStatisticsGpuMemHeapSoftBodies( const PxSimulationStatistics* inOwner ) { return inOwner->gpuMemHeapSoftBodies; }
 inline void setPxSimulationStatisticsGpuMemHeapSoftBodies( PxSimulationStatistics* inOwner, PxU64 inData) { inOwner->gpuMemHeapSoftBodies = inData; }
 inline PxU64 getPxSimulationStatisticsGpuMemHeapFEMCloths( const PxSimulationStatistics* inOwner ) { return inOwner->gpuMemHeapFEMCloths; }
 inline void setPxSimulationStatisticsGpuMemHeapFEMCloths( PxSimulationStatistics* inOwner, PxU64 inData) { inOwner->gpuMemHeapFEMCloths = inData; }
-inline PxU64 getPxSimulationStatisticsGpuMemHeapHairSystems( const PxSimulationStatistics* inOwner ) { return inOwner->gpuMemHeapHairSystems; }
-inline void setPxSimulationStatisticsGpuMemHeapHairSystems( PxSimulationStatistics* inOwner, PxU64 inData) { inOwner->gpuMemHeapHairSystems = inData; }
 inline PxU64 getPxSimulationStatisticsGpuMemHeapOther( const PxSimulationStatistics* inOwner ) { return inOwner->gpuMemHeapOther; }
 inline void setPxSimulationStatisticsGpuMemHeapOther( PxSimulationStatistics* inOwner, PxU64 inData) { inOwner->gpuMemHeapOther = inData; }
 inline PxU32 getPxSimulationStatisticsNbBroadPhaseAdds( const PxSimulationStatistics* inOwner ) { return inOwner->nbBroadPhaseAdds; }
@@ -1593,7 +1583,6 @@ PX_PHYSX_CORE_API PxSimulationStatisticsGeneratedInfo::PxSimulationStatisticsGen
 	, GpuMemParticles( "GpuMemParticles", setPxSimulationStatisticsGpuMemParticles, getPxSimulationStatisticsGpuMemParticles )
 	, GpuMemSoftBodies( "GpuMemSoftBodies", setPxSimulationStatisticsGpuMemSoftBodies, getPxSimulationStatisticsGpuMemSoftBodies )
 	, GpuMemFEMCloths( "GpuMemFEMCloths", setPxSimulationStatisticsGpuMemFEMCloths, getPxSimulationStatisticsGpuMemFEMCloths )
-	, GpuMemHairSystems( "GpuMemHairSystems", setPxSimulationStatisticsGpuMemHairSystems, getPxSimulationStatisticsGpuMemHairSystems )
 	, GpuMemHeap( "GpuMemHeap", setPxSimulationStatisticsGpuMemHeap, getPxSimulationStatisticsGpuMemHeap )
 	, GpuMemHeapBroadPhase( "GpuMemHeapBroadPhase", setPxSimulationStatisticsGpuMemHeapBroadPhase, getPxSimulationStatisticsGpuMemHeapBroadPhase )
 	, GpuMemHeapNarrowPhase( "GpuMemHeapNarrowPhase", setPxSimulationStatisticsGpuMemHeapNarrowPhase, getPxSimulationStatisticsGpuMemHeapNarrowPhase )
@@ -1604,11 +1593,9 @@ PX_PHYSX_CORE_API PxSimulationStatisticsGeneratedInfo::PxSimulationStatisticsGen
 	, GpuMemHeapSimulationParticles( "GpuMemHeapSimulationParticles", setPxSimulationStatisticsGpuMemHeapSimulationParticles, getPxSimulationStatisticsGpuMemHeapSimulationParticles )
 	, GpuMemHeapSimulationSoftBody( "GpuMemHeapSimulationSoftBody", setPxSimulationStatisticsGpuMemHeapSimulationSoftBody, getPxSimulationStatisticsGpuMemHeapSimulationSoftBody )
 	, GpuMemHeapSimulationFEMCloth( "GpuMemHeapSimulationFEMCloth", setPxSimulationStatisticsGpuMemHeapSimulationFEMCloth, getPxSimulationStatisticsGpuMemHeapSimulationFEMCloth )
-	, GpuMemHeapSimulationHairSystem( "GpuMemHeapSimulationHairSystem", setPxSimulationStatisticsGpuMemHeapSimulationHairSystem, getPxSimulationStatisticsGpuMemHeapSimulationHairSystem )
 	, GpuMemHeapParticles( "GpuMemHeapParticles", setPxSimulationStatisticsGpuMemHeapParticles, getPxSimulationStatisticsGpuMemHeapParticles )
 	, GpuMemHeapSoftBodies( "GpuMemHeapSoftBodies", setPxSimulationStatisticsGpuMemHeapSoftBodies, getPxSimulationStatisticsGpuMemHeapSoftBodies )
 	, GpuMemHeapFEMCloths( "GpuMemHeapFEMCloths", setPxSimulationStatisticsGpuMemHeapFEMCloths, getPxSimulationStatisticsGpuMemHeapFEMCloths )
-	, GpuMemHeapHairSystems( "GpuMemHeapHairSystems", setPxSimulationStatisticsGpuMemHeapHairSystems, getPxSimulationStatisticsGpuMemHeapHairSystems )
 	, GpuMemHeapOther( "GpuMemHeapOther", setPxSimulationStatisticsGpuMemHeapOther, getPxSimulationStatisticsGpuMemHeapOther )
 	, NbBroadPhaseAdds( "NbBroadPhaseAdds", setPxSimulationStatisticsNbBroadPhaseAdds, getPxSimulationStatisticsNbBroadPhaseAdds )
 	, NbBroadPhaseRemoves( "NbBroadPhaseRemoves", setPxSimulationStatisticsNbBroadPhaseRemoves, getPxSimulationStatisticsNbBroadPhaseRemoves )
@@ -1637,7 +1624,6 @@ PX_PHYSX_CORE_API PxSimulationStatisticsGeneratedValues::PxSimulationStatisticsG
 		,GpuMemParticles( inSource->gpuMemParticles )
 		,GpuMemSoftBodies( inSource->gpuMemSoftBodies )
 		,GpuMemFEMCloths( inSource->gpuMemFEMCloths )
-		,GpuMemHairSystems( inSource->gpuMemHairSystems )
 		,GpuMemHeap( inSource->gpuMemHeap )
 		,GpuMemHeapBroadPhase( inSource->gpuMemHeapBroadPhase )
 		,GpuMemHeapNarrowPhase( inSource->gpuMemHeapNarrowPhase )
@@ -1648,11 +1634,9 @@ PX_PHYSX_CORE_API PxSimulationStatisticsGeneratedValues::PxSimulationStatisticsG
 		,GpuMemHeapSimulationParticles( inSource->gpuMemHeapSimulationParticles )
 		,GpuMemHeapSimulationSoftBody( inSource->gpuMemHeapSimulationSoftBody )
 		,GpuMemHeapSimulationFEMCloth( inSource->gpuMemHeapSimulationFEMCloth )
-		,GpuMemHeapSimulationHairSystem( inSource->gpuMemHeapSimulationHairSystem )
 		,GpuMemHeapParticles( inSource->gpuMemHeapParticles )
 		,GpuMemHeapSoftBodies( inSource->gpuMemHeapSoftBodies )
 		,GpuMemHeapFEMCloths( inSource->gpuMemHeapFEMCloths )
-		,GpuMemHeapHairSystems( inSource->gpuMemHeapHairSystems )
 		,GpuMemHeapOther( inSource->gpuMemHeapOther )
 		,NbBroadPhaseAdds( inSource->nbBroadPhaseAdds )
 		,NbBroadPhaseRemoves( inSource->nbBroadPhaseRemoves )

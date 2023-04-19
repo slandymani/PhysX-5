@@ -33,14 +33,6 @@
 #include "NpArticulationTendon.h"
 #include "NpArticulationSensor.h"
 #include "NpAggregate.h"
-#if PX_SUPPORT_GPU_PHYSX
-	#include "NpSoftBody.h"
-	#include "NpParticleSystem.h"
-	#include "NpFEMCloth.h"
-	#include "NpHairSystem.h"
-	#include "cudamanager/PxCudaContextManager.h"
-	#include "cudamanager/PxCudaContext.h"
-#endif
 #include "ScArticulationSim.h"
 #include "ScArticulationTendonSim.h"
 #include "CmCollection.h"
@@ -241,15 +233,6 @@ NpScene::~NpScene()
 	while(softBodyCount--)
 		removeSoftBody(*mSoftBodies.getEntries()[softBodyCount], false);
 
-#if PX_ENABLE_FEATURES_UNDER_CONSTRUCTION
-	PxU32 femClothCount = mFEMCloths.size();
-	while (femClothCount--)
-		removeFEMCloth(*mFEMCloths.getEntries()[femClothCount], false);
-
-	PxU32 hairSystemsCount = mHairSystems.size();
-	while (hairSystemsCount--)
-		removeHairSystem(*mHairSystems.getEntries()[hairSystemsCount], false);
-#endif
 #endif
 	bool unlock = mScene.getFlags() & PxSceneFlag::eREQUIRE_RW_LOCK;
 
@@ -516,35 +499,6 @@ bool NpScene::addActorInternal(PxActor& actor, const PxBVH* bvh)
 		{
 			return outputError<PxErrorCode::eINVALID_PARAMETER>(__LINE__, "PxScene::addActor(): Individual articulation links can not be added to the scene");
 		}
-#if PX_SUPPORT_GPU_PHYSX
-		case (PxConcreteType::eSOFT_BODY):
-		{
-			return addSoftBody(static_cast<PxSoftBody&>(actor));
-		}
-		case (PxConcreteType::eFEM_CLOTH):
-		{
-#if PX_ENABLE_FEATURES_UNDER_CONSTRUCTION
-			return addFEMCloth(static_cast<PxFEMCloth&>(actor));
-#else
-			return false;
-#endif
-		}
-		case (PxConcreteType::ePBD_PARTICLESYSTEM):
-		case (PxConcreteType::eFLIP_PARTICLESYSTEM):
-		case (PxConcreteType::eMPM_PARTICLESYSTEM):
-		case (PxConcreteType::eCUSTOM_PARTICLESYSTEM):
-		{
-			return addParticleSystem(static_cast<PxParticleSystem&>(actor));
-		}
-		case (PxConcreteType::eHAIR_SYSTEM):
-		{
-#if PX_ENABLE_FEATURES_UNDER_CONSTRUCTION
-			return addHairSystem(static_cast<PxHairSystem&>(actor));
-#else
-			return false;
-#endif
-		}
-#endif
 		default:
 			PX_ASSERT(false); 	// should not happen
 			return false;
@@ -816,57 +770,6 @@ void NpScene::removeActorInternal(PxActor& actor, bool wakeOnLostTouch, bool rem
 			outputError<PxErrorCode::eINVALID_PARAMETER>(__LINE__, "PxScene::removeActor(): Individual articulation links can not be removed from the scene");
 		}
 		break;
-
-#if PX_SUPPORT_GPU_PHYSX
-		case PxActorType::eSOFTBODY:
-		{
-			NpSoftBody& npSoftBody = static_cast<NpSoftBody&>(actor);
-			removeSoftBody(npSoftBody, wakeOnLostTouch);
-		}
-		break;
-#if PX_ENABLE_FEATURES_UNDER_CONSTRUCTION
-		case PxActorType::eFEMCLOTH:
-		{
-			NpFEMCloth& npFEMCloth= static_cast<NpFEMCloth&>(actor);
-			removeFEMCloth(npFEMCloth, wakeOnLostTouch);
-		}
-		break;
-#endif
-		case PxActorType::ePBD_PARTICLESYSTEM:
-		{
-			PxPBDParticleSystem& npParticleSystem = static_cast<PxPBDParticleSystem&>(actor);
-			removeParticleSystem(npParticleSystem, wakeOnLostTouch);
-		}
-		break;
-#if PX_ENABLE_FEATURES_UNDER_CONSTRUCTION
-		case PxActorType::eFLIP_PARTICLESYSTEM:
-		{
-			PxFLIPParticleSystem& npParticleSystem = static_cast<PxFLIPParticleSystem&>(actor);
-			removeParticleSystem(npParticleSystem, wakeOnLostTouch);
-		}
-		break;
-
-		case PxActorType::eMPM_PARTICLESYSTEM:
-		{
-			PxMPMParticleSystem& npParticleSystem = static_cast<PxMPMParticleSystem&>(actor);
-			removeParticleSystem(npParticleSystem, wakeOnLostTouch);
-		}
-		break;
-
-		case PxActorType::eCUSTOM_PARTICLESYSTEM:
-		{
-			PxCustomParticleSystem& npParticleSystem = static_cast<PxCustomParticleSystem&>(actor);
-			removeParticleSystem(npParticleSystem, wakeOnLostTouch);
-		}
-		break;
-		case PxActorType::eHAIRSYSTEM:
-		{
-			NpHairSystem& npHairSystem = static_cast<NpHairSystem&>(actor);
-			removeHairSystem(npHairSystem, wakeOnLostTouch);
-		}
-		break;
-#endif
-#endif
 		default:
 			PX_ASSERT(0);
 	}
@@ -1813,63 +1716,6 @@ PxU32 NpScene::getParticleSystems(PxParticleSolverType::Enum type, PxParticleSys
 	}
 #else
 	PX_UNUSED(type);
-	PX_UNUSED(userBuffer);
-	PX_UNUSED(bufferSize);
-	PX_UNUSED(startIndex);
-	return 0;
-#endif
-}
-
-///////////////////////////////////////////////////////////////////////////////
-
-#if PX_ENABLE_FEATURES_UNDER_CONSTRUCTION
-bool NpScene::addHairSystem(PxHairSystem& hairSystem)
-{
-	if (!mScene.isUsingGpuDynamicsAndBp())
-	{
-		return outputError<PxErrorCode::eINVALID_OPERATION>(__LINE__, "PxScene::addHairSystem(): Hair systems only currently supported with GPU-accelerated scenes!");
-	}
-
-#if PX_SUPPORT_GPU_PHYSX
-	NpHairSystem& npHairSystem = static_cast<NpHairSystem&>(hairSystem);
-	scAddHairSystem(npHairSystem);
-	mHairSystems.insert(&npHairSystem);
-	mScene.addHairSystemSimControl(npHairSystem.getCore());
-	return true;
-#else
-	PX_UNUSED(hairSystem);
-	return false;
-#endif
-}
-
-void NpScene::removeHairSystem(PxHairSystem& hairSystem, bool /*wakeOnLostTouch*/)
-{
-#if PX_SUPPORT_GPU_PHYSX
-	NpHairSystem& npHairSystem = static_cast<NpHairSystem&>(hairSystem);
-	scRemoveHairSystem(npHairSystem);
-	removeFromHairSystemList(hairSystem);
-#else
-	PX_UNUSED(hairSystem);
-#endif
-}
-#endif
-
-PxU32 NpScene::getNbHairSystems() const
-{
-#if PX_SUPPORT_GPU_PHYSX && PX_ENABLE_FEATURES_UNDER_CONSTRUCTION
-	NP_READ_CHECK(this);
-	return mHairSystems.size();
-#else
-	return 0;
-#endif
-}
-
-PxU32 NpScene::getHairSystems(PxHairSystem** userBuffer, PxU32 bufferSize, PxU32 startIndex) const
-{
-#if PX_SUPPORT_GPU_PHYSX && PX_ENABLE_FEATURES_UNDER_CONSTRUCTION
-	NP_READ_CHECK(this);
-	return Cm::getArrayOfPointers(userBuffer, bufferSize, startIndex, mHairSystems.getEntries(), mHairSystems.size());
-#else
 	PX_UNUSED(userBuffer);
 	PX_UNUSED(bufferSize);
 	PX_UNUSED(startIndex);
@@ -4160,104 +4006,6 @@ PX_FORCE_INLINE static void removeNonSimActor(T& rigid)
 
 template <typename T>struct ScSceneFns {};
 
-#if PX_SUPPORT_GPU_PHYSX
-template<> struct ScSceneFns<NpSoftBody>
-{
-	static PX_FORCE_INLINE void insert(Sc::Scene& s, NpSoftBody& v, PxBounds3*, const BVH*, bool)
-	{
-		s.addSoftBody(v.getCore());
-	}
-
-	static PX_FORCE_INLINE void remove(Sc::Scene& s, NpSoftBody& v, bool /*wakeOnLostTouch*/)
-	{
-		s.removeSoftBody(v.getCore());
-	}
-};
-
-#if PX_ENABLE_FEATURES_UNDER_CONSTRUCTION
-template<> struct ScSceneFns<NpFEMCloth>
-{
-	static PX_FORCE_INLINE void insert(Sc::Scene& s, NpFEMCloth& v, PxBounds3*, const Gu::BVH*, bool)
-	{
-		s.addFEMCloth(v.getCore());
-	}
-
-	static PX_FORCE_INLINE void remove(Sc::Scene& s, NpFEMCloth& v, bool /*wakeOnLostTouch*/)
-	{
-		s.removeFEMCloth(v.getCore());
-	}
-};
-#endif
-
-template<> struct ScSceneFns<NpPBDParticleSystem>
-{
-	static PX_FORCE_INLINE void insert(Sc::Scene& s, NpPBDParticleSystem& v, PxBounds3*, const BVH*, bool)
-	{
-		s.addParticleSystem(v.getCore());
-	}
-
-	static PX_FORCE_INLINE void remove(Sc::Scene& s, NpPBDParticleSystem& v, bool /*wakeOnLostTouch*/)
-	{
-		s.removeParticleSystem(v.getCore());
-	}
-};
-
-#if PX_ENABLE_FEATURES_UNDER_CONSTRUCTION
-template<> struct ScSceneFns<NpFLIPParticleSystem>
-{
-	static PX_FORCE_INLINE void insert(Sc::Scene& s, NpFLIPParticleSystem& v, PxBounds3*, const BVH*, bool)
-	{
-		s.addParticleSystem(v.getCore());
-	}
-
-	static PX_FORCE_INLINE void remove(Sc::Scene& s, NpFLIPParticleSystem& v, bool /*wakeOnLostTouch*/)
-	{
-		s.removeParticleSystem(v.getCore());
-	}
-};
-
-template<> struct ScSceneFns<NpMPMParticleSystem>
-{
-	static PX_FORCE_INLINE void insert(Sc::Scene& s, NpMPMParticleSystem& v, PxBounds3*, const BVH*, bool)
-	{
-		s.addParticleSystem(v.getCore());
-	}
-
-	static PX_FORCE_INLINE void remove(Sc::Scene& s, NpMPMParticleSystem& v, bool /*wakeOnLostTouch*/)
-	{
-		s.removeParticleSystem(v.getCore());
-	}
-};
-
-template<> struct ScSceneFns<NpCustomParticleSystem>
-{
-	static PX_FORCE_INLINE void insert(Sc::Scene& s, NpCustomParticleSystem& v, PxBounds3*, const BVH*, bool)
-	{
-		s.addParticleSystem(v.getCore());
-	}
-
-	static PX_FORCE_INLINE void remove(Sc::Scene& s, NpCustomParticleSystem& v, bool /*wakeOnLostTouch*/)
-	{
-		s.removeParticleSystem(v.getCore());
-	}
-};
-
-template<> struct ScSceneFns<NpHairSystem>
-{
-	static PX_FORCE_INLINE void insert(Sc::Scene& s, NpHairSystem& v, PxBounds3*, const BVH*, bool)
-	{
-		s.addHairSystem(v.getCore());
-	}
-
-	static PX_FORCE_INLINE void remove(Sc::Scene& s, NpHairSystem& v, bool /*wakeOnLostTouch*/)
-	{
-		s.removeHairSystem(v.getCore());
-	}
-};
-#endif
-#endif
-
-
 template<> struct ScSceneFns<NpArticulationReducedCoordinate>
 {
 	static PX_FORCE_INLINE void insert(Sc::Scene& s, NpArticulationReducedCoordinate& v, PxBounds3*, const BVH*, bool)
@@ -4640,103 +4388,6 @@ void NpScene::removeFromConstraintList(PxConstraint& constraint)
 
 	npConstraint.setNpScene(NULL);
 }
-
-///////////////////////////////////////////////////////////////////////////////
-
-#if PX_SUPPORT_GPU_PHYSX
-void NpScene::scAddSoftBody(NpSoftBody& softBody)
-{
-	add<NpSoftBody>(this, softBody);
-}
-
-void NpScene::scRemoveSoftBody(NpSoftBody& softBody)
-{
-	mScene.removeSoftBodySimControl(softBody.getCore());
-	remove<NpSoftBody>(this, softBody);
-}
-
-////////////////////////////////////////////////////////////////////////////////
-
-#if PX_ENABLE_FEATURES_UNDER_CONSTRUCTION
-void NpScene::scAddFEMCloth(NpScene* npScene, NpFEMCloth& femCloth)
-{
-	add<NpFEMCloth>(npScene, femCloth, NULL, NULL);
-}
-
-void NpScene::scRemoveFEMCloth(NpFEMCloth& femCloth)
-{
-	mScene.removeFEMClothSimControl(femCloth.getCore());
-	remove<NpFEMCloth>(this, femCloth, false);
-}
-#endif
-
-////////////////////////////////////////////////////////////////////////////////
-
-void NpScene::scAddParticleSystem(NpPBDParticleSystem& particleSystem)
-{
-	add<NpPBDParticleSystem>(this, particleSystem);
-}
-
-void NpScene::scRemoveParticleSystem(NpPBDParticleSystem& particleSystem)
-{
-	mScene.removeParticleSystemSimControl(particleSystem.getCore());
-	remove<NpPBDParticleSystem>(this, particleSystem);
-}
-
-////////////////////////////////////////////////////////////////////////////////
-
-#if PX_ENABLE_FEATURES_UNDER_CONSTRUCTION
-void NpScene::scAddParticleSystem(NpFLIPParticleSystem& particleSystem)
-{
-	add<NpFLIPParticleSystem>(this, particleSystem);
-}
-
-void NpScene::scRemoveParticleSystem(NpFLIPParticleSystem& particleSystem)
-{
-	mScene.removeParticleSystemSimControl(particleSystem.getCore());
-	remove<NpFLIPParticleSystem>(this, particleSystem);
-}
-
-////////////////////////////////////////////////////////////////////////////////
-
-void NpScene::scAddParticleSystem(NpMPMParticleSystem& particleSystem)
-{
-	add<NpMPMParticleSystem>(this, particleSystem);
-}
-
-void NpScene::scRemoveParticleSystem(NpMPMParticleSystem& particleSystem)
-{
-	mScene.removeParticleSystemSimControl(particleSystem.getCore());
-	remove<NpMPMParticleSystem>(this, particleSystem);
-}
-
-////////////////////////////////////////////////////////////////////////////////
-
-void NpScene::scAddParticleSystem(NpCustomParticleSystem& particleSystem)
-{
-	add<NpCustomParticleSystem>(this, particleSystem);
-}
-
-void NpScene::scRemoveParticleSystem(NpCustomParticleSystem& particleSystem)
-{
-	mScene.removeParticleSystemSimControl(particleSystem.getCore());
-	remove<NpCustomParticleSystem>(this, particleSystem);
-}
-////////////////////////////////////////////////////////////////////////////////
-
-void NpScene::scAddHairSystem(NpHairSystem& hairSystem)
-{
-	add<NpHairSystem>(this, hairSystem);
-}
-
-void NpScene::scRemoveHairSystem(NpHairSystem& hairSystem)
-{
-	mScene.removeHairSystemSimControl(hairSystem.getCore());
-	remove<NpHairSystem>(this, hairSystem);
-}
-
-#endif
-#endif
 
 ///////////////////////////////////////////////////////////////////////////////
 

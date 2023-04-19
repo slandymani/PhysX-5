@@ -131,17 +131,11 @@ struct PxHeightFieldGeometryLL : public PxHeightFieldGeometry
 	MaterialIndicesStruct	materialsLL;
 };
 
-struct PxHairSystemGeometryLL : public PxHairSystemGeometry
-{
-	PxU32					gpuRemapId;
-};
-
 template <> struct PxcGeometryTraits<PxParticleSystemGeometryLL>	{ enum { TypeID = PxGeometryType::ePARTICLESYSTEM}; };
 template <> struct PxcGeometryTraits<PxConvexMeshGeometryLL>		{ enum { TypeID = PxGeometryType::eCONVEXMESH }; };
 template <> struct PxcGeometryTraits<PxTriangleMeshGeometryLL>		{ enum { TypeID = PxGeometryType::eTRIANGLEMESH }; };
 template <> struct PxcGeometryTraits<PxTetrahedronMeshGeometryLL>	{ enum { TypeID = PxGeometryType::eTETRAHEDRONMESH }; };
 template <> struct PxcGeometryTraits<PxHeightFieldGeometryLL>		{ enum { TypeID = PxGeometryType::eHEIGHTFIELD }; };
-template <> struct PxcGeometryTraits<PxHairSystemGeometryLL>		{ enum { TypeID = PxGeometryType::eHAIRSYSTEM }; };
 
 class InvalidGeometry : public PxGeometry
 {
@@ -196,7 +190,6 @@ private:
 		PxU8	mesh[sizeof(PxTriangleMeshGeometryLL)];
 		PxU8	tetMesh[sizeof(PxTetrahedronMeshGeometryLL)];
 		PxU8	heightfield[sizeof(PxHeightFieldGeometryLL)];
-		PxU8	hairsystem[sizeof(PxHairSystemGeometryLL)];
 		PxU8	custom[sizeof(PxCustomGeometry)];
 		PxU8	invalid[sizeof(InvalidGeometry)];
 	} mGeometry;

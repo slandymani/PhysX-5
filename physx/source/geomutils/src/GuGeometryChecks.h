@@ -38,7 +38,6 @@
 #include "geometry/PxTetrahedronMeshGeometry.h"
 #include "geometry/PxTriangleMeshGeometry.h"
 #include "geometry/PxHeightFieldGeometry.h"
-#include "geometry/PxHairSystemGeometry.h"
 #include "geometry/PxCustomGeometry.h"
 
 namespace physx
@@ -66,7 +65,6 @@ namespace physx
 	template <> struct PxcGeometryTraits<PxTriangleMeshGeometry>		{ enum { TypeID = PxGeometryType::eTRIANGLEMESH }; };
 	template <> struct PxcGeometryTraits<PxTetrahedronMeshGeometry>		{ enum { TypeID = PxGeometryType::eTETRAHEDRONMESH }; };
 	template <> struct PxcGeometryTraits<PxHeightFieldGeometry>			{ enum { TypeID = PxGeometryType::eHEIGHTFIELD }; };
-	template <> struct PxcGeometryTraits<PxHairSystemGeometry>			{ enum { TypeID = PxGeometryType::eHAIRSYSTEM }; };
 	template <> struct PxcGeometryTraits<PxCustomGeometry>				{ enum { TypeID = PxGeometryType::eCUSTOM }; };
 
 	template<class T> PX_CUDA_CALLABLE PX_FORCE_INLINE void checkType(const PxGeometry& geometry)

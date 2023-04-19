@@ -174,36 +174,6 @@ Sc::ArticulationSim* IslandSim::getArticulationSim(PxNodeIndex nodeIndex) const
 	return reinterpret_cast<Sc::ArticulationSim*>(userData);
 }
 
-#if PX_SUPPORT_GPU_PHYSX
-void IslandSim::addSoftBody(Dy::SoftBody* llSoftBody, bool isActive, PxNodeIndex nodeIndex)
-{
-	addNode(isActive, false, Node::eSOFTBODY_TYPE, nodeIndex);
-	Node& node = mNodes[nodeIndex.index()];
-	node.mLLSoftBody = llSoftBody;
-}
-
-void IslandSim::addFEMCloth(Dy::FEMCloth* llFEMCloth, bool isActive, PxNodeIndex nodeIndex)
-{
-	addNode(isActive, false, Node::eFEMCLOTH_TYPE, nodeIndex);
-	Node& node = mNodes[nodeIndex.index()];
-	node.mLLFEMCloth = llFEMCloth;
-}
-
-void IslandSim::addParticleSystem(Dy::ParticleSystem* llParticleSystem, bool isActive, PxNodeIndex nodeIndex)
-{
-	addNode(isActive, false, Node::ePARTICLESYSTEM_TYPE, nodeIndex);
-	Node& node = mNodes[nodeIndex.index()];
-	node.mLLParticleSystem = llParticleSystem;
-}
-
-void IslandSim::addHairSystem(Dy::HairSystem* llHairSystem, bool isActive, PxNodeIndex nodeIndex)
-{
-	addNode(isActive, false, Node::eHAIRSYSTEM_TYPE, nodeIndex);
-	Node& node = mNodes[nodeIndex.index()];
-	node.mLLHairSystem = llHairSystem;
-}
-#endif
-
 void IslandSim::connectEdge(EdgeInstance& instance, EdgeInstanceIndex edgeIndex, Node& source, PxNodeIndex /*destination*/)
 {
 	PX_ASSERT(instance.mNextEdge == IG_INVALID_EDGE);

@@ -41,10 +41,6 @@
 #include "PxBuffer.h"
 #include "PxParticleSystem.h"
 #include "foundation/PxPreprocessor.h"
-#if PX_ENABLE_FEATURES_UNDER_CONSTRUCTION
-#include "PxFEMCloth.h"
-#include "PxHairSystem.h"
-#endif
 
 #if !PX_DOXYGEN
 namespace physx
@@ -680,17 +676,6 @@ public:
 	@see PxSoftBody
 	*/
 	PX_DEPRECATED virtual PxSoftBody* createSoftBody(PxCudaContextManager& cudaContextManager) = 0;
-
-	/**
-	\brief Creates a hair system with all fields initialized to their default values.
-	\warning Feature under development, only for internal usage.
-
-	\param[in] cudaContextManager The PxCudaContextManager this instance is tied to.
-	\return the new hair system
-
-	@see PxHairSystem
-	*/
-	PX_DEPRECATED virtual PxHairSystem* createHairSystem(PxCudaContextManager& cudaContextManager) = 0;
 
 	/**
 	\brief Creates a particle system with a position-based dynamics (PBD) solver.

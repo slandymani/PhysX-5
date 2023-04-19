@@ -281,7 +281,6 @@ float physx::computeCCDThreshold(const PxGeometry& geometry)
 		case PxGeometryType::eHEIGHTFIELD:		{ return 0.0f;	}
 		case PxGeometryType::eTETRAHEDRONMESH:	{ return 0.0f;	}
 		case PxGeometryType::ePARTICLESYSTEM:	{ return 0.0f;	}
-		case PxGeometryType::eHAIRSYSTEM:		{ return 0.0f;	}
 		case PxGeometryType::eCUSTOM:			{ return 0.0f;	}
 
 		default:

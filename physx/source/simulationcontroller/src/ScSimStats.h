@@ -81,7 +81,6 @@ namespace Sc
 		PxU64 gpuMemSizeParticles;
 		PxU64 gpuMemSizeSoftBodies;
 		PxU64 gpuMemSizeFEMCloths;
-		PxU64 gpuMemSizeHairSystems;
 	};
 
 } // namespace Sc
