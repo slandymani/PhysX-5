@@ -34,7 +34,6 @@
 #include "GuHeightField.h"
 #include "GuConvexMesh.h"
 #include "NpFactory.h"
-#include "GuTetrahedronMesh.h"
 
 namespace physx
 {
@@ -56,12 +55,6 @@ namespace physx
 
 			if (type == PxConcreteType::eBVH)
 				return NpFactory::getInstance().createBVH(data);
-
-			if (type == PxConcreteType::eTETRAHEDRON_MESH)
-				return NpFactory::getInstance().createTetrahedronMesh(data);
-
-			if (type == PxConcreteType::eSOFTBODY_MESH)
-				return NpFactory::getInstance().createSoftBodyMesh(data);
 
 			PxGetFoundation().error(PxErrorCode::eINTERNAL_ERROR, __FILE__, __LINE__, "Inserting object failed: "
 				"Object type not supported for buildObjectFromData.");

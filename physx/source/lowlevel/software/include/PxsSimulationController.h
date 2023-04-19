@@ -36,21 +36,6 @@
 #include "foundation/PxPinnedArray.h"
 #include "foundation/PxUserAllocated.h"
 #include "PxScene.h"
-#include "PxParticleSystem.h"
-
-#if PX_ENABLE_FEATURES_UNDER_CONSTRUCTION
-	#include "PxFLIPParticleSystem.h"
-	#include "PxMPMParticleSystem.h"
-
-	// if these assert fail adjust the type here and in the forward declaration of the #else section just below
-	PX_COMPILE_TIME_ASSERT(sizeof(physx::PxMPMParticleDataFlag::Enum) == sizeof(physx::PxU32));
-	PX_COMPILE_TIME_ASSERT(sizeof(physx::PxSparseGridDataFlag::Enum) == sizeof(physx::PxU32));
-#else
-	namespace PxMPMParticleDataFlag { enum Enum : physx::PxU32; }
-	namespace PxSparseGridDataFlag { enum Enum : physx::PxU32; }
-#endif
-
-#include "PxParticleSolverType.h"
 
 namespace physx
 {
@@ -60,8 +45,6 @@ namespace physx
 		struct Constraint;
 		class FeatherstoneArticulation;
 		struct ArticulationJointCore;
-		class ParticleSystemCore;
-		class ParticleSystem;
 	}
 
 	namespace Cm
@@ -97,7 +80,6 @@ namespace physx
 	class PxsRigidBody;
 	class PxsKernelWranglerManager;
 	class PxsHeapMemoryAllocatorManager;
-	class PxgParticleSystemCore;
 	struct PxConeLimitedConstraint;
 
 	class PxPhysXGpu;
@@ -142,7 +124,6 @@ namespace physx
 		virtual void updateBodies(PxBaseTask* continuation) = 0;
 		virtual void updateShapes(PxBaseTask* continuation) = 0;
 		virtual void preIntegrateAndUpdateBound(PxBaseTask* continuation, const PxVec3 gravity, const PxReal dt) = 0;
-		virtual void updateParticleSystemsAndSoftBodies() = 0;
 		virtual void sortContacts() = 0;
 		virtual void update(PxBitMapPinned& changedHandleMap) = 0;
 		virtual void updateArticulation(Dy::FeatherstoneArticulation* articulation, const PxNodeIndex& nodeIndex) = 0;
@@ -171,34 +152,10 @@ namespace physx
 		virtual void	reserve(const PxU32 nbBodies) = 0;
 
 		virtual PxU32   getArticulationRemapIndex(const PxU32 nodeIndex) = 0;
-		//virtual void	setParticleSystemManager(PxgParticleSystemCore* psCore) = 0;
 
 		virtual void	copyArticulationData(void* data, void* index, PxArticulationGpuDataType::Enum dataType, const PxU32 nbCopyArticulations, void* copyEvent) = 0;
 		virtual void	applyArticulationData(void* data, void* index, PxArticulationGpuDataType::Enum dataType, const PxU32 nbUpdatedArticulations, 
 			void* waitEvent, void* signalEvent) = 0;
-
-		//KS - the methods below here should probably be wrapped in if PX_SUPPORT_GPU_PHYSX
-
-		virtual void	copySoftBodyData(void** data, void* dataSizes, void* softBodyIndices, PxSoftBodyDataFlag::Enum flag, const PxU32 nbCopySoftBodies, const PxU32 maxSize, void* copyEvent) = 0;
-		virtual void	applySoftBodyData(void** data, void* dataSizes, void* softBodyIndices, PxSoftBodyDataFlag::Enum flag, const PxU32 nbUpdatedSoftBodies, const PxU32 maxSize, void* applyEvent) = 0;
-		virtual	void	copyContactData(Dy::Context* dyContext, void* data, const PxU32 maxContactPairs, void* numContactPairs, void* copyEvent) = 0;
-		virtual	void	copyBodyData(PxGpuBodyData* data, PxGpuActorPair* index, const PxU32 nbUpdatedActors, void* copyEvent) = 0;
-		virtual	void	applyActorData(void* data, PxGpuActorPair* index, PxActorCacheFlag::Enum flag, const PxU32 nbUpdatedActors, void* waitEvent, void* signalEvent) = 0;
-		
-		virtual void	syncParticleData() = 0;
-
-		virtual void    updateBoundsAndShapes(Bp::AABBManagerBase& aabbManager, const bool useGpuBp, const bool useDirectApi) = 0;
-
-		virtual	void	computeDenseJacobians(const PxIndexDataPair* indices, PxU32 nbIndices, void* computeEvent) = 0;
-		virtual	void	computeGeneralizedMassMatrices(const PxIndexDataPair* indices, PxU32 nbIndices, void* computeEvent) = 0;
-		virtual	void	computeGeneralizedGravityForces(const PxIndexDataPair* indices, PxU32 nbIndices, const PxVec3& gravity, void* computeEvent) = 0;
-		virtual	void	computeCoriolisAndCentrifugalForces(const PxIndexDataPair* indices, PxU32 nbIndices, void* computeEvent) = 0;		
-		virtual void    applyParticleBufferData(const PxU32* indices, const PxGpuParticleBufferIndexPair* indexPairs, const PxParticleBufferFlags* flags, PxU32 nbUpdatedBuffers, void* waitEvent, void* signalEvent) = 0;
-
-		virtual void	flushInsertions() = 0;
-
-		virtual void*	getMPMDataPointer(const Dy::ParticleSystem& psLL, PxMPMParticleDataFlag::Enum flags) = 0;
-		virtual void*	getSparseGridDataPointer(const Dy::ParticleSystem& psLL, PxSparseGridDataFlag::Enum flags, PxParticleSolverType::Enum type) = 0;
 
 	protected:
 		PxsSimulationControllerCallback* mCallback;

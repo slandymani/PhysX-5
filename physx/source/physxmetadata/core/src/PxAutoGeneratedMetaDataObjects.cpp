@@ -48,9 +48,6 @@ const PxTolerancesScale getPxPhysics_TolerancesScale( const PxPhysics* inObj ) {
 PxU32 getPxPhysics_TriangleMeshes( const PxPhysics* inObj, PxTriangleMesh ** outBuffer, PxU32 inBufSize ) { return inObj->getTriangleMeshes( outBuffer, inBufSize ); }
 PxU32 getNbPxPhysics_TriangleMeshes( const PxPhysics* inObj ) { return inObj->getNbTriangleMeshes(  ); }
 PxTriangleMesh * createPxPhysics_TriangleMeshes( PxPhysics* inObj, PxInputStream & inCreateParam ){ return inObj->createTriangleMesh( inCreateParam ); }
-PxU32 getPxPhysics_TetrahedronMeshes( const PxPhysics* inObj, PxTetrahedronMesh ** outBuffer, PxU32 inBufSize ) { return inObj->getTetrahedronMeshes( outBuffer, inBufSize ); }
-PxU32 getNbPxPhysics_TetrahedronMeshes( const PxPhysics* inObj ) { return inObj->getNbTetrahedronMeshes(  ); }
-PxTetrahedronMesh * createPxPhysics_TetrahedronMeshes( PxPhysics* inObj, PxInputStream & inCreateParam ){ return inObj->createTetrahedronMesh( inCreateParam ); }
 PxU32 getPxPhysics_HeightFields( const PxPhysics* inObj, PxHeightField ** outBuffer, PxU32 inBufSize ) { return inObj->getHeightFields( outBuffer, inBufSize ); }
 PxU32 getNbPxPhysics_HeightFields( const PxPhysics* inObj ) { return inObj->getNbHeightFields(  ); }
 PxHeightField * createPxPhysics_HeightFields( PxPhysics* inObj, PxInputStream & inCreateParam ){ return inObj->createHeightField( inCreateParam ); }
@@ -70,19 +67,9 @@ PxU32 getPxPhysics_Shapes( const PxPhysics* inObj, PxShape ** outBuffer, PxU32 i
 PxU32 getNbPxPhysics_Shapes( const PxPhysics* inObj ) { return inObj->getNbShapes(  ); }
 PxU32 getPxPhysics_Materials( const PxPhysics* inObj, PxMaterial ** outBuffer, PxU32 inBufSize ) { return inObj->getMaterials( outBuffer, inBufSize ); }
 PxU32 getNbPxPhysics_Materials( const PxPhysics* inObj ) { return inObj->getNbMaterials(  ); }
-PxU32 getPxPhysics_FEMSoftBodyMaterials( const PxPhysics* inObj, PxFEMSoftBodyMaterial ** outBuffer, PxU32 inBufSize ) { return inObj->getFEMSoftBodyMaterials( outBuffer, inBufSize ); }
-PxU32 getNbPxPhysics_FEMSoftBodyMaterials( const PxPhysics* inObj ) { return inObj->getNbFEMSoftBodyMaterials(  ); }
-PxU32 getPxPhysics_FEMClothMaterials( const PxPhysics* inObj, PxFEMClothMaterial ** outBuffer, PxU32 inBufSize ) { return inObj->getFEMClothMaterials( outBuffer, inBufSize ); }
-PxU32 getNbPxPhysics_FEMClothMaterials( const PxPhysics* inObj ) { return inObj->getNbFEMClothMaterials(  ); }
-PxU32 getPxPhysics_PBDMaterials( const PxPhysics* inObj, PxPBDMaterial ** outBuffer, PxU32 inBufSize ) { return inObj->getPBDMaterials( outBuffer, inBufSize ); }
-PxU32 getNbPxPhysics_PBDMaterials( const PxPhysics* inObj ) { return inObj->getNbPBDMaterials(  ); }
-PxU32 getPxPhysics_CustomMaterials( const PxPhysics* inObj, PxCustomMaterial ** outBuffer, PxU32 inBufSize ) { return inObj->getCustomMaterials( outBuffer, inBufSize ); }
-PxU32 getNbPxPhysics_CustomMaterials( const PxPhysics* inObj ) { return inObj->getNbCustomMaterials(  ); }
-PxCustomMaterial * createPxPhysics_CustomMaterials( PxPhysics* inObj, void * inCreateParam ){ return inObj->createCustomMaterial( inCreateParam ); }
 PX_PHYSX_CORE_API PxPhysicsGeneratedInfo::PxPhysicsGeneratedInfo()
 	: TolerancesScale( "TolerancesScale", getPxPhysics_TolerancesScale)
 	, TriangleMeshes( "TriangleMeshes", getPxPhysics_TriangleMeshes, getNbPxPhysics_TriangleMeshes, createPxPhysics_TriangleMeshes )
-	, TetrahedronMeshes( "TetrahedronMeshes", getPxPhysics_TetrahedronMeshes, getNbPxPhysics_TetrahedronMeshes, createPxPhysics_TetrahedronMeshes )
 	, HeightFields( "HeightFields", getPxPhysics_HeightFields, getNbPxPhysics_HeightFields, createPxPhysics_HeightFields )
 	, ConvexMeshes( "ConvexMeshes", getPxPhysics_ConvexMeshes, getNbPxPhysics_ConvexMeshes, createPxPhysics_ConvexMeshes )
 	, BVHs( "BVHs", getPxPhysics_BVHs, getNbPxPhysics_BVHs, createPxPhysics_BVHs )
@@ -90,10 +77,6 @@ PX_PHYSX_CORE_API PxPhysicsGeneratedInfo::PxPhysicsGeneratedInfo()
 	, Scenes( "Scenes", getPxPhysics_Scenes, getNbPxPhysics_Scenes, createPxPhysics_Scenes )
 	, Shapes( "Shapes", getPxPhysics_Shapes, getNbPxPhysics_Shapes )
 	, Materials( "Materials", getPxPhysics_Materials, getNbPxPhysics_Materials )
-	, FEMSoftBodyMaterials( "FEMSoftBodyMaterials", getPxPhysics_FEMSoftBodyMaterials, getNbPxPhysics_FEMSoftBodyMaterials )
-	, FEMClothMaterials( "FEMClothMaterials", getPxPhysics_FEMClothMaterials, getNbPxPhysics_FEMClothMaterials )
-	, PBDMaterials( "PBDMaterials", getPxPhysics_PBDMaterials, getNbPxPhysics_PBDMaterials )
-	, CustomMaterials( "CustomMaterials", getPxPhysics_CustomMaterials, getNbPxPhysics_CustomMaterials, createPxPhysics_CustomMaterials )
 {}
 PX_PHYSX_CORE_API PxPhysicsGeneratedValues::PxPhysicsGeneratedValues( const PxPhysics* inSource )
 		:TolerancesScale( getPxPhysics_TolerancesScale( inSource ) )
@@ -155,116 +138,6 @@ PX_PHYSX_CORE_API PxMaterialGeneratedValues::PxMaterialGeneratedValues( const Px
 		,FrictionCombineMode( getPxMaterial_FrictionCombineMode( inSource ) )
 		,RestitutionCombineMode( getPxMaterial_RestitutionCombineMode( inSource ) )
 		,ConcreteTypeName( getPxMaterial_ConcreteTypeName( inSource ) )
-{
-	PX_UNUSED(inSource);
-}
-void setPxFEMMaterial_YoungsModulus( PxFEMMaterial* inObj, PxReal inArg){ inObj->setYoungsModulus( inArg ); }
-PxReal getPxFEMMaterial_YoungsModulus( const PxFEMMaterial* inObj ) { return inObj->getYoungsModulus(); }
-void setPxFEMMaterial_Poissons( PxFEMMaterial* inObj, PxReal inArg){ inObj->setPoissons( inArg ); }
-PxReal getPxFEMMaterial_Poissons( const PxFEMMaterial* inObj ) { return inObj->getPoissons(); }
-void setPxFEMMaterial_DynamicFriction( PxFEMMaterial* inObj, PxReal inArg){ inObj->setDynamicFriction( inArg ); }
-PxReal getPxFEMMaterial_DynamicFriction( const PxFEMMaterial* inObj ) { return inObj->getDynamicFriction(); }
-PX_PHYSX_CORE_API PxFEMMaterialGeneratedInfo::PxFEMMaterialGeneratedInfo()
-	: YoungsModulus( "YoungsModulus", setPxFEMMaterial_YoungsModulus, getPxFEMMaterial_YoungsModulus)
-	, Poissons( "Poissons", setPxFEMMaterial_Poissons, getPxFEMMaterial_Poissons)
-	, DynamicFriction( "DynamicFriction", setPxFEMMaterial_DynamicFriction, getPxFEMMaterial_DynamicFriction)
-{}
-PX_PHYSX_CORE_API PxFEMMaterialGeneratedValues::PxFEMMaterialGeneratedValues( const PxFEMMaterial* inSource )
-		:PxBaseMaterialGeneratedValues( inSource )
-		,YoungsModulus( getPxFEMMaterial_YoungsModulus( inSource ) )
-		,Poissons( getPxFEMMaterial_Poissons( inSource ) )
-		,DynamicFriction( getPxFEMMaterial_DynamicFriction( inSource ) )
-{
-	PX_UNUSED(inSource);
-}
-void setPxFEMSoftBodyMaterial_Damping( PxFEMSoftBodyMaterial* inObj, PxReal inArg){ inObj->setDamping( inArg ); }
-PxReal getPxFEMSoftBodyMaterial_Damping( const PxFEMSoftBodyMaterial* inObj ) { return inObj->getDamping(); }
-void setPxFEMSoftBodyMaterial_DampingScale( PxFEMSoftBodyMaterial* inObj, PxReal inArg){ inObj->setDampingScale( inArg ); }
-PxReal getPxFEMSoftBodyMaterial_DampingScale( const PxFEMSoftBodyMaterial* inObj ) { return inObj->getDampingScale(); }
-const char * getPxFEMSoftBodyMaterial_ConcreteTypeName( const PxFEMSoftBodyMaterial* inObj ) { return inObj->getConcreteTypeName(); }
-PX_PHYSX_CORE_API PxFEMSoftBodyMaterialGeneratedInfo::PxFEMSoftBodyMaterialGeneratedInfo()
-	: Damping( "Damping", setPxFEMSoftBodyMaterial_Damping, getPxFEMSoftBodyMaterial_Damping)
-	, DampingScale( "DampingScale", setPxFEMSoftBodyMaterial_DampingScale, getPxFEMSoftBodyMaterial_DampingScale)
-	, ConcreteTypeName( "ConcreteTypeName", getPxFEMSoftBodyMaterial_ConcreteTypeName)
-{}
-PX_PHYSX_CORE_API PxFEMSoftBodyMaterialGeneratedValues::PxFEMSoftBodyMaterialGeneratedValues( const PxFEMSoftBodyMaterial* inSource )
-		:PxFEMMaterialGeneratedValues( inSource )
-		,Damping( getPxFEMSoftBodyMaterial_Damping( inSource ) )
-		,DampingScale( getPxFEMSoftBodyMaterial_DampingScale( inSource ) )
-		,ConcreteTypeName( getPxFEMSoftBodyMaterial_ConcreteTypeName( inSource ) )
-{
-	PX_UNUSED(inSource);
-}
-void setPxParticleMaterial_Friction( PxParticleMaterial* inObj, PxReal inArg){ inObj->setFriction( inArg ); }
-PxReal getPxParticleMaterial_Friction( const PxParticleMaterial* inObj ) { return inObj->getFriction(); }
-void setPxParticleMaterial_Damping( PxParticleMaterial* inObj, PxReal inArg){ inObj->setDamping( inArg ); }
-PxReal getPxParticleMaterial_Damping( const PxParticleMaterial* inObj ) { return inObj->getDamping(); }
-void setPxParticleMaterial_Adhesion( PxParticleMaterial* inObj, PxReal inArg){ inObj->setAdhesion( inArg ); }
-PxReal getPxParticleMaterial_Adhesion( const PxParticleMaterial* inObj ) { return inObj->getAdhesion(); }
-void setPxParticleMaterial_GravityScale( PxParticleMaterial* inObj, PxReal inArg){ inObj->setGravityScale( inArg ); }
-PxReal getPxParticleMaterial_GravityScale( const PxParticleMaterial* inObj ) { return inObj->getGravityScale(); }
-void setPxParticleMaterial_AdhesionRadiusScale( PxParticleMaterial* inObj, PxReal inArg){ inObj->setAdhesionRadiusScale( inArg ); }
-PxReal getPxParticleMaterial_AdhesionRadiusScale( const PxParticleMaterial* inObj ) { return inObj->getAdhesionRadiusScale(); }
-PX_PHYSX_CORE_API PxParticleMaterialGeneratedInfo::PxParticleMaterialGeneratedInfo()
-	: Friction( "Friction", setPxParticleMaterial_Friction, getPxParticleMaterial_Friction)
-	, Damping( "Damping", setPxParticleMaterial_Damping, getPxParticleMaterial_Damping)
-	, Adhesion( "Adhesion", setPxParticleMaterial_Adhesion, getPxParticleMaterial_Adhesion)
-	, GravityScale( "GravityScale", setPxParticleMaterial_GravityScale, getPxParticleMaterial_GravityScale)
-	, AdhesionRadiusScale( "AdhesionRadiusScale", setPxParticleMaterial_AdhesionRadiusScale, getPxParticleMaterial_AdhesionRadiusScale)
-{}
-PX_PHYSX_CORE_API PxParticleMaterialGeneratedValues::PxParticleMaterialGeneratedValues( const PxParticleMaterial* inSource )
-		:PxBaseMaterialGeneratedValues( inSource )
-		,Friction( getPxParticleMaterial_Friction( inSource ) )
-		,Damping( getPxParticleMaterial_Damping( inSource ) )
-		,Adhesion( getPxParticleMaterial_Adhesion( inSource ) )
-		,GravityScale( getPxParticleMaterial_GravityScale( inSource ) )
-		,AdhesionRadiusScale( getPxParticleMaterial_AdhesionRadiusScale( inSource ) )
-{
-	PX_UNUSED(inSource);
-}
-void setPxPBDMaterial_Viscosity( PxPBDMaterial* inObj, PxReal inArg){ inObj->setViscosity( inArg ); }
-PxReal getPxPBDMaterial_Viscosity( const PxPBDMaterial* inObj ) { return inObj->getViscosity(); }
-void setPxPBDMaterial_VorticityConfinement( PxPBDMaterial* inObj, PxReal inArg){ inObj->setVorticityConfinement( inArg ); }
-PxReal getPxPBDMaterial_VorticityConfinement( const PxPBDMaterial* inObj ) { return inObj->getVorticityConfinement(); }
-void setPxPBDMaterial_SurfaceTension( PxPBDMaterial* inObj, PxReal inArg){ inObj->setSurfaceTension( inArg ); }
-PxReal getPxPBDMaterial_SurfaceTension( const PxPBDMaterial* inObj ) { return inObj->getSurfaceTension(); }
-void setPxPBDMaterial_Cohesion( PxPBDMaterial* inObj, PxReal inArg){ inObj->setCohesion( inArg ); }
-PxReal getPxPBDMaterial_Cohesion( const PxPBDMaterial* inObj ) { return inObj->getCohesion(); }
-void setPxPBDMaterial_Lift( PxPBDMaterial* inObj, PxReal inArg){ inObj->setLift( inArg ); }
-PxReal getPxPBDMaterial_Lift( const PxPBDMaterial* inObj ) { return inObj->getLift(); }
-void setPxPBDMaterial_Drag( PxPBDMaterial* inObj, PxReal inArg){ inObj->setDrag( inArg ); }
-PxReal getPxPBDMaterial_Drag( const PxPBDMaterial* inObj ) { return inObj->getDrag(); }
-void setPxPBDMaterial_CFLCoefficient( PxPBDMaterial* inObj, PxReal inArg){ inObj->setCFLCoefficient( inArg ); }
-PxReal getPxPBDMaterial_CFLCoefficient( const PxPBDMaterial* inObj ) { return inObj->getCFLCoefficient(); }
-void setPxPBDMaterial_ParticleFrictionScale( PxPBDMaterial* inObj, PxReal inArg){ inObj->setParticleFrictionScale( inArg ); }
-PxReal getPxPBDMaterial_ParticleFrictionScale( const PxPBDMaterial* inObj ) { return inObj->getParticleFrictionScale(); }
-void setPxPBDMaterial_ParticleAdhesionScale( PxPBDMaterial* inObj, PxReal inArg){ inObj->setParticleAdhesionScale( inArg ); }
-PxReal getPxPBDMaterial_ParticleAdhesionScale( const PxPBDMaterial* inObj ) { return inObj->getParticleAdhesionScale(); }
-const char * getPxPBDMaterial_ConcreteTypeName( const PxPBDMaterial* inObj ) { return inObj->getConcreteTypeName(); }
-PX_PHYSX_CORE_API PxPBDMaterialGeneratedInfo::PxPBDMaterialGeneratedInfo()
-	: Viscosity( "Viscosity", setPxPBDMaterial_Viscosity, getPxPBDMaterial_Viscosity)
-	, VorticityConfinement( "VorticityConfinement", setPxPBDMaterial_VorticityConfinement, getPxPBDMaterial_VorticityConfinement)
-	, SurfaceTension( "SurfaceTension", setPxPBDMaterial_SurfaceTension, getPxPBDMaterial_SurfaceTension)
-	, Cohesion( "Cohesion", setPxPBDMaterial_Cohesion, getPxPBDMaterial_Cohesion)
-	, Lift( "Lift", setPxPBDMaterial_Lift, getPxPBDMaterial_Lift)
-	, Drag( "Drag", setPxPBDMaterial_Drag, getPxPBDMaterial_Drag)
-	, CFLCoefficient( "CFLCoefficient", setPxPBDMaterial_CFLCoefficient, getPxPBDMaterial_CFLCoefficient)
-	, ParticleFrictionScale( "ParticleFrictionScale", setPxPBDMaterial_ParticleFrictionScale, getPxPBDMaterial_ParticleFrictionScale)
-	, ParticleAdhesionScale( "ParticleAdhesionScale", setPxPBDMaterial_ParticleAdhesionScale, getPxPBDMaterial_ParticleAdhesionScale)
-	, ConcreteTypeName( "ConcreteTypeName", getPxPBDMaterial_ConcreteTypeName)
-{}
-PX_PHYSX_CORE_API PxPBDMaterialGeneratedValues::PxPBDMaterialGeneratedValues( const PxPBDMaterial* inSource )
-		:PxParticleMaterialGeneratedValues( inSource )
-		,Viscosity( getPxPBDMaterial_Viscosity( inSource ) )
-		,VorticityConfinement( getPxPBDMaterial_VorticityConfinement( inSource ) )
-		,SurfaceTension( getPxPBDMaterial_SurfaceTension( inSource ) )
-		,Cohesion( getPxPBDMaterial_Cohesion( inSource ) )
-		,Lift( getPxPBDMaterial_Lift( inSource ) )
-		,Drag( getPxPBDMaterial_Drag( inSource ) )
-		,CFLCoefficient( getPxPBDMaterial_CFLCoefficient( inSource ) )
-		,ParticleFrictionScale( getPxPBDMaterial_ParticleFrictionScale( inSource ) )
-		,ParticleAdhesionScale( getPxPBDMaterial_ParticleAdhesionScale( inSource ) )
-		,ConcreteTypeName( getPxPBDMaterial_ConcreteTypeName( inSource ) )
 {
 	PX_UNUSED(inSource);
 }
@@ -925,7 +798,6 @@ PxSceneLimits getPxScene_Limits( const PxScene* inObj ) { return inObj->getLimit
 PxU32 getPxScene_Timestamp( const PxScene* inObj ) { return inObj->getTimestamp(); }
 PxU32 getPxScene_Actors( const PxScene* inObj, PxActorTypeFlags inFilter, PxActor ** outBuffer, PxU32 inBufSize ) { return inObj->getActors( inFilter, outBuffer, inBufSize ); }
 PxU32 getNbPxScene_Actors( const PxScene* inObj, PxActorTypeFlags inFilter ) { return inObj->getNbActors( inFilter ); }
-PxU32 getPxScene_SoftBodies( const PxScene* inObj, PxSoftBody ** outBuffer, PxU32 inBufSize ) { return inObj->getSoftBodies( outBuffer, inBufSize ); }
 PxU32 getNbPxScene_SoftBodies( const PxScene* inObj ) { return inObj->getNbSoftBodies(  ); }
 PxU32 getPxScene_Articulations( const PxScene* inObj, PxArticulationReducedCoordinate ** outBuffer, PxU32 inBufSize ) { return inObj->getArticulations( outBuffer, inBufSize ); }
 PxU32 getNbPxScene_Articulations( const PxScene* inObj ) { return inObj->getNbArticulations(  ); }
@@ -934,7 +806,6 @@ PxU32 getNbPxScene_Constraints( const PxScene* inObj ) { return inObj->getNbCons
 PxU32 getPxScene_Aggregates( const PxScene* inObj, PxAggregate ** outBuffer, PxU32 inBufSize ) { return inObj->getAggregates( outBuffer, inBufSize ); }
 PxU32 getNbPxScene_Aggregates( const PxScene* inObj ) { return inObj->getNbAggregates(  ); }
 PxCpuDispatcher * getPxScene_CpuDispatcher( const PxScene* inObj ) { return inObj->getCpuDispatcher(); }
-PxCudaContextManager * getPxScene_CudaContextManager( const PxScene* inObj ) { return inObj->getCudaContextManager(); }
 void setPxScene_SimulationEventCallback( PxScene* inObj, PxSimulationEventCallback * inArg){ inObj->setSimulationEventCallback( inArg ); }
 PxSimulationEventCallback * getPxScene_SimulationEventCallback( const PxScene* inObj ) { return inObj->getSimulationEventCallback(); }
 void setPxScene_ContactModifyCallback( PxScene* inObj, PxContactModifyCallback * inArg){ inObj->setContactModifyCallback( inArg ); }
@@ -1065,17 +936,6 @@ PX_PHYSX_CORE_API PxSceneGeneratedValues::PxSceneGeneratedValues( const PxScene*
 {
 	PX_UNUSED(inSource);
 	inSource->getSimulationStatistics(SimulationStatistics);
-}
-inline PxTetrahedronMesh * getPxTetrahedronMeshGeometryTetrahedronMesh( const PxTetrahedronMeshGeometry* inOwner ) { return inOwner->tetrahedronMesh; }
-inline void setPxTetrahedronMeshGeometryTetrahedronMesh( PxTetrahedronMeshGeometry* inOwner, PxTetrahedronMesh * inData) { inOwner->tetrahedronMesh = inData; }
-PX_PHYSX_CORE_API PxTetrahedronMeshGeometryGeneratedInfo::PxTetrahedronMeshGeometryGeneratedInfo()
-	: TetrahedronMesh( "TetrahedronMesh", setPxTetrahedronMeshGeometryTetrahedronMesh, getPxTetrahedronMeshGeometryTetrahedronMesh )
-{}
-PX_PHYSX_CORE_API PxTetrahedronMeshGeometryGeneratedValues::PxTetrahedronMeshGeometryGeneratedValues( const PxTetrahedronMeshGeometry* inSource )
-		:PxGeometryGeneratedValues( inSource )
-		,TetrahedronMesh( inSource->tetrahedronMesh )
-{
-	PX_UNUSED(inSource);
 }
 PX_PHYSX_CORE_API PxCustomGeometryGeneratedInfo::PxCustomGeometryGeneratedInfo()
 {}
@@ -1237,8 +1097,6 @@ inline PxSceneFlags getPxSceneDescFlags( const PxSceneDesc* inOwner ) { return i
 inline void setPxSceneDescFlags( PxSceneDesc* inOwner, PxSceneFlags inData) { inOwner->flags = inData; }
 inline PxCpuDispatcher * getPxSceneDescCpuDispatcher( const PxSceneDesc* inOwner ) { return inOwner->cpuDispatcher; }
 inline void setPxSceneDescCpuDispatcher( PxSceneDesc* inOwner, PxCpuDispatcher * inData) { inOwner->cpuDispatcher = inData; }
-inline PxCudaContextManager * getPxSceneDescCudaContextManager( const PxSceneDesc* inOwner ) { return inOwner->cudaContextManager; }
-inline void setPxSceneDescCudaContextManager( PxSceneDesc* inOwner, PxCudaContextManager * inData) { inOwner->cudaContextManager = inData; }
 inline void * getPxSceneDescUserData( const PxSceneDesc* inOwner ) { return inOwner->userData; }
 inline void setPxSceneDescUserData( PxSceneDesc* inOwner, void * inData) { inOwner->userData = inData; }
 inline PxU32 getPxSceneDescSolverBatchSize( const PxSceneDesc* inOwner ) { return inOwner->solverBatchSize; }
@@ -1362,8 +1220,6 @@ inline PxBroadPhaseType::Enum getPxBroadPhaseDescMType( const PxBroadPhaseDesc* 
 inline void setPxBroadPhaseDescMType( PxBroadPhaseDesc* inOwner, PxBroadPhaseType::Enum inData) { inOwner->mType = inData; }
 inline PxU64 getPxBroadPhaseDescMContextID( const PxBroadPhaseDesc* inOwner ) { return inOwner->mContextID; }
 inline void setPxBroadPhaseDescMContextID( PxBroadPhaseDesc* inOwner, PxU64 inData) { inOwner->mContextID = inData; }
-inline PxCudaContextManager * getPxBroadPhaseDescMContextManager( const PxBroadPhaseDesc* inOwner ) { return inOwner->mContextManager; }
-inline void setPxBroadPhaseDescMContextManager( PxBroadPhaseDesc* inOwner, PxCudaContextManager * inData) { inOwner->mContextManager = inData; }
 inline PxU32 getPxBroadPhaseDescMFoundLostPairsCapacity( const PxBroadPhaseDesc* inOwner ) { return inOwner->mFoundLostPairsCapacity; }
 inline void setPxBroadPhaseDescMFoundLostPairsCapacity( PxBroadPhaseDesc* inOwner, PxU32 inData) { inOwner->mFoundLostPairsCapacity = inData; }
 inline _Bool getPxBroadPhaseDescMDiscardStaticVsKinematic( const PxBroadPhaseDesc* inOwner ) { return inOwner->mDiscardStaticVsKinematic; }
@@ -1443,12 +1299,6 @@ inline PxU32 getPxgDynamicsMemoryConfigFoundLostAggregatePairsCapacity( const Px
 inline void setPxgDynamicsMemoryConfigFoundLostAggregatePairsCapacity( PxgDynamicsMemoryConfig* inOwner, PxU32 inData) { inOwner->foundLostAggregatePairsCapacity = inData; }
 inline PxU32 getPxgDynamicsMemoryConfigTotalAggregatePairsCapacity( const PxgDynamicsMemoryConfig* inOwner ) { return inOwner->totalAggregatePairsCapacity; }
 inline void setPxgDynamicsMemoryConfigTotalAggregatePairsCapacity( PxgDynamicsMemoryConfig* inOwner, PxU32 inData) { inOwner->totalAggregatePairsCapacity = inData; }
-inline PxU32 getPxgDynamicsMemoryConfigMaxSoftBodyContacts( const PxgDynamicsMemoryConfig* inOwner ) { return inOwner->maxSoftBodyContacts; }
-inline void setPxgDynamicsMemoryConfigMaxSoftBodyContacts( PxgDynamicsMemoryConfig* inOwner, PxU32 inData) { inOwner->maxSoftBodyContacts = inData; }
-inline PxU32 getPxgDynamicsMemoryConfigMaxFemClothContacts( const PxgDynamicsMemoryConfig* inOwner ) { return inOwner->maxFemClothContacts; }
-inline void setPxgDynamicsMemoryConfigMaxFemClothContacts( PxgDynamicsMemoryConfig* inOwner, PxU32 inData) { inOwner->maxFemClothContacts = inData; }
-inline PxU32 getPxgDynamicsMemoryConfigMaxParticleContacts( const PxgDynamicsMemoryConfig* inOwner ) { return inOwner->maxParticleContacts; }
-inline void setPxgDynamicsMemoryConfigMaxParticleContacts( PxgDynamicsMemoryConfig* inOwner, PxU32 inData) { inOwner->maxParticleContacts = inData; }
 inline PxU32 getPxgDynamicsMemoryConfigCollisionStackSize( const PxgDynamicsMemoryConfig* inOwner ) { return inOwner->collisionStackSize; }
 inline void setPxgDynamicsMemoryConfigCollisionStackSize( PxgDynamicsMemoryConfig* inOwner, PxU32 inData) { inOwner->collisionStackSize = inData; }
 PX_PHYSX_CORE_API PxgDynamicsMemoryConfigGeneratedInfo::PxgDynamicsMemoryConfigGeneratedInfo()
@@ -1460,9 +1310,6 @@ PX_PHYSX_CORE_API PxgDynamicsMemoryConfigGeneratedInfo::PxgDynamicsMemoryConfigG
 	, FoundLostPairsCapacity( "FoundLostPairsCapacity", setPxgDynamicsMemoryConfigFoundLostPairsCapacity, getPxgDynamicsMemoryConfigFoundLostPairsCapacity )
 	, FoundLostAggregatePairsCapacity( "FoundLostAggregatePairsCapacity", setPxgDynamicsMemoryConfigFoundLostAggregatePairsCapacity, getPxgDynamicsMemoryConfigFoundLostAggregatePairsCapacity )
 	, TotalAggregatePairsCapacity( "TotalAggregatePairsCapacity", setPxgDynamicsMemoryConfigTotalAggregatePairsCapacity, getPxgDynamicsMemoryConfigTotalAggregatePairsCapacity )
-	, MaxSoftBodyContacts( "MaxSoftBodyContacts", setPxgDynamicsMemoryConfigMaxSoftBodyContacts, getPxgDynamicsMemoryConfigMaxSoftBodyContacts )
-	, MaxFemClothContacts( "MaxFemClothContacts", setPxgDynamicsMemoryConfigMaxFemClothContacts, getPxgDynamicsMemoryConfigMaxFemClothContacts )
-	, MaxParticleContacts( "MaxParticleContacts", setPxgDynamicsMemoryConfigMaxParticleContacts, getPxgDynamicsMemoryConfigMaxParticleContacts )
 	, CollisionStackSize( "CollisionStackSize", setPxgDynamicsMemoryConfigCollisionStackSize, getPxgDynamicsMemoryConfigCollisionStackSize )
 {}
 PX_PHYSX_CORE_API PxgDynamicsMemoryConfigGeneratedValues::PxgDynamicsMemoryConfigGeneratedValues( const PxgDynamicsMemoryConfig* inSource )
@@ -1474,9 +1321,6 @@ PX_PHYSX_CORE_API PxgDynamicsMemoryConfigGeneratedValues::PxgDynamicsMemoryConfi
 		,FoundLostPairsCapacity( inSource->foundLostPairsCapacity )
 		,FoundLostAggregatePairsCapacity( inSource->foundLostAggregatePairsCapacity )
 		,TotalAggregatePairsCapacity( inSource->totalAggregatePairsCapacity )
-		,MaxSoftBodyContacts( inSource->maxSoftBodyContacts )
-		,MaxFemClothContacts( inSource->maxFemClothContacts )
-		,MaxParticleContacts( inSource->maxParticleContacts )
 		,CollisionStackSize( inSource->collisionStackSize )
 {
 	PX_UNUSED(inSource);
@@ -1521,40 +1365,6 @@ inline PxU32 getPxSimulationStatisticsNbLostTouches( const PxSimulationStatistic
 inline void setPxSimulationStatisticsNbLostTouches( PxSimulationStatistics* inOwner, PxU32 inData) { inOwner->nbLostTouches = inData; }
 inline PxU32 getPxSimulationStatisticsNbPartitions( const PxSimulationStatistics* inOwner ) { return inOwner->nbPartitions; }
 inline void setPxSimulationStatisticsNbPartitions( PxSimulationStatistics* inOwner, PxU32 inData) { inOwner->nbPartitions = inData; }
-inline PxU64 getPxSimulationStatisticsGpuMemParticles( const PxSimulationStatistics* inOwner ) { return inOwner->gpuMemParticles; }
-inline void setPxSimulationStatisticsGpuMemParticles( PxSimulationStatistics* inOwner, PxU64 inData) { inOwner->gpuMemParticles = inData; }
-inline PxU64 getPxSimulationStatisticsGpuMemSoftBodies( const PxSimulationStatistics* inOwner ) { return inOwner->gpuMemSoftBodies; }
-inline void setPxSimulationStatisticsGpuMemSoftBodies( PxSimulationStatistics* inOwner, PxU64 inData) { inOwner->gpuMemSoftBodies = inData; }
-inline PxU64 getPxSimulationStatisticsGpuMemFEMCloths( const PxSimulationStatistics* inOwner ) { return inOwner->gpuMemFEMCloths; }
-inline void setPxSimulationStatisticsGpuMemFEMCloths( PxSimulationStatistics* inOwner, PxU64 inData) { inOwner->gpuMemFEMCloths = inData; }
-inline PxU64 getPxSimulationStatisticsGpuMemHeap( const PxSimulationStatistics* inOwner ) { return inOwner->gpuMemHeap; }
-inline void setPxSimulationStatisticsGpuMemHeap( PxSimulationStatistics* inOwner, PxU64 inData) { inOwner->gpuMemHeap = inData; }
-inline PxU64 getPxSimulationStatisticsGpuMemHeapBroadPhase( const PxSimulationStatistics* inOwner ) { return inOwner->gpuMemHeapBroadPhase; }
-inline void setPxSimulationStatisticsGpuMemHeapBroadPhase( PxSimulationStatistics* inOwner, PxU64 inData) { inOwner->gpuMemHeapBroadPhase = inData; }
-inline PxU64 getPxSimulationStatisticsGpuMemHeapNarrowPhase( const PxSimulationStatistics* inOwner ) { return inOwner->gpuMemHeapNarrowPhase; }
-inline void setPxSimulationStatisticsGpuMemHeapNarrowPhase( PxSimulationStatistics* inOwner, PxU64 inData) { inOwner->gpuMemHeapNarrowPhase = inData; }
-inline PxU64 getPxSimulationStatisticsGpuMemHeapSolver( const PxSimulationStatistics* inOwner ) { return inOwner->gpuMemHeapSolver; }
-inline void setPxSimulationStatisticsGpuMemHeapSolver( PxSimulationStatistics* inOwner, PxU64 inData) { inOwner->gpuMemHeapSolver = inData; }
-inline PxU64 getPxSimulationStatisticsGpuMemHeapArticulation( const PxSimulationStatistics* inOwner ) { return inOwner->gpuMemHeapArticulation; }
-inline void setPxSimulationStatisticsGpuMemHeapArticulation( PxSimulationStatistics* inOwner, PxU64 inData) { inOwner->gpuMemHeapArticulation = inData; }
-inline PxU64 getPxSimulationStatisticsGpuMemHeapSimulation( const PxSimulationStatistics* inOwner ) { return inOwner->gpuMemHeapSimulation; }
-inline void setPxSimulationStatisticsGpuMemHeapSimulation( PxSimulationStatistics* inOwner, PxU64 inData) { inOwner->gpuMemHeapSimulation = inData; }
-inline PxU64 getPxSimulationStatisticsGpuMemHeapSimulationArticulation( const PxSimulationStatistics* inOwner ) { return inOwner->gpuMemHeapSimulationArticulation; }
-inline void setPxSimulationStatisticsGpuMemHeapSimulationArticulation( PxSimulationStatistics* inOwner, PxU64 inData) { inOwner->gpuMemHeapSimulationArticulation = inData; }
-inline PxU64 getPxSimulationStatisticsGpuMemHeapSimulationParticles( const PxSimulationStatistics* inOwner ) { return inOwner->gpuMemHeapSimulationParticles; }
-inline void setPxSimulationStatisticsGpuMemHeapSimulationParticles( PxSimulationStatistics* inOwner, PxU64 inData) { inOwner->gpuMemHeapSimulationParticles = inData; }
-inline PxU64 getPxSimulationStatisticsGpuMemHeapSimulationSoftBody( const PxSimulationStatistics* inOwner ) { return inOwner->gpuMemHeapSimulationSoftBody; }
-inline void setPxSimulationStatisticsGpuMemHeapSimulationSoftBody( PxSimulationStatistics* inOwner, PxU64 inData) { inOwner->gpuMemHeapSimulationSoftBody = inData; }
-inline PxU64 getPxSimulationStatisticsGpuMemHeapSimulationFEMCloth( const PxSimulationStatistics* inOwner ) { return inOwner->gpuMemHeapSimulationFEMCloth; }
-inline void setPxSimulationStatisticsGpuMemHeapSimulationFEMCloth( PxSimulationStatistics* inOwner, PxU64 inData) { inOwner->gpuMemHeapSimulationFEMCloth = inData; }
-inline PxU64 getPxSimulationStatisticsGpuMemHeapParticles( const PxSimulationStatistics* inOwner ) { return inOwner->gpuMemHeapParticles; }
-inline void setPxSimulationStatisticsGpuMemHeapParticles( PxSimulationStatistics* inOwner, PxU64 inData) { inOwner->gpuMemHeapParticles = inData; }
-inline PxU64 getPxSimulationStatisticsGpuMemHeapSoftBodies( const PxSimulationStatistics* inOwner ) { return inOwner->gpuMemHeapSoftBodies; }
-inline void setPxSimulationStatisticsGpuMemHeapSoftBodies( PxSimulationStatistics* inOwner, PxU64 inData) { inOwner->gpuMemHeapSoftBodies = inData; }
-inline PxU64 getPxSimulationStatisticsGpuMemHeapFEMCloths( const PxSimulationStatistics* inOwner ) { return inOwner->gpuMemHeapFEMCloths; }
-inline void setPxSimulationStatisticsGpuMemHeapFEMCloths( PxSimulationStatistics* inOwner, PxU64 inData) { inOwner->gpuMemHeapFEMCloths = inData; }
-inline PxU64 getPxSimulationStatisticsGpuMemHeapOther( const PxSimulationStatistics* inOwner ) { return inOwner->gpuMemHeapOther; }
-inline void setPxSimulationStatisticsGpuMemHeapOther( PxSimulationStatistics* inOwner, PxU64 inData) { inOwner->gpuMemHeapOther = inData; }
 inline PxU32 getPxSimulationStatisticsNbBroadPhaseAdds( const PxSimulationStatistics* inOwner ) { return inOwner->nbBroadPhaseAdds; }
 inline void setPxSimulationStatisticsNbBroadPhaseAdds( PxSimulationStatistics* inOwner, PxU32 inData) { inOwner->nbBroadPhaseAdds = inData; }
 inline PxU32 getPxSimulationStatisticsNbBroadPhaseRemoves( const PxSimulationStatistics* inOwner ) { return inOwner->nbBroadPhaseRemoves; }
@@ -1580,23 +1390,6 @@ PX_PHYSX_CORE_API PxSimulationStatisticsGeneratedInfo::PxSimulationStatisticsGen
 	, NbNewTouches( "NbNewTouches", setPxSimulationStatisticsNbNewTouches, getPxSimulationStatisticsNbNewTouches )
 	, NbLostTouches( "NbLostTouches", setPxSimulationStatisticsNbLostTouches, getPxSimulationStatisticsNbLostTouches )
 	, NbPartitions( "NbPartitions", setPxSimulationStatisticsNbPartitions, getPxSimulationStatisticsNbPartitions )
-	, GpuMemParticles( "GpuMemParticles", setPxSimulationStatisticsGpuMemParticles, getPxSimulationStatisticsGpuMemParticles )
-	, GpuMemSoftBodies( "GpuMemSoftBodies", setPxSimulationStatisticsGpuMemSoftBodies, getPxSimulationStatisticsGpuMemSoftBodies )
-	, GpuMemFEMCloths( "GpuMemFEMCloths", setPxSimulationStatisticsGpuMemFEMCloths, getPxSimulationStatisticsGpuMemFEMCloths )
-	, GpuMemHeap( "GpuMemHeap", setPxSimulationStatisticsGpuMemHeap, getPxSimulationStatisticsGpuMemHeap )
-	, GpuMemHeapBroadPhase( "GpuMemHeapBroadPhase", setPxSimulationStatisticsGpuMemHeapBroadPhase, getPxSimulationStatisticsGpuMemHeapBroadPhase )
-	, GpuMemHeapNarrowPhase( "GpuMemHeapNarrowPhase", setPxSimulationStatisticsGpuMemHeapNarrowPhase, getPxSimulationStatisticsGpuMemHeapNarrowPhase )
-	, GpuMemHeapSolver( "GpuMemHeapSolver", setPxSimulationStatisticsGpuMemHeapSolver, getPxSimulationStatisticsGpuMemHeapSolver )
-	, GpuMemHeapArticulation( "GpuMemHeapArticulation", setPxSimulationStatisticsGpuMemHeapArticulation, getPxSimulationStatisticsGpuMemHeapArticulation )
-	, GpuMemHeapSimulation( "GpuMemHeapSimulation", setPxSimulationStatisticsGpuMemHeapSimulation, getPxSimulationStatisticsGpuMemHeapSimulation )
-	, GpuMemHeapSimulationArticulation( "GpuMemHeapSimulationArticulation", setPxSimulationStatisticsGpuMemHeapSimulationArticulation, getPxSimulationStatisticsGpuMemHeapSimulationArticulation )
-	, GpuMemHeapSimulationParticles( "GpuMemHeapSimulationParticles", setPxSimulationStatisticsGpuMemHeapSimulationParticles, getPxSimulationStatisticsGpuMemHeapSimulationParticles )
-	, GpuMemHeapSimulationSoftBody( "GpuMemHeapSimulationSoftBody", setPxSimulationStatisticsGpuMemHeapSimulationSoftBody, getPxSimulationStatisticsGpuMemHeapSimulationSoftBody )
-	, GpuMemHeapSimulationFEMCloth( "GpuMemHeapSimulationFEMCloth", setPxSimulationStatisticsGpuMemHeapSimulationFEMCloth, getPxSimulationStatisticsGpuMemHeapSimulationFEMCloth )
-	, GpuMemHeapParticles( "GpuMemHeapParticles", setPxSimulationStatisticsGpuMemHeapParticles, getPxSimulationStatisticsGpuMemHeapParticles )
-	, GpuMemHeapSoftBodies( "GpuMemHeapSoftBodies", setPxSimulationStatisticsGpuMemHeapSoftBodies, getPxSimulationStatisticsGpuMemHeapSoftBodies )
-	, GpuMemHeapFEMCloths( "GpuMemHeapFEMCloths", setPxSimulationStatisticsGpuMemHeapFEMCloths, getPxSimulationStatisticsGpuMemHeapFEMCloths )
-	, GpuMemHeapOther( "GpuMemHeapOther", setPxSimulationStatisticsGpuMemHeapOther, getPxSimulationStatisticsGpuMemHeapOther )
 	, NbBroadPhaseAdds( "NbBroadPhaseAdds", setPxSimulationStatisticsNbBroadPhaseAdds, getPxSimulationStatisticsNbBroadPhaseAdds )
 	, NbBroadPhaseRemoves( "NbBroadPhaseRemoves", setPxSimulationStatisticsNbBroadPhaseRemoves, getPxSimulationStatisticsNbBroadPhaseRemoves )
 {}
@@ -1621,23 +1414,6 @@ PX_PHYSX_CORE_API PxSimulationStatisticsGeneratedValues::PxSimulationStatisticsG
 		,NbNewTouches( inSource->nbNewTouches )
 		,NbLostTouches( inSource->nbLostTouches )
 		,NbPartitions( inSource->nbPartitions )
-		,GpuMemParticles( inSource->gpuMemParticles )
-		,GpuMemSoftBodies( inSource->gpuMemSoftBodies )
-		,GpuMemFEMCloths( inSource->gpuMemFEMCloths )
-		,GpuMemHeap( inSource->gpuMemHeap )
-		,GpuMemHeapBroadPhase( inSource->gpuMemHeapBroadPhase )
-		,GpuMemHeapNarrowPhase( inSource->gpuMemHeapNarrowPhase )
-		,GpuMemHeapSolver( inSource->gpuMemHeapSolver )
-		,GpuMemHeapArticulation( inSource->gpuMemHeapArticulation )
-		,GpuMemHeapSimulation( inSource->gpuMemHeapSimulation )
-		,GpuMemHeapSimulationArticulation( inSource->gpuMemHeapSimulationArticulation )
-		,GpuMemHeapSimulationParticles( inSource->gpuMemHeapSimulationParticles )
-		,GpuMemHeapSimulationSoftBody( inSource->gpuMemHeapSimulationSoftBody )
-		,GpuMemHeapSimulationFEMCloth( inSource->gpuMemHeapSimulationFEMCloth )
-		,GpuMemHeapParticles( inSource->gpuMemHeapParticles )
-		,GpuMemHeapSoftBodies( inSource->gpuMemHeapSoftBodies )
-		,GpuMemHeapFEMCloths( inSource->gpuMemHeapFEMCloths )
-		,GpuMemHeapOther( inSource->gpuMemHeapOther )
 		,NbBroadPhaseAdds( inSource->nbBroadPhaseAdds )
 		,NbBroadPhaseRemoves( inSource->nbBroadPhaseRemoves )
 {

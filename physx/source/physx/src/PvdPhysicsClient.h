@@ -71,8 +71,6 @@ class PvdPhysicsClient : public PvdClient, public PxErrorCallback, public NpFact
   private:
 	void createPvdInstance(const PxTriangleMesh* triMesh);
 	void destroyPvdInstance(const PxTriangleMesh* triMesh);
-	void createPvdInstance(const PxTetrahedronMesh* tetMesh);
-	void destroyPvdInstance(const PxTetrahedronMesh* tetMesh);
 	void createPvdInstance(const PxConvexMesh* convexMesh);
 	void destroyPvdInstance(const PxConvexMesh* convexMesh);
 	void createPvdInstance(const PxHeightField* heightField);
@@ -80,18 +78,6 @@ class PvdPhysicsClient : public PvdClient, public PxErrorCallback, public NpFact
 	void createPvdInstance(const PxMaterial* mat);
 	void destroyPvdInstance(const PxMaterial* mat);
 	void updatePvdProperties(const PxMaterial* mat);
-
-	void createPvdInstance(const PxFEMSoftBodyMaterial* mat);
-	void destroyPvdInstance(const PxFEMSoftBodyMaterial* mat);
-	void updatePvdProperties(const PxFEMSoftBodyMaterial* mat);
-
-	void createPvdInstance(const PxFEMClothMaterial* mat);
-	void destroyPvdInstance(const PxFEMClothMaterial* mat);
-	void updatePvdProperties(const PxFEMClothMaterial* mat);
-
-	void createPvdInstance(const PxPBDMaterial* mat);
-	void destroyPvdInstance(const PxPBDMaterial* mat);
-	void updatePvdProperties(const PxPBDMaterial* mat);
 
 	PsPvd*  mPvd;
 	PvdDataStream* mPvdDataStream;

@@ -39,10 +39,7 @@
 #include "PxClient.h"
 #include "task/PxTask.h"
 #include "PxArticulationFlag.h"
-#include "PxSoftBodyFlag.h"
 #include "PxActorData.h"
-#include "PxParticleSystemFlag.h"
-#include "PxParticleSolverType.h"
 
 #include "pvd/PxPvdSceneClient.h"
 
@@ -58,16 +55,12 @@ class PxPhysics;
 class PxAggregate;
 class PxRenderBuffer;
 class PxArticulationReducedCoordinate;
-class PxParticleSystem;
 
 struct PxContactPairHeader;
 
 typedef PxU8 PxDominanceGroup;
 
 class PxPvdSceneClient;
-
-class PxSoftBody;
-class PxFEMCloth;
 
 /**
 \brief Expresses the dominance relationship of a contact.
@@ -488,71 +481,6 @@ class PxScene : public PxSceneSQSystem
 	@see PxActor
 	*/
 	virtual PxActor**		getActiveActors(PxU32& nbActorsOut) = 0;
-
-	/**
-	\brief Retrieve the number of soft bodies in the scene.
-
-	\return the number of soft bodies.
-
-	@see getActors()
-	*/
-	PX_DEPRECATED virtual	PxU32				getNbSoftBodies() const = 0;
-
-	/**
-	\brief Retrieve an array of all the soft bodies in the scene.
-
-	\param[out] userBuffer The buffer to receive actor pointers.
-	\param[in] bufferSize Size of provided user buffer.
-	\param[in] startIndex Index of first actor pointer to be retrieved
-	\return Number of actors written to the buffer.
-
-	@see getNbActors()
-	*/
-	PX_DEPRECATED virtual	PxU32				getSoftBodies(PxSoftBody** userBuffer, PxU32 bufferSize, PxU32 startIndex = 0) const = 0;
-
-	/**
-	\brief Retrieve the number of particle systems of the requested type in the scene.
-
-	\param[in] type The particle system type. See PxParticleSolverType. Only one type can be requested per function call.
-	\return the number particle systems.
-
-	See getParticleSystems(), PxParticleSolverType
-	*/
-	PX_DEPRECATED virtual PxU32				getNbParticleSystems(PxParticleSolverType::Enum type) const = 0;
-
-	/**
-	\brief Retrieve an array of all the particle systems of the requested type in the scene.
-
-	\param[in] type The particle system type. See PxParticleSolverType. Only one type can be requested per function call.
-	\param[out] userBuffer The buffer to receive particle system pointers.
-	\param[in] bufferSize Size of provided user buffer.
-	\param[in] startIndex Index of first particle system pointer to be retrieved
-	\return Number of particle systems written to the buffer.
-
-	See getNbParticleSystems(), PxParticleSolverType
-	*/
-	PX_DEPRECATED virtual	PxU32				getParticleSystems(PxParticleSolverType::Enum type, PxParticleSystem** userBuffer, PxU32 bufferSize, PxU32 startIndex = 0) const = 0;
-
-	/**
-	\brief Retrieve the number of FEM cloths in the scene.
-	\warning Feature under development, only for internal usage.
-
-	\return the number of FEM cloths.
-
-	See getFEMCloths()
-	*/
-	PX_DEPRECATED virtual PxU32				getNbFEMCloths() const = 0;
-
-	/**
-	\brief Retrieve an array of all the FEM cloths in the scene.
-	\warning Feature under development, only for internal usage.
-
-	\param[out] userBuffer The buffer to write the FEM cloth pointers to
-	\param[in] bufferSize Size of the provided user buffer
-	\param[in] startIndex Index of first FEM cloth pointer to be retrieved
-	\return Number of FEM cloths written to the buffer
-	*/
-	PX_DEPRECATED virtual PxU32				getFEMCloths(PxFEMCloth** userBuffer, PxU32 bufferSize, PxU32 startIndex = 0) const = 0;
 
 	/**
 	\brief Returns the number of articulations in the scene.
@@ -1095,11 +1023,6 @@ class PxScene : public PxSceneSQSystem
 	virtual	void				fetchResultsFinish(PxU32* errorState = 0) = 0;
 
 	/**
-	This call performs the synchronization of particle system data copies.
-	 */
-	virtual void				fetchResultsParticleSystem() = 0;
-
-	/**
 	\brief Clear internal buffers and free memory.
 
 	This method can be used to clear buffers and free internal memory without having to destroy the scene. Can be useful if
@@ -1621,168 +1544,6 @@ class PxScene : public PxSceneSQSystem
 	\return the client, NULL if no PVD supported.
 	*/
 	virtual PxPvdSceneClient*		getScenePvdClient() = 0;
-
-	/**
-	\brief Copy GPU articulation data from the internal GPU buffer to a user-provided device buffer.
-	\param[in] data User-provided gpu data buffer which should be sized appropriately for the particular data that is requested. Further details provided in the user guide.
-	\param[in] index User-provided gpu index buffer. This buffer stores the articulation indices which the user wants to copy.
-	\param[in] dataType Enum specifying the type of data the user wants to read back from the articulations.
-	\param[in] nbCopyArticulations Number of articulations that data should be copied from.
-	\param[in] copyEvent User-provided event for the articulation stream to signal when the data copy to the user buffer has completed.
-	*/
-	virtual		void				copyArticulationData(void* data, void* index, PxArticulationGpuDataType::Enum dataType, const PxU32 nbCopyArticulations, void* copyEvent = NULL) = 0;
-	
-	/**
-	\brief Apply GPU articulation data from a user-provided device buffer to the internal GPU buffer.
-	\param[in] data User-provided gpu data buffer which should be sized appropriately for the particular data that is requested. Further details provided in the user guide.
-	\param[in] index User-provided gpu index buffer. This buffer stores the articulation indices which the user wants to write to.
-	\param[in] dataType Enum specifying the type of data the user wants to write to the articulations.
-	\param[in] nbUpdatedArticulations Number of articulations that data should be written to.
-	\param[in] waitEvent User-provided event for the articulation stream to wait for data.
-	\param[in] signalEvent User-provided event for the articulation stream to signal when the data read from the user buffer has completed.
-	*/
-	virtual		void				applyArticulationData(void* data, void* index, PxArticulationGpuDataType::Enum dataType, const PxU32 nbUpdatedArticulations, void* waitEvent = NULL, void* signalEvent = NULL) = 0;
-
-	/**
-	\brief Copy GPU softbody data from the internal GPU buffer to a user-provided device buffer.
-	\param[in] data User-provided gpu buffer containing a pointer to another gpu buffer for every softbody to process
-	\param[in] dataSizes The size of every buffer in bytes
-	\param[in] softBodyIndices User provided gpu index buffer. This buffer stores the softbody index which the user want to copy.
-	\param[in] maxSize The largest size stored in dataSizes. Used internally to decide how many threads to launch for the copy process.
-	\param[in] flag Flag defining which data the user wants to read back from the softbody system
-	\param[in] nbCopySoftBodies The number of softbodies to be copied.
-	\param[in] copyEvent User-provided event for the user to sync data
-	*/
-	virtual		void				copySoftBodyData(void** data, void* dataSizes, void* softBodyIndices, PxSoftBodyDataFlag::Enum flag, const PxU32 nbCopySoftBodies, const PxU32 maxSize, void* copyEvent = NULL) = 0;
-
-
-	/**
-	\brief Apply user-provided data to the internal softbody system.
-	\param[in] data User-provided gpu buffer containing a pointer to another gpu buffer for every softbody to process
-	\param[in] dataSizes The size of every buffer in bytes	
-	\param[in] softBodyIndices User provided gpu index buffer. This buffer stores the updated softbody index.
-	\param[in] flag Flag defining which data the user wants to write to the softbody system
-	\param[in] maxSize The largest size stored in dataSizes. Used internally to decide how many threads to launch for the copy process. 
-	\param[in] nbUpdatedSoftBodies The number of updated softbodies
-	\param[in] applyEvent User-provided event for the softbody stream to wait for data
-	*/
-	virtual		void				applySoftBodyData(void** data, void* dataSizes, void* softBodyIndices, PxSoftBodyDataFlag::Enum flag, const PxU32 nbUpdatedSoftBodies, const PxU32 maxSize, void* applyEvent = NULL) = 0;
-
-	/**
-	\brief Copy contact data from the internal GPU buffer to a user-provided device buffer.
-
-	\note The contact data contains pointers to internal state and is only valid until the next call to simulate().
-
-	\param[in] data User-provided gpu data buffer, which should be the size of PxGpuContactPair * numContactPairs
-	\param[in] maxContactPairs  The maximum number of pairs that the buffer can contain
-	\param[in] numContactPairs The actual number of contact pairs that were written
-	\param[in] copyEvent User-provided event for the user to sync data
-	*/
-	virtual		void				copyContactData(void* data, const PxU32 maxContactPairs, void* numContactPairs, void* copyEvent = NULL) = 0;
-
-	/**
-	\brief Copy GPU rigid body data from the internal GPU buffer to a user-provided device buffer.
-	\param[in] data User-provided gpu data buffer which should nbCopyActors * sizeof(PxGpuBodyData). The only data it can copy is PxGpuBodyData.
-	\param[in] index User provided node PxGpuActorPair buffer. This buffer stores pairs of indices: the PxNodeIndex corresponding to the rigid body and an index corresponding to the location in the user buffer that this value should be placed.
-	\param[in] nbCopyActors The number of rigid body to be copied.
-	\param[in] copyEvent User-provided event for the user to sync data.
-	*/
-	virtual		void				copyBodyData(PxGpuBodyData* data, PxGpuActorPair* index, const PxU32 nbCopyActors, void* copyEvent = NULL) = 0;
-
-	/**
-	\brief Apply user-provided data to rigid body.
-	\param[in] data User-provided gpu data buffer which should be sized appropriately for the particular data that is requested. Further details provided in the user guide.
-	\param[in] index User provided PxGpuActorPair buffer. This buffer stores pairs of indices: the PxNodeIndex corresponding to the rigid body and an index corresponding to the location in the user buffer that this value should be placed.
-	\param[in] flag Flag defining which data the user wants to write to the rigid body
-	\param[in] nbUpdatedActors The number of updated rigid body
-	\param[in] waitEvent User-provided event for the rigid body stream to wait for data
-	\param[in] signalEvent User-provided event for the rigid body stream to signal when the read from the user buffer has completed
-	*/
-	virtual		void				applyActorData(void* data, PxGpuActorPair* index, PxActorCacheFlag::Enum flag, const PxU32 nbUpdatedActors, void* waitEvent = NULL, void* signalEvent = NULL) = 0;
-
-	/**
-	\brief Compute dense Jacobian matrices for specified articulations on the GPU.
-
-	The size of Jacobians can vary by articulation, since it depends on the number of links, degrees-of-freedom, and whether the base is fixed.
-
-	The size is determined using these formulas:
-	nCols = (fixedBase ? 0 : 6) + dofCount
-	nRows = (fixedBase ? 0 : 6) + (linkCount - 1) * 6;
-
-	The user must ensure that adequate space is provided for each Jacobian matrix.
-
-	\param[in] indices User-provided gpu buffer of (index, data) pairs. The entries map a GPU articulation index to a GPU block of memory where the returned Jacobian will be stored.
-	\param[in] nbIndices The number of (index, data) pairs provided.
-	\param[in] computeEvent User-provided event for the user to sync data.
-	*/
-	virtual		void				computeDenseJacobians(const PxIndexDataPair* indices, PxU32 nbIndices, void* computeEvent) = 0;
-
-	/**
-	\brief Compute the joint-space inertia matrices that maps joint accelerations to joint forces: forces = M * accelerations on the GPU.
-
-	The size of matrices can vary by articulation, since it depends on the number of links and degrees-of-freedom.
-
-	The size is determined using this formula:
-	sizeof(float) * dofCount * dofCount
-
-	The user must ensure that adequate space is provided for each mass matrix.
-
-	\param[in] indices User-provided gpu buffer of (index, data) pairs. The entries map a GPU articulation index to a GPU block of memory where the returned matrix will be stored.
-	\param[in] nbIndices The number of (index, data) pairs provided.
-	\param[in] computeEvent User-provided event for the user to sync data.
-	*/
-	virtual		void				computeGeneralizedMassMatrices(const PxIndexDataPair* indices, PxU32 nbIndices, void* computeEvent) = 0;
-
-	/**
-	\brief Computes the joint DOF forces required to counteract gravitational forces for the given articulation pose.
-
-	The size of the result can vary by articulation, since it depends on the number of links and degrees-of-freedom.
-
-	The size is determined using this formula:
-	sizeof(float) * dofCount
-
-	The user must ensure that adequate space is provided for each articulation.
-
-	\param[in] indices User-provided gpu buffer of (index, data) pairs. The entries map a GPU articulation index to a GPU block of memory where the returned matrix will be stored.
-	\param[in] nbIndices The number of (index, data) pairs provided.
-	\param[in] computeEvent User-provided event for the user to sync data.
-	*/
-	virtual		void				computeGeneralizedGravityForces(const PxIndexDataPair* indices, PxU32 nbIndices, void* computeEvent) = 0;
-
-	/**
-	\brief Computes the joint DOF forces required to counteract coriolis and centrifugal forces for the given articulation pose.
-
-	The size of the result can vary by articulation, since it depends on the number of links and degrees-of-freedom.
-
-	The size is determined using this formula:
-	sizeof(float) * dofCount
-
-	The user must ensure that adequate space is provided for each articulation.
-
-	\param[in] indices User-provided gpu buffer of (index, data) pairs. The entries map a GPU articulation index to a GPU block of memory where the returned matrix will be stored.
-	\param[in] nbIndices The number of (index, data) pairs provided.
-	\param[in] computeEvent User-provided event for the user to sync data.
-	*/
-	virtual		void				computeCoriolisAndCentrifugalForces(const PxIndexDataPair* indices, PxU32 nbIndices, void* computeEvent) = 0;
-
-	virtual		PxgDynamicsMemoryConfig getGpuDynamicsConfig() const = 0;
-
-	/**
-	\brief Apply user-provided data to particle buffers.
-
-	This function should be used if the particle buffer flags are already on the device. Otherwise, use PxParticleBuffer::raiseFlags()
-	from the CPU.
-
-	This assumes the data has been changed directly in the PxParticleBuffer.
-
-	\param[in] indices User-provided index buffer that indexes into the BufferIndexPair and flags list.
-	\param[in] bufferIndexPair User-provided index pair buffer specifying the unique id and GPU particle system for each PxParticleBuffer. See PxGpuParticleBufferIndexPair.
-	\param[in] flags Flags to mark what data needs to be updated. See PxParticleBufferFlags. 
-	\param[in] nbUpdatedBuffers The number of particle buffers to update.
-	\param[in] waitEvent User-provided event for the particle stream to wait for data.
-	\param[in] signalEvent User-provided event for the particle stream to signal when the data read from the user buffer has completed.
-	*/
-	virtual		void				applyParticleBufferData(const PxU32* indices, const PxGpuParticleBufferIndexPair* bufferIndexPair, const PxParticleBufferFlags* flags, PxU32 nbUpdatedBuffers, void* waitEvent = NULL, void* signalEvent = NULL) = 0;
 
 	void*	userData;	//!< user can assign this to whatever, usually to create a 1:1 relationship with a user object.
 };

@@ -34,7 +34,6 @@
 #include "geometry/PxTriangleMeshGeometry.h"
 #include "geometry/PxConvexMeshGeometry.h"
 #include "geometry/PxHeightFieldGeometry.h"
-#include "geometry/PxParticleSystemGeometry.h"
 #include "geometry/PxCustomGeometry.h"
 #include "foundation/PxAtomic.h"
 
@@ -78,8 +77,6 @@ bool PxGeometryQuery::isValid(const PxGeometry& g)
 		case PxGeometryType::eCONVEXMESH:		return static_cast<const PxConvexMeshGeometry&>(g).isValid();
 		case PxGeometryType::eTRIANGLEMESH:		return static_cast<const PxTriangleMeshGeometry&>(g).isValid();
 		case PxGeometryType::eHEIGHTFIELD:		return static_cast<const PxHeightFieldGeometry&>(g).isValid();
-		case PxGeometryType::eTETRAHEDRONMESH:	return static_cast<const PxTetrahedronMeshGeometry&>(g).isValid();
-		case PxGeometryType::ePARTICLESYSTEM:	return static_cast<const PxParticleSystemGeometry&>(g).isValid();
 		case PxGeometryType::eCUSTOM:			return static_cast<const PxCustomGeometry&>(g).isValid();
 	}
 	return false;

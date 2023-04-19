@@ -43,8 +43,6 @@
 #include "geometry/PxPlaneGeometry.h"
 #include "geometry/PxConvexMeshGeometry.h"
 #include "geometry/PxHeightFieldGeometry.h"
-#include "geometry/PxParticleSystemGeometry.h"
-#include "geometry/PxTetrahedronMeshGeometry.h"
 #include "geometry/PxCustomGeometry.h"
 
 #if !PX_DOXYGEN
@@ -101,17 +99,11 @@ public:
 	PX_FORCE_INLINE PxConvexMeshGeometry&				convexMesh()			{ return get<PxConvexMeshGeometry, PxGeometryType::eCONVEXMESH>();					}
 	PX_FORCE_INLINE const PxConvexMeshGeometry&			convexMesh()	const	{ return get<const PxConvexMeshGeometry, PxGeometryType::eCONVEXMESH>();			}
 
-	PX_FORCE_INLINE PxTetrahedronMeshGeometry&			tetMesh()				{ return get<PxTetrahedronMeshGeometry, PxGeometryType::eTETRAHEDRONMESH>();		}
-	PX_FORCE_INLINE const PxTetrahedronMeshGeometry&	tetMesh()		const	{ return get<const PxTetrahedronMeshGeometry, PxGeometryType::eTETRAHEDRONMESH>();	}
-
 	PX_FORCE_INLINE PxTriangleMeshGeometry&				triangleMesh()			{ return get<PxTriangleMeshGeometry, PxGeometryType::eTRIANGLEMESH>();				}
 	PX_FORCE_INLINE const PxTriangleMeshGeometry&		triangleMesh()	const	{ return get<const PxTriangleMeshGeometry, PxGeometryType::eTRIANGLEMESH>();		}
 
 	PX_FORCE_INLINE PxHeightFieldGeometry&				heightField()			{ return get<PxHeightFieldGeometry, PxGeometryType::eHEIGHTFIELD>();				}
 	PX_FORCE_INLINE const PxHeightFieldGeometry&		heightField()	const	{ return get<const PxHeightFieldGeometry, PxGeometryType::eHEIGHTFIELD>();			}
-
-	PX_FORCE_INLINE PxParticleSystemGeometry&			particleSystem()		{ return get<PxParticleSystemGeometry, PxGeometryType::ePARTICLESYSTEM>();			}
-	PX_FORCE_INLINE const PxParticleSystemGeometry&		particleSystem() const	{ return get<const PxParticleSystemGeometry, PxGeometryType::ePARTICLESYSTEM>();	}
 
 	PX_FORCE_INLINE PxCustomGeometry&					custom()				{ return get<PxCustomGeometry, PxGeometryType::eCUSTOM>();							}
 	PX_FORCE_INLINE const PxCustomGeometry&				custom()		const	{ return get<const PxCustomGeometry, PxGeometryType::eCUSTOM>();					}
@@ -131,9 +123,7 @@ public:
 		case PxGeometryType::eBOX:				put<PxBoxGeometry>(geometry);				break;
 		case PxGeometryType::eCONVEXMESH:		put<PxConvexMeshGeometry>(geometry);		break;
 		case PxGeometryType::eTRIANGLEMESH:		put<PxTriangleMeshGeometry>(geometry);		break;
-		case PxGeometryType::eTETRAHEDRONMESH:	put<PxTetrahedronMeshGeometry>(geometry);	break;
 		case PxGeometryType::eHEIGHTFIELD:		put<PxHeightFieldGeometry>(geometry);		break;
-		case PxGeometryType::ePARTICLESYSTEM:	put<PxParticleSystemGeometry>(geometry);	break;
 		case PxGeometryType::eCUSTOM:			put<PxCustomGeometry>(geometry);			break;
 		case PxGeometryType::eGEOMETRY_COUNT:
 		case PxGeometryType::eINVALID:														break;
@@ -168,10 +158,8 @@ public:
 		PxU8	capsule[sizeof(PxCapsuleGeometry)];
 		PxU8	plane[sizeof(PxPlaneGeometry)];
 		PxU8	convex[sizeof(PxConvexMeshGeometry)];
-		PxU8	tetMesh[sizeof(PxTetrahedronMeshGeometry)];
 		PxU8	mesh[sizeof(PxTriangleMeshGeometry)];
 		PxU8	heightfield[sizeof(PxHeightFieldGeometry)];
-		PxU8	particleSystem[sizeof(PxParticleSystemGeometry)];
 		PxU8	custom[sizeof(PxCustomGeometry)];
 	} bytes;
 }

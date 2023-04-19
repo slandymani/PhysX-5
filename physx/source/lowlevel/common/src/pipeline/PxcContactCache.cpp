@@ -69,8 +69,6 @@ namespace physx
 			true,		//PxcContactSphereCapsule
 			false,		//PxcContactSphereBox
 			true,		//PxcContactSphereConvex
-			false,		//ParticleSystem
-			true,		//SoftBody
 			true,		//PxcContactSphereMesh
 			true,		//PxcContactSphereHeightField
 			false,		//PxcContactGeometryCustomGeometry
@@ -83,8 +81,6 @@ namespace physx
 			true,		//PxcContactPlaneCapsule
 			true,		//PxcContactPlaneBox
 			true,		//PxcContactPlaneConvex
-			false,		//ParticleSystem
-			true,		//SoftBody
 			false,		//PxcInvalidContactPair
 			false,		//PxcInvalidContactPair
 			false,		//PxcContactGeometryCustomGeometry
@@ -97,8 +93,6 @@ namespace physx
 			true,		//PxcContactCapsuleCapsule
 			true,		//PxcContactCapsuleBox
 			true,		//PxcContactCapsuleConvex
-			false,		//ParticleSystem
-			true,		//SoftBody
 			true,		//PxcContactCapsuleMesh
 			true,		//PxcContactCapsuleHeightField
 			false,		//PxcContactGeometryCustomGeometry
@@ -111,8 +105,6 @@ namespace physx
 			false,		//-
 			true,		//PxcContactBoxBox
 			true,		//PxcContactBoxConvex
-			false,		//ParticleSystem
-			true,		//SoftBody
 			true,		//PxcContactBoxMesh
 			true,		//PxcContactBoxHeightField
 			false,		//PxcContactGeometryCustomGeometry
@@ -125,45 +117,13 @@ namespace physx
 			false,		//-
 			false,		//-
 			true,		//PxcContactConvexConvex
-			false,		//-
-			true,		//-
 			true,		//PxcContactConvexMesh2
 			true,		//PxcContactConvexHeightField
 			false,		//PxcContactGeometryCustomGeometry
 		},
 
-		//PxGeometryType::ePARTICLESYSTEM
-		{
-			false,		//-
-			false,		//-
-			false,		//-
-			false,		//-
-			false,		//-
-			false,		//-
-			false,		//-
-			false,		//PxcInvalidContactPair
-			false,		//PxcInvalidContactPair
-			false,		//PxcInvalidContactPair
-		},
-
-		//PxGeometryType::eTETRAHEDRONMESH
-		{
-			false,		//-
-			false,		//-
-			false,		//-
-			false,		//-
-			false,		//-
-			false,		//-
-			false,		//-
-			false,		//PxcInvalidContactPair
-			false,		//PxcInvalidContactPair
-			false,		//PxcInvalidContactPair
-		},
-
 		//PxGeometryType::eTRIANGLEMESH
 		{
-			false,		//-
-			false,		//-
 			false,		//-
 			false,		//-
 			false,		//-
@@ -180,8 +140,6 @@ namespace physx
 			false,		//-
 			false,		//-
 			false,		//-
-			false,		//-
-			false,		//-
 			true,		//-
 			false,		//-
 			false,		//PxcInvalidContactPair
@@ -190,8 +148,6 @@ namespace physx
 
 		//PxGeometryType::eCUSTOM
 		{
-			false,		//-
-			false,		//-
 			false,		//-
 			false,		//-
 			false,		//-

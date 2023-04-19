@@ -32,10 +32,6 @@
 #include "ScRigidSim.h"
 #include "ScContactStream.h"
 #include "ScNPhaseCore.h"
-#if PX_SUPPORT_GPU_PHYSX
-#include "ScSoftBodySim.h"
-#endif
-
 
 namespace physx
 {
@@ -195,19 +191,9 @@ PX_FORCE_INLINE void Sc::ActorPairReport::createContactReportData(NPhaseCore& np
 		reportData->mActorAID = mActorA.getActorID();
 		reportData->mActorBID = mActorB.getActorID();
 
-#if PX_SUPPORT_GPU_PHYSX
-		if (mActorA.getActorType() == PxActorType::eSOFTBODY)
-			reportData->mPxActorA = static_cast<const SoftBodyCore&>(actorCoreA).getPxActor();
-		else
-#endif
-			reportData->mPxActorA = static_cast<const RigidCore&>(actorCoreA).getPxActor();
 
-#if PX_SUPPORT_GPU_PHYSX
-		if (mActorA.getActorType() == PxActorType::eSOFTBODY)
-			reportData->mPxActorB = static_cast<const SoftBodyCore&>(actorCoreB).getPxActor();
-		else
-#endif
-			reportData->mPxActorB = static_cast<const RigidCore&>(actorCoreB).getPxActor();
+		reportData->mPxActorA = static_cast<const RigidCore&>(actorCoreA).getPxActor();
+		reportData->mPxActorB = static_cast<const RigidCore&>(actorCoreB).getPxActor();
 	}
 }
 

@@ -37,7 +37,6 @@
 namespace physx
 {
 class TriangleMeshBuilder;
-class TetrahedronMeshBuilder;
 class ConvexMeshBuilder;
 class ConvexHullLib;
 class PxInsertionCallback;
@@ -56,21 +55,6 @@ public:
 	virtual bool					cookTriangleMesh(const PxTriangleMeshDesc& desc, PxOutputStream& stream, PxTriangleMeshCookingResult::Enum* condition = NULL) const;
 	virtual PxTriangleMesh*			createTriangleMesh(const PxTriangleMeshDesc& desc, PxInsertionCallback& insertionCallback, PxTriangleMeshCookingResult::Enum* condition = NULL) const;
 	virtual bool					validateTriangleMesh(const PxTriangleMeshDesc& desc) const;
-
-	virtual bool					cookSoftBodyMesh(const PxTetrahedronMeshDesc& simulationMeshDesc, const PxTetrahedronMeshDesc& collisionMeshDesc,
-										const PxSoftBodySimulationDataDesc& softbodyDataDesc, PxOutputStream& stream) const;
-	virtual PxSoftBodyMesh*			createSoftBodyMesh(const PxTetrahedronMeshDesc& simulationMeshDesc, const PxTetrahedronMeshDesc& collisionMeshDesc,
-										const PxSoftBodySimulationDataDesc& softbodyDataDesc, PxInsertionCallback& insertionCallback) const;
-
-	virtual bool					cookTetrahedronMesh(const PxTetrahedronMeshDesc& meshDesc, PxOutputStream& stream) const;
-	virtual PxTetrahedronMesh*		createTetrahedronMesh(const PxTetrahedronMeshDesc& meshDesc, PxInsertionCallback& insertionCallback) const;
-
-	virtual PxCollisionMeshMappingData* computeModelsMapping(PxTetrahedronMeshData& simulationMesh, const PxTetrahedronMeshData& collisionMesh, const PxSoftBodyCollisionData& collisionData, const PxBoundedData* vertexToTet) const;
-	virtual PxCollisionTetrahedronMeshData* computeCollisionData(const PxTetrahedronMeshDesc& collisionMeshDesc) const;
-	virtual PxSimulationTetrahedronMeshData* computeSimulationData(const PxTetrahedronMeshDesc& simulationMeshDesc) const;
-	virtual PxSoftBodyMesh*			assembleSoftBodyMesh(PxTetrahedronMeshData& simulationMesh, PxSoftBodySimulationData& simulationData, PxTetrahedronMeshData& collisionMesh,
-										PxSoftBodyCollisionData& collisionData, PxCollisionMeshMappingData& mappingData, PxInsertionCallback& insertionCallback) const;
-	virtual PxSoftBodyMesh*			assembleSoftBodyMesh(PxSimulationTetrahedronMeshData& simulationMesh, PxCollisionTetrahedronMeshData& collisionMesh, PxCollisionMeshMappingData& mappingData, PxInsertionCallback& insertionCallback) const;
 
 	virtual bool					cookConvexMesh(const PxConvexMeshDesc& desc, PxOutputStream& stream, PxConvexMeshCookingResult::Enum* condition) const;
 	virtual PxConvexMesh*			createConvexMesh(const PxConvexMeshDesc& desc, PxInsertionCallback& insertionCallback, PxConvexMeshCookingResult::Enum* condition) const;

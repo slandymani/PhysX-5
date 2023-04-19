@@ -27,17 +27,8 @@
 // Copyright (c) 2001-2004 NovodeX AG. All rights reserved.  
            
 #include "ScShapeInteraction.h"
-#if PX_SUPPORT_GPU_PHYSX
-#include "ScParticleSystemSim.h"
-#endif
 
 using namespace physx;
-
-static PX_FORCE_INLINE bool isParticleSystem(const PxActorType::Enum actorType)
-{
-	return actorType == PxActorType::ePBD_PARTICLESYSTEM || actorType == PxActorType::eFLIP_PARTICLESYSTEM
-		|| actorType == PxActorType::eMPM_PARTICLESYSTEM || actorType == PxActorType::eCUSTOM_PARTICLESYSTEM;
-}
 
 Sc::ShapeInteraction::ShapeInteraction(ShapeSimBase& s1, ShapeSimBase& s2, PxPairFlags pairFlags, PxsContactManager* contactManager) :
 	ElementSimInteraction	(s1, s2, InteractionType::eOVERLAP, InteractionFlag::eRB_ELEMENT|InteractionFlag::eFILTERABLE),
@@ -102,13 +93,6 @@ Sc::ShapeInteraction::ShapeInteraction(ShapeSimBase& s1, ShapeSimBase& s2, PxPai
 		PxActorType::Enum actorTypeLargest = PxMax(bs0.getActorType(), bs1.getActorType());
 
 		IG::Edge::EdgeType type = IG::Edge::eCONTACT_MANAGER;
-		if (actorTypeLargest == PxActorType::eSOFTBODY)
-			type = IG::Edge::eSOFT_BODY_CONTACT;
-		if (actorTypeLargest == PxActorType::eFEMCLOTH)
-			type = IG::Edge::eFEM_CLOTH_CONTACT;
-		else if (isParticleSystem(actorTypeLargest))
-			type = IG::Edge::ePARTICLE_SYSTEM_CONTACT;
-
 		mEdgeIndex = simpleIslandManager->addContactManager(NULL, indexA, indexB, this, type);
 
 		const bool active = registerInActors(contactManager);	// this will call onActivate_() on the interaction
@@ -801,10 +785,6 @@ PX_FORCE_INLINE void Sc::ShapeInteraction::updateFlags(const Sc::Scene& scene, c
 
 PX_INLINE PxReal ScGetRestOffset(const Sc::ShapeSimBase& shapeSim)
 {
-#if PX_SUPPORT_GPU_PHYSX
-	if (shapeSim.getActor().isParticleSystem())
-		return static_cast<Sc::ParticleSystemSim&>(shapeSim.getActor()).getCore().getRestOffset();
-#endif
 	return shapeSim.getRestOffset();
 }
 
@@ -1109,12 +1089,6 @@ void Sc::ShapeInteraction::createManager(void* contactManager)
 
 	if(type1 == PxActorType::eRIGID_DYNAMIC)
 		wuflags |= PxcNpWorkUnitFlag::eDYNAMIC_BODY1;
-
-	if (type0 == PxActorType::eSOFTBODY)
-		wuflags |= PxcNpWorkUnitFlag::eSOFT_BODY;
-
-	if (type1 == PxActorType::eSOFTBODY)
-		wuflags |= PxcNpWorkUnitFlag::eSOFT_BODY;
 
 	if(!disableResponse && !contactChangeable)
 		wuflags |= PxcNpWorkUnitFlag::eOUTPUT_CONSTRAINTS;

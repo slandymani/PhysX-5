@@ -151,8 +151,6 @@ SweepMethod g_SweepMethodTable[][PxGeometryType::eGEOMETRY_COUNT] =
 		SweepGeomGeom<CapsuleV, CapsuleV>,			//PxGeometryType::eCAPSULE
 		SweepGeomGeom<CapsuleV, BoxV>,				//PxGeometryType::eBOX
 		SweepGeomGeom<CapsuleV, ConvexHullV>,		//PxGeometryType::eCONVEXMESH
-		UnimplementedSweep,							//PxGeometryType::ePARTICLESYSTEM
-		UnimplementedSweep,							//PxGeometryType::eTETRAHEDRONMESH
 		SweepAnyShapeMesh,							//PxGeometryType::eTRIANGLEMESH
 		SweepAnyShapeHeightfield,					//PxGeometryType::eHEIGHTFIELD
 		UnimplementedSweep,							//PxGeometryType::eCUSTOM
@@ -165,8 +163,6 @@ SweepMethod g_SweepMethodTable[][PxGeometryType::eGEOMETRY_COUNT] =
 		UnimplementedSweep,							//PxGeometryType::eCAPSULE
 		UnimplementedSweep,							//PxGeometryType::eBOX
 		UnimplementedSweep,							//PxGeometryType::eCONVEXMESH
-		UnimplementedSweep,							//PxGeometryType::ePARTICLESYSTEM
-		UnimplementedSweep,							//PxGeometryType::eTETRAHEDRONMESH
 		UnimplementedSweep,							//PxGeometryType::eTRIANGLEMESH
 		UnimplementedSweep,							//PxGeometryType::eHEIGHTFIELD
 		UnimplementedSweep,							//PxGeometryType::eCUSTOM
@@ -179,8 +175,6 @@ SweepMethod g_SweepMethodTable[][PxGeometryType::eGEOMETRY_COUNT] =
 		SweepGeomGeom<CapsuleV, CapsuleV>,			//PxGeometryType::eCAPSULE
 		SweepGeomGeom<CapsuleV, BoxV>,				//PxGeometryType::eBOX
 		SweepGeomGeom<CapsuleV, ConvexHullV>,		//PxGeometryType::eCONVEXMESH
-		UnimplementedSweep,							//PxGeometryType::ePARTICLESYSTEM
-		UnimplementedSweep,							//PxGeometryType::eTETRAHEDRONMESH
 		SweepAnyShapeMesh,							//PxGeometryType::eTRIANGLEMESH
 		SweepAnyShapeHeightfield,					//PxGeometryType::eHEIGHTFIELD
 		UnimplementedSweep,							//PxGeometryType::eCUSTOM
@@ -193,8 +187,6 @@ SweepMethod g_SweepMethodTable[][PxGeometryType::eGEOMETRY_COUNT] =
 		0,											//PxGeometryType::eCAPSULE
 		SweepGeomGeom<BoxV, BoxV>,					//PxGeometryType::eBOX
 		SweepGeomGeom<BoxV, ConvexHullV>,			//PxGeometryType::eCONVEXMESH
-		UnimplementedSweep,							//PxGeometryType::ePARTICLESYSTEM
-		UnimplementedSweep,							//PxGeometryType::eTETRAHEDRONMESH
 		SweepAnyShapeMesh,							//PxGeometryType::eTRIANGLEMESH
 		SweepAnyShapeHeightfield,					//PxGeometryType::eHEIGHTFIELD
 		UnimplementedSweep,							//PxGeometryType::eCUSTOM
@@ -207,38 +199,8 @@ SweepMethod g_SweepMethodTable[][PxGeometryType::eGEOMETRY_COUNT] =
 		0,											//PxGeometryType::eCAPSULE
 		0,											//PxGeometryType::eBOX
 		SweepGeomGeom<ConvexHullV, ConvexHullV>,	//PxGeometryType::eCONVEXMESH
-		UnimplementedSweep,							//PxGeometryType::ePARTICLESYSTEM
-		UnimplementedSweep,							//PxGeometryType::eTETRAHEDRONMESH
 		SweepAnyShapeMesh,							//PxGeometryType::eTRIANGLEMESH
 		SweepAnyShapeHeightfield,					//PxGeometryType::eHEIGHTFIELD
-		UnimplementedSweep,							//PxGeometryType::eCUSTOM
-	},
-
-	//PxGeometryType::ePARTICLESYSTEM
-	{
-		0,											//PxGeometryType::eSPHERE
-		0,											//PxGeometryType::ePLANE
-		0,											//PxGeometryType::eCAPSULE
-		0,											//PxGeometryType::eBOX
-		0,											//PxGeometryType::eCONVEXMESH
-		UnimplementedSweep,							//PxGeometryType::ePARTICLESYSTEM
-		UnimplementedSweep,							//PxGeometryType::eTETRAHEDRONMESH
-		UnimplementedSweep,							//PxGeometryType::eTRIANGLEMESH
-		UnimplementedSweep,							//PxGeometryType::eHEIGHTFIELD
-		UnimplementedSweep,							//PxGeometryType::eCUSTOM
-	},
-
-	//PxGeometryType::eTETRAHEDRONMESH
-	{
-		0,											//PxGeometryType::eSPHERE
-		0,											//PxGeometryType::ePLANE
-		0,											//PxGeometryType::eCAPSULE
-		0,											//PxGeometryType::eBOX
-		0,											//PxGeometryType::eCONVEXMESH
-		0,											//PxGeometryType::ePARTICLESYSTEM
-		UnimplementedSweep,							//PxGeometryType::eTETRAHEDRONMESH
-		UnimplementedSweep,							//PxGeometryType::eTRIANGLEMESH
-		UnimplementedSweep,							//PxGeometryType::eHEIGHTFIELD
 		UnimplementedSweep,							//PxGeometryType::eCUSTOM
 	},
 
@@ -249,8 +211,6 @@ SweepMethod g_SweepMethodTable[][PxGeometryType::eGEOMETRY_COUNT] =
 		0,											//PxGeometryType::eCAPSULE
 		0,											//PxGeometryType::eBOX
 		0,											//PxGeometryType::eCONVEXMESH
-		0,											//PxGeometryType::ePARTICLESYSTEM
-		0,											//PxGeometryType::eTETRAHEDRONMESH
 		UnimplementedSweep,							//PxGeometryType::eTRIANGLEMESH
 		UnimplementedSweep,							//PxGeometryType::eHEIGHTFIELD
 		UnimplementedSweep,							//PxGeometryType::eCUSTOM
@@ -263,8 +223,6 @@ SweepMethod g_SweepMethodTable[][PxGeometryType::eGEOMETRY_COUNT] =
 		0,											//PxGeometryType::eCAPSULE
 		0,											//PxGeometryType::eBOX
 		0,											//PxGeometryType::eCONVEXMESH
-		0,											//PxGeometryType::ePARTICLESYSTEM
-		0,											//PxGeometryType::eTETRAHEDRONMESH
 		0,											//PxGeometryType::eTRIANGLEMESH
 		UnimplementedSweep,							//PxGeometryType::eHEIGHTFIELD
 		UnimplementedSweep,							//PxGeometryType::eCUSTOM
@@ -277,8 +235,6 @@ SweepMethod g_SweepMethodTable[][PxGeometryType::eGEOMETRY_COUNT] =
 		0,											//PxGeometryType::eCAPSULE
 		0,											//PxGeometryType::eBOX
 		0,											//PxGeometryType::eCONVEXMESH
-		0,											//PxGeometryType::ePARTICLESYSTEM
-		0,											//PxGeometryType::eTETRAHEDRONMESH
 		0,											//PxGeometryType::eTRIANGLEMESH
 		0,											//PxGeometryType::eHEIGHTFIELD
 		UnimplementedSweep,							//PxGeometryType::eCUSTOM
@@ -338,8 +294,6 @@ TriangleSweepMethod g_TriangleSweepMethodTable[] =
 	SweepGeomTriangles<CapsuleV>,		//PxGeometryType::eCAPSULE
 	SweepGeomTriangles<BoxV>,			//PxGeometryType::eBOX
 	SweepGeomTriangles<ConvexHullV>,	//PxGeometryType::eCONVEXMESH
-	UnimplementedTriangleSweep,			//PxGeometryType::ePARTICLESYSTEM
-	UnimplementedTriangleSweep,			//PxGeometryType::eTETRAHEDRONMESH
 	UnimplementedTriangleSweep,			//PxGeometryType::eTRIANGLEMESH
 	UnimplementedTriangleSweep,			//PxGeometryType::eHEIGHTFIELD
 	UnimplementedTriangleSweep,			//PxGeometryType::eCUSTOM

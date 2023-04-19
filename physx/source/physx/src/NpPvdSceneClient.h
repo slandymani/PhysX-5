@@ -44,11 +44,6 @@
 #include "PsPvd.h"
 
 #include "PxsMaterialCore.h"
-#include "PxsFEMSoftBodyMaterialCore.h"
-#include "PxsFEMClothMaterialCore.h"
-#include "PxsPBDMaterialCore.h"
-#include "PxsFLIPMaterialCore.h"
-#include "PxsMPMMaterialCore.h"
 
 namespace physx
 {
@@ -167,30 +162,6 @@ class PvdSceneClient : public PxPvdSceneClient, public PvdClient, public PvdVisu
 	void createPvdInstance	(const PxsMaterialCore* materialCore);
 	void updatePvdProperties(const PxsMaterialCore* materialCore);
 	void releasePvdInstance	(const PxsMaterialCore* materialCore);
-
-	void createPvdInstance	(const PxsFEMSoftBodyMaterialCore* materialCore);
-	void updatePvdProperties(const PxsFEMSoftBodyMaterialCore* materialCore);
-	void releasePvdInstance	(const PxsFEMSoftBodyMaterialCore* materialCore);
-
-	void createPvdInstance	(const PxsFEMClothMaterialCore* materialCore);
-	void updatePvdProperties(const PxsFEMClothMaterialCore* materialCore);
-	void releasePvdInstance	(const PxsFEMClothMaterialCore* materialCore);
-
-	void createPvdInstance	(const PxsPBDMaterialCore* materialCore);
-	void updatePvdProperties(const PxsPBDMaterialCore* materialCore);
-	void releasePvdInstance	(const PxsPBDMaterialCore* materialCore);
-
-	void createPvdInstance	(const PxsFLIPMaterialCore* materialCore);
-	void updatePvdProperties(const PxsFLIPMaterialCore* materialCore);
-	void releasePvdInstance	(const PxsFLIPMaterialCore* materialCore);
-
-	void createPvdInstance	(const PxsMPMMaterialCore* materialCore);
-	void updatePvdProperties(const PxsMPMMaterialCore* materialCore);
-	void releasePvdInstance	(const PxsMPMMaterialCore* materialCore);
-
-	void createPvdInstance	(const PxsCustomMaterialCore* materialCore);
-	void updatePvdProperties(const PxsCustomMaterialCore* materialCore);
-	void releasePvdInstance	(const PxsCustomMaterialCore* materialCore);
 
 	///////////////////////////////////////////////////////////////////////////
 

@@ -133,12 +133,6 @@ OMNI_PVD_ENUM			(actortype,				PxActorType)
 OMNI_PVD_ENUM_VALUE		(actortype,				eRIGID_STATIC,							PxActorType::eRIGID_STATIC)
 OMNI_PVD_ENUM_VALUE		(actortype,				eRIGID_DYNAMIC,							PxActorType::eRIGID_DYNAMIC)
 OMNI_PVD_ENUM_VALUE		(actortype,				eARTICULATION_LINK,						PxActorType::eARTICULATION_LINK)
-OMNI_PVD_ENUM_VALUE		(actortype,				eSOFTBODY,								PxActorType::eSOFTBODY)
-OMNI_PVD_ENUM_VALUE		(actortype,				eFEMCLOTH,								PxActorType::eFEMCLOTH)
-OMNI_PVD_ENUM_VALUE		(actortype,				ePBD_PARTICLESYSTEM,					PxActorType::ePBD_PARTICLESYSTEM)
-OMNI_PVD_ENUM_VALUE		(actortype,				eFLIP_PARTICLESYSTEM,					PxActorType::eFLIP_PARTICLESYSTEM)
-OMNI_PVD_ENUM_VALUE		(actortype,				eMPM_PARTICLESYSTEM,					PxActorType::eMPM_PARTICLESYSTEM)
-OMNI_PVD_ENUM_VALUE		(actortype,				eCUSTOM_PARTICLESYSTEM,					PxActorType::eCUSTOM_PARTICLESYSTEM)
 
 OMNI_PVD_ENUM			(articulationjointtype,		PxArticulationJointType)
 OMNI_PVD_ENUM_VALUE		(articulationjointtype,		eFIX,						PxArticulationJointType::eFIX)
@@ -176,17 +170,9 @@ OMNI_PVD_ATTRIBUTE_SET	(physics, scenes,				PxPhysics, PxScene)
 OMNI_PVD_ATTRIBUTE_SET	(physics, heightFields,			PxPhysics, PxHeightField)
 OMNI_PVD_ATTRIBUTE_SET	(physics, convexMeshes,			PxPhysics, PxConvexMesh)
 OMNI_PVD_ATTRIBUTE_SET	(physics, triangleMeshes,		PxPhysics, PxTriangleMesh)
-OMNI_PVD_ATTRIBUTE_SET	(physics, tetrahedronMeshes,	PxPhysics, PxTetrahedronMesh)
-OMNI_PVD_ATTRIBUTE_SET	(physics, softBodyMeshes,		PxPhysics, PxSoftBodyMesh)
 OMNI_PVD_ATTRIBUTE_SET	(physics, shapes,				PxPhysics, PxShape)
 OMNI_PVD_ATTRIBUTE_SET	(physics, bvhs,					PxPhysics, PxBVH)
 OMNI_PVD_ATTRIBUTE_SET	(physics, materials,			PxPhysics, PxMaterial)
-OMNI_PVD_ATTRIBUTE_SET	(physics, FEMSoftBodyMaterials,	PxPhysics, PxFEMSoftBodyMaterial)
-OMNI_PVD_ATTRIBUTE_SET	(physics, FEMClothMaterials,	PxPhysics, PxFEMClothMaterial)
-OMNI_PVD_ATTRIBUTE_SET	(physics, PBDMaterials,			PxPhysics, PxPBDMaterial)
-OMNI_PVD_ATTRIBUTE_SET	(physics, FLIPMaterials,		PxPhysics, PxFLIPMaterial)
-OMNI_PVD_ATTRIBUTE_SET	(physics, MPMMaterials,			PxPhysics, PxMPMMaterial)
-OMNI_PVD_ATTRIBUTE_SET	(physics, softBodies,			PxPhysics, PxActor)
 OMNI_PVD_ATTRIBUTE_SET	(physics, rigidDynamics,		PxPhysics, PxActor)
 OMNI_PVD_ATTRIBUTE_SET	(physics, rigidStatics,			PxPhysics, PxActor)
 OMNI_PVD_ATTRIBUTE_SET	(physics, aggregates,			PxPhysics, PxAggregate)
@@ -265,31 +251,6 @@ OMNI_PVD_ATTRIBUTE		(material,	staticFriction,			PxMaterial,	PxReal,		OmniPvdDat
 OMNI_PVD_ATTRIBUTE		(material,	dynamicFriction,		PxMaterial,	PxReal,		OmniPvdDataTypeEnum::eFLOAT32, 1)
 OMNI_PVD_ATTRIBUTE		(material,	restitution,			PxMaterial,	PxReal,		OmniPvdDataTypeEnum::eFLOAT32, 1)
 OMNI_PVD_ATTRIBUTE		(material,	damping,				PxMaterial,	PxReal,		OmniPvdDataTypeEnum::eFLOAT32, 1)
-
-////////////////////////////////////////////////////////////////////////////////
-// FEMSoftBodyMaterial
-////////////////////////////////////////////////////////////////////////////////
-OMNI_PVD_CLASS			(femsoftbodymaterial,			PxFEMSoftBodyMaterial)
-
-////////////////////////////////////////////////////////////////////////////////
-// FEMClothMaterial
-////////////////////////////////////////////////////////////////////////////////
-OMNI_PVD_CLASS			(femclothmaterial,				PxFEMClothMaterial)
-
-////////////////////////////////////////////////////////////////////////////////
-// PBDMaterial
-////////////////////////////////////////////////////////////////////////////////
-OMNI_PVD_CLASS			(pbdmaterial,					PxPBDMaterial)
-
-////////////////////////////////////////////////////////////////////////////////
-// FLIPMaterial
-////////////////////////////////////////////////////////////////////////////////
-OMNI_PVD_CLASS			(flipmaterial,					PxFLIPMaterial)
-
-////////////////////////////////////////////////////////////////////////////////
-// MPMMaterial
-////////////////////////////////////////////////////////////////////////////////
-OMNI_PVD_CLASS			(mpmmaterial,					PxMPMMaterial)
 
 ////////////////////////////////////////////////////////////////////////////////
 // Aggregate
@@ -469,26 +430,6 @@ OMNI_PVD_ATTRIBUTE		(geomtrianglemesh, triangleMesh, PxGeometry, PxTriangleMesh 
 OMNI_PVD_CLASS			(trianglemesh,			PxTriangleMesh)
 OMNI_PVD_ATTRIBUTE		(trianglemesh, verts,	PxTriangleMesh, PxReal, OmniPvdDataTypeEnum::eFLOAT32, 0)
 OMNI_PVD_ATTRIBUTE		(trianglemesh, tris,	PxTriangleMesh, PxU32,	OmniPvdDataTypeEnum::eUINT32, 0)
-
-////////////////////////////////////////////////////////////////////////////////
-// GeomTetrahedronMesh
-////////////////////////////////////////////////////////////////////////////////
-OMNI_PVD_FAKE_CLASS		(geomtetrahedronmesh, PxGeometry, PxGeomTetrahedronMesh)
-OMNI_PVD_ATTRIBUTE		(geomtetrahedronmesh, tetrahedronMesh, PxGeometry, PxTetrahedronMesh const *, OmniPvdDataTypeEnum::eOBJECT_HANDLE, 1)
-
-////////////////////////////////////////////////////////////////////////////////
-// TetrahedronMesh
-////////////////////////////////////////////////////////////////////////////////
-OMNI_PVD_CLASS			(tetrahedronmesh,			PxTetrahedronMesh)
-OMNI_PVD_ATTRIBUTE		(tetrahedronmesh, verts,	PxTetrahedronMesh, PxReal, OmniPvdDataTypeEnum::eFLOAT32, 0)
-OMNI_PVD_ATTRIBUTE		(tetrahedronmesh, tets,		PxTetrahedronMesh, PxU32,	OmniPvdDataTypeEnum::eUINT32, 0)
-
-////////////////////////////////////////////////////////////////////////////////
-// SoftBodyMesh
-////////////////////////////////////////////////////////////////////////////////
-OMNI_PVD_CLASS			(softbodymesh,					PxSoftBodyMesh)
-OMNI_PVD_ATTRIBUTE		(softbodymesh, collisionMesh,	PxSoftBodyMesh, PxTetrahedronMesh*, OmniPvdDataTypeEnum::eOBJECT_HANDLE, 1)
-OMNI_PVD_ATTRIBUTE		(softbodymesh, simulationMesh,	PxSoftBodyMesh, PxTetrahedronMesh*,	OmniPvdDataTypeEnum::eOBJECT_HANDLE, 1)
 
 ////////////////////////////////////////////////////////////////////////////////
 // BVH

@@ -33,7 +33,6 @@
 #include "foundation/PxHashSet.h"
 #include "foundation/PxUserAllocated.h"
 #include "geometry/PxTriangleMesh.h"
-#include "geometry/PxTetrahedronMesh.h"
 #include "geometry/PxConvexMesh.h"
 #include "geometry/PxHeightField.h"
 #include "geometry/PxBVH.h"
@@ -54,10 +53,6 @@ namespace Gu
 	class HeightField;
 	class TriangleMesh;
 	class TriangleMeshData;
-	class SoftBodyMesh;
-	class SoftBodyMeshData;
-	class TetrahedronMesh;
-	class TetrahedronMeshData;
 	class BVH;
 	struct ConvexHullInitData;
 	class BVHData;
@@ -98,22 +93,6 @@ namespace Gu
 		PxU32							getNbTriangleMeshes()	const;
 		PxU32							getTriangleMeshes(PxTriangleMesh** userBuffer, PxU32 bufferSize, PxU32 startIndex)	const;
 
-		// Tetrahedron meshes
-		void							addTetrahedronMesh(Gu::TetrahedronMesh* np, bool lock = true);
-		PxTetrahedronMesh*				createTetrahedronMesh(PxInputStream& stream);
-		PxTetrahedronMesh*				createTetrahedronMesh(void* tetrahedronMeshData);
-		bool							removeTetrahedronMesh(PxTetrahedronMesh&);
-		PxU32							getNbTetrahedronMeshes()	const;
-		PxU32							getTetrahedronMeshes(PxTetrahedronMesh** userBuffer, PxU32 bufferSize, PxU32 startIndex)	const;
-
-		// SoftBody meshes
-		void							addSoftBodyMesh(Gu::SoftBodyMesh* np, bool lock = true);
-		PxSoftBodyMesh*					createSoftBodyMesh(PxInputStream& stream);
-		PxSoftBodyMesh*					createSoftBodyMesh(void* tetrahedronMeshData);
-		bool							removeSoftBodyMesh(PxSoftBodyMesh&);
-		PxU32							getNbSoftBodyMeshes()	const;
-		PxU32							getSoftBodyMeshes(PxSoftBodyMesh** userBuffer, PxU32 bufferSize, PxU32 startIndex)	const;
-
 		// Convexes
 		void							addConvexMesh(Gu::ConvexMesh* np, bool lock=true);
 		PxConvexMesh*					createConvexMesh(PxInputStream&);
@@ -147,16 +126,12 @@ namespace Gu
 	protected:
 
 		PxTriangleMesh*					createTriangleMesh(Gu::TriangleMeshData& data);
-		PxTetrahedronMesh*				createTetrahedronMesh(Gu::TetrahedronMeshData& data);
-		PxSoftBodyMesh*					createSoftBodyMesh(Gu::SoftBodyMeshData& data);
 		PxConvexMesh*					createConvexMesh(Gu::ConvexHullInitData& data);
 		PxBVH*							createBVH(Gu::BVHData& data);
 
 		mutable PxMutex					mTrackingMutex;
 	private:
 		PxCoalescedHashSet<Gu::TriangleMesh*>		mTriangleMeshes;
-		PxCoalescedHashSet<Gu::TetrahedronMesh*>	mTetrahedronMeshes;
-		PxCoalescedHashSet<Gu::SoftBodyMesh*>		mSoftBodyMeshes;
 		PxCoalescedHashSet<Gu::ConvexMesh*>			mConvexMeshes;
 		PxCoalescedHashSet<Gu::HeightField*>		mHeightFields;
 		PxCoalescedHashSet<Gu::BVH*>				mBVHs;

@@ -48,15 +48,11 @@ class PxCapsuleGeometry;
 class PxPlaneGeometry;
 class PxConvexMeshGeometry;
 class PxTriangleMeshGeometry;
-class PxTetrahedronMeshGeometry;
 class PxHeightFieldGeometry;
-class PxParticleSystemGeometry;
 class PxRigidActor;
 struct PxFilterData;
 class PxBaseMaterial;
 class PxMaterial;
-class PxFEMSoftBodyMaterial;
-class PxFEMClothMaterial;
 
 /**
 \brief Flags which affect the behavior of PxShapes.
@@ -181,189 +177,6 @@ public:
 	virtual		const PxGeometry&	getGeometry() const = 0;
 
 	/**
-	\brief Get the geometry type of the shape.
-
-	\return Type of shape geometry.
-
-	@see PxGeometryType
-	@deprecated
-	*/
-	PX_DEPRECATED PX_FORCE_INLINE	PxGeometryType::Enum	getGeometryType() const
-	{
-		return getGeometry().getType();
-	}
-
-	/**
-	\brief Fetch the geometry of the shape.
-
-	\note If the type of geometry to extract does not match the geometry type of the shape
-	then the method will return false and the passed in geometry descriptor is not modified.
-
-	\param[in] geometry The descriptor to save the shape's geometry data to.
-	\return True on success else false
-
-	@see PxGeometry PxGeometryType getGeometryType()
-	@deprecated
-	*/
-	PX_DEPRECATED PX_FORCE_INLINE bool	getBoxGeometry(PxBoxGeometry& geometry)	const
-	{
-		return getGeometryT(PxGeometryType::eBOX, geometry);
-	}
-
-	/**
-	\brief Fetch the geometry of the shape.
-
-	\note If the type of geometry to extract does not match the geometry type of the shape
-	then the method will return false and the passed in geometry descriptor is not modified.
-
-	\param[in] geometry The descriptor to save the shape's geometry data to.
-	\return True on success else false
-
-	@see PxGeometry PxGeometryType getGeometryType()
-	@deprecated
-	*/
-	PX_DEPRECATED PX_FORCE_INLINE bool	getSphereGeometry(PxSphereGeometry& geometry)	const
-	{
-		return getGeometryT(PxGeometryType::eSPHERE, geometry);
-	}
-
-	/**
-	\brief Fetch the geometry of the shape.
-
-	\note If the type of geometry to extract does not match the geometry type of the shape
-	then the method will return false and the passed in geometry descriptor is not modified.
-
-	\param[in] geometry The descriptor to save the shape's geometry data to.
-	\return True on success else false
-
-	@see PxGeometry PxGeometryType getGeometryType()
-	@deprecated
-	*/
-	PX_DEPRECATED PX_FORCE_INLINE bool	getCapsuleGeometry(PxCapsuleGeometry& geometry)	const
-	{
-		return getGeometryT(PxGeometryType::eCAPSULE, geometry);
-	}
-
-	/**
-	\brief Fetch the geometry of the shape.
-
-	\note If the type of geometry to extract does not match the geometry type of the shape
-	then the method will return false and the passed in geometry descriptor is not modified.
-
-	\param[in] geometry The descriptor to save the shape's geometry data to.
-	\return True on success else false
-
-	@see PxGeometry PxGeometryType getGeometryType()
-	@deprecated
-	*/
-	PX_DEPRECATED PX_FORCE_INLINE bool	getPlaneGeometry(PxPlaneGeometry& geometry)	const
-	{
-		return getGeometryT(PxGeometryType::ePLANE, geometry);
-	}
-
-	/**
-	\brief Fetch the geometry of the shape.
-
-	\note If the type of geometry to extract does not match the geometry type of the shape
-	then the method will return false and the passed in geometry descriptor is not modified.
-
-	\param[in] geometry The descriptor to save the shape's geometry data to.
-	\return True on success else false
-
-	@see PxGeometry PxGeometryType getGeometryType()
-	@deprecated
-	*/
-	PX_DEPRECATED PX_FORCE_INLINE bool	getConvexMeshGeometry(PxConvexMeshGeometry& geometry)	const
-	{
-		return getGeometryT(PxGeometryType::eCONVEXMESH, geometry);
-	}
-
-	/**
-	\brief Fetch the geometry of the shape.
-
-	\note If the type of geometry to extract does not match the geometry type of the shape
-	then the method will return false and the passed in geometry descriptor is not modified.
-
-	\param[in] geometry The descriptor to save the shape's geometry data to.
-	\return True on success else false
-
-	@see PxGeometry PxGeometryType getGeometryType()
-	@deprecated
-	*/
-	PX_DEPRECATED PX_FORCE_INLINE bool	getTriangleMeshGeometry(PxTriangleMeshGeometry& geometry)	const
-	{
-		return getGeometryT(PxGeometryType::eTRIANGLEMESH, geometry);
-	}
-
-	/**
-	\brief Fetch the geometry of the shape.
-
-	\note If the type of geometry to extract does not match the geometry type of the shape
-	then the method will return false and the passed in geometry descriptor is not modified.
-
-	\param[in] geometry The descriptor to save the shape's geometry data to.
-	\return True on success else false
-
-	@see PxGeometry PxGeometryType getGeometryType()
-	@deprecated
-	*/
-	PX_DEPRECATED PX_FORCE_INLINE bool	getTetrahedronMeshGeometry(PxTetrahedronMeshGeometry& geometry)	const
-	{
-		return getGeometryT(PxGeometryType::eTETRAHEDRONMESH, geometry);
-	}
-
-	/**
-	\brief Fetch the geometry of the shape.
-
-	\note If the type of geometry to extract does not match the geometry type of the shape
-	then the method will return false and the passed in geometry descriptor is not modified.
-
-	\param[in] geometry The descriptor to save the shape's geometry data to.
-	\return True on success else false
-
-	@see PxGeometry PxGeometryType getGeometryType()
-	@deprecated
-	*/
-	PX_DEPRECATED PX_FORCE_INLINE bool	getParticleSystemGeometry(PxParticleSystemGeometry& geometry)	const
-	{
-		return getGeometryT(PxGeometryType::ePARTICLESYSTEM, geometry);
-	}
-
-	/**
-	\brief Fetch the geometry of the shape.
-
-	\note If the type of geometry to extract does not match the geometry type of the shape
-	then the method will return false and the passed in geometry descriptor is not modified.
-
-	\param[in] geometry The descriptor to save the shape's geometry data to.
-	\return True on success else false
-
-	@see PxGeometry PxGeometryType getGeometryType()
-	@deprecated
-	*/
-	PX_DEPRECATED PX_FORCE_INLINE bool	getHeightFieldGeometry(PxHeightFieldGeometry& geometry)	const
-	{
-		return getGeometryT(PxGeometryType::eHEIGHTFIELD, geometry);
-	}
-
-	/**
-	\brief Fetch the geometry of the shape.
-
-	\note If the type of geometry to extract does not match the geometry type of the shape
-	then the method will return false and the passed in geometry descriptor is not modified.
-
-	\param[in] geometry The descriptor to save the shape's geometry data to.
-	\return True on success else false
-
-	@see PxGeometry PxGeometryType getGeometryType()
-	@deprecated
-	*/
-	PX_DEPRECATED PX_FORCE_INLINE bool	getCustomGeometry(PxCustomGeometry& geometry)	const
-	{
-		return getGeometryT(PxGeometryType::eCUSTOM, geometry);
-	}
-
-	/**
 	\brief Retrieves the actor which this shape is associated with.
 
 	\return The actor this shape is associated with, if it is an exclusive shape, else NULL
@@ -467,31 +280,6 @@ public:
 	virtual		void	setMaterials(PxMaterial*const* materials, PxU16 materialCount) = 0;
 
 	/**
-	\brief Assigns FEM soft body material(s) to the shape. Will remove existing materials from the shape.
-
-	<b>Sleeping:</b> Does <b>NOT</b> wake the associated actor up automatically.
-
-	\param[in] materials List of material pointers to assign to the shape. See #PxFEMSoftBodyMaterial
-	\param[in] materialCount The number of materials provided.
-
-	@see PxPhysics.createFEMSoftBodyMaterial() getSoftBodyMaterials() 
-	*/
-	PX_DEPRECATED virtual		void	setSoftBodyMaterials(PxFEMSoftBodyMaterial*const* materials, PxU16 materialCount) = 0;
-
-	/**
-	\brief Assigns FEM cloth material(s) to the shape. Will remove existing materials from the shape.
-	\warning Feature under development, only for internal usage.
-
-	<b>Sleeping:</b> Does <b>NOT</b> wake the associated actor up automatically.
-
-	\param[in] materials List of material pointers to assign to the shape. See #PxFEMClothMaterial
-	\param[in] materialCount The number of materials provided.
-
-	@see PxPhysics.createFEMClothMaterial() getClothMaterials() 
-	*/
-	PX_DEPRECATED virtual		void	setClothMaterials(PxFEMClothMaterial*const* materials, PxU16 materialCount) = 0;
-
-	/**
 	\brief Returns the number of materials assigned to the shape.
 
 	You can use #getMaterials() to retrieve the material pointers.
@@ -517,39 +305,6 @@ public:
 	@see PxMaterial getNbMaterials() PxMaterial::release()
 	*/
 	virtual		PxU32	getMaterials(PxMaterial** userBuffer, PxU32 bufferSize, PxU32 startIndex=0) const = 0;
-
-	/**
-	\brief Retrieve all the FEM soft body material pointers associated with the shape.
-
-	You can retrieve the number of material pointers by calling #getNbMaterials()
-
-	Note: The returned data may contain invalid pointers if you release materials using #PxMaterial::release().
-
-	\param[out] userBuffer The buffer to store the material pointers.
-	\param[in] bufferSize Size of provided user buffer.
-	\param[in] startIndex Index of first material pointer to be retrieved
-	\return Number of material pointers written to the buffer.
-
-	@see PxFEMSoftBodyMaterial getNbMaterials() PxMaterial::release()
-	*/
-	PX_DEPRECATED virtual		PxU32	getSoftBodyMaterials(PxFEMSoftBodyMaterial** userBuffer, PxU32 bufferSize, PxU32 startIndex = 0) const = 0;
-
-	/**
-	\brief Retrieve all the FEM cloth material pointers associated with the shape.
-	\warning Feature under development, only for internal usage.
-
-	You can retrieve the number of material pointers by calling #getNbMaterials()
-
-	Note: The returned data may contain invalid pointers if you release materials using #PxMaterial::release().
-
-	\param[out] userBuffer The buffer to store the material pointers.
-	\param[in] bufferSize Size of provided user buffer.
-	\param[in] startIndex Index of first material pointer to be retrieved
-	\return Number of material pointers written to the buffer.
-
-	@see PxFEMClothMaterial getNbMaterials() PxMaterial::release()
-	*/
-	PX_DEPRECATED virtual		PxU32	getClothMaterials(PxFEMClothMaterial** userBuffer, PxU32 bufferSize, PxU32 startIndex = 0) const = 0;
 
 	/**
 	\brief Retrieve material from given triangle index.

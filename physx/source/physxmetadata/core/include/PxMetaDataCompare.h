@@ -46,8 +46,6 @@ inline bool areEqual( const PxSimulationFilterShader&, const PxSimulationFilterS
 inline bool areEqual( const PxSimulationFilterCallback&, const PxSimulationFilterCallback& ) { return true; }
 inline bool areEqual( const PxConvexMesh&, const PxConvexMesh& ) { return true; }
 inline bool areEqual( const PxTriangleMesh&, const PxTriangleMesh& ) { return true; }
-inline bool areEqual( const PxTetrahedronMesh&, const PxTetrahedronMesh&) { return true; }
-inline bool areEqual( const PxParticleSystemGeometry&, const PxParticleSystemGeometry&) { return true; }
 inline bool areEqual( const PxBVH33TriangleMesh&, const PxBVH33TriangleMesh& ) { return true; }
 inline bool areEqual( const PxBVH34TriangleMesh&, const PxBVH34TriangleMesh& ) { return true; }
 inline bool areEqual( const PxHeightField&, const PxHeightField& ) { return true; }
@@ -244,8 +242,6 @@ struct EqualityOp
 			case PxGeometryType::eCAPSULE: compareGeometry<PxCapsuleGeometry>(inProp); break;
 			case PxGeometryType::eBOX: compareGeometry<PxBoxGeometry>(inProp); break;
 			case PxGeometryType::eCONVEXMESH: compareGeometry<PxConvexMeshGeometry>(inProp); break;
-			case PxGeometryType::eTETRAHEDRONMESH: compareGeometry<PxTetrahedronMeshGeometry>(inProp); break;
-			case PxGeometryType::ePARTICLESYSTEM: compareGeometry<PxParticleSystemGeometry>(inProp); break;
 			case PxGeometryType::eTRIANGLEMESH: compareGeometry<PxTriangleMeshGeometry>(inProp); break;
 			case PxGeometryType::eHEIGHTFIELD: compareGeometry<PxHeightFieldGeometry>(inProp); break;
 			default: PX_ASSERT( false ); break;

@@ -33,10 +33,7 @@
 #include "NpArticulationLink.h"
 #include "GuConvexMesh.h"
 #include "GuTriangleMesh.h"
-#include "GuTetrahedronMesh.h"
 #include "GuBounds.h"
-#include "NpFEMCloth.h"
-#include "NpSoftBody.h"
 
 #include "omnipvd/OmniPvdPxSampler.h"
 
@@ -86,23 +83,8 @@ NpShape::~NpShape()
 	const PxU32 nbMaterials = scGetNbMaterials();
 	PxShapeCoreFlags flags = mCore.getCore().mShapeCoreFlags;
 
-	if (flags & PxShapeCoreFlag::eCLOTH_SHAPE)
-	{
-#if PX_ENABLE_FEATURES_UNDER_CONSTRUCTION
-		for (PxU32 i = 0; i < nbMaterials; i++)
-			RefCountable_decRefCount(*scGetMaterial<NpFEMClothMaterial>(i));
-#endif
-	}
-	else if(flags & PxShapeCoreFlag::eSOFT_BODY_SHAPE)
-	{ 
-		for (PxU32 i = 0; i < nbMaterials; i++)
-			RefCountable_decRefCount(*scGetMaterial<NpFEMSoftBodyMaterial>(i));
-	}
-	else
-	{
-		for (PxU32 i = 0; i < nbMaterials; i++)
-			RefCountable_decRefCount(*scGetMaterial<NpMaterial>(i));
-	}
+	for (PxU32 i = 0; i < nbMaterials; i++)
+		RefCountable_decRefCount(*scGetMaterial<NpMaterial>(i));
 }
 
 void NpShape::onRefCountZero()
@@ -146,7 +128,6 @@ void NpShape::requiresObjects(PxProcessPxBaseCallback& c)
 	case PxGeometryType::eCONVEXMESH:		mesh = static_cast<const PxConvexMeshGeometry&>(geometry).convexMesh;			break;
 	case PxGeometryType::eHEIGHTFIELD:		mesh = static_cast<const PxHeightFieldGeometry&>(geometry).heightField;			break;
 	case PxGeometryType::eTRIANGLEMESH:		mesh = static_cast<const PxTriangleMeshGeometry&>(geometry).triangleMesh;		break;
-	case PxGeometryType::eTETRAHEDRONMESH:	mesh = static_cast<const PxTetrahedronMeshGeometry&>(geometry).tetrahedronMesh;	break;
 	}
 	
 	if(mesh)
@@ -440,37 +421,7 @@ void NpShape::setMaterialsInternal(PxMaterialType* const * materials, PxU16 mate
 
 void NpShape::setMaterials(PxMaterial*const* materials, PxU16 materialCount)
 {
-	PX_CHECK_AND_RETURN(!(mCore.getCore().mShapeCoreFlags & PxShapeCoreFlag::eSOFT_BODY_SHAPE), "NpShape::setMaterials: cannot set rigid body materials to a soft body shape!");
-	PX_CHECK_AND_RETURN(!(mCore.getCore().mShapeCoreFlags & PxShapeCoreFlag::eCLOTH_SHAPE), "NpShape::setMaterials: cannot set rigid body materials to a cloth shape!");
 	setMaterialsInternal<PxMaterial, NpMaterial>(materials, materialCount);
-}
-void NpShape::setSoftBodyMaterials(PxFEMSoftBodyMaterial*const* materials, PxU16 materialCount)
-{
-#if PX_SUPPORT_GPU_PHYSX
-	PX_CHECK_AND_RETURN((mCore.getCore().mShapeCoreFlags & PxShapeCoreFlag::eSOFT_BODY_SHAPE), "NpShape::setMaterials: can only apply soft body materials to a soft body shape!");
-
-	setMaterialsInternal<PxFEMSoftBodyMaterial, NpFEMSoftBodyMaterial>(materials, materialCount);
-	if (this->mActor)
-	{
-		static_cast<NpSoftBody*>(mActor)->updateMaterials();
-	}
-#else
-	PX_UNUSED(materials);
-	PX_UNUSED(materialCount);
-#endif
-}
-
-void NpShape::setClothMaterials(PxFEMClothMaterial*const* materials, PxU16 materialCount)
-{
-#if PX_SUPPORT_GPU_PHYSX && PX_ENABLE_FEATURES_UNDER_CONSTRUCTION
-
-	PX_CHECK_AND_RETURN((mCore.getCore().mShapeCoreFlags & PxShapeCoreFlag::eCLOTH_SHAPE), "NpShape::setMaterials: can only apply cloth materials to a cloth shape!");
-
-	setMaterialsInternal<PxFEMClothMaterial, NpFEMClothMaterial>(materials, materialCount);
-#else
-	PX_UNUSED(materials);
-	PX_UNUSED(materialCount);
-#endif
 }
 
 PxU16 NpShape::getNbMaterials() const
@@ -484,25 +435,6 @@ PxU32 NpShape::getMaterials(PxMaterial** userBuffer, PxU32 bufferSize, PxU32 sta
 	NP_READ_CHECK(getNpScene());
 	return scGetMaterials<PxMaterial, NpMaterial>(userBuffer, bufferSize, startIndex);
 }
-
-PxU32 NpShape::getSoftBodyMaterials(PxFEMSoftBodyMaterial** userBuffer, PxU32 bufferSize, PxU32 startIndex) const
-{
-	NP_READ_CHECK(getNpScene());
-	return scGetMaterials<PxFEMSoftBodyMaterial, NpFEMSoftBodyMaterial>(userBuffer, bufferSize, startIndex);
-}
-
-#if PX_ENABLE_FEATURES_UNDER_CONSTRUCTION
-PxU32 NpShape::getClothMaterials(PxFEMClothMaterial** userBuffer, PxU32 bufferSize, PxU32 startIndex) const
-{
-	NP_READ_CHECK(getNpScene());
-	return scGetMaterials<PxFEMClothMaterial, NpFEMClothMaterial>(userBuffer, bufferSize, startIndex);
-}
-#else
-PxU32 NpShape::getClothMaterials(PxFEMClothMaterial**, PxU32, PxU32) const
-{
-	return 0;
-}
-#endif
 
 PxBaseMaterial* NpShape::getMaterialFromInternalFaceIndex(PxU32 faceIndex) const
 {
@@ -854,7 +786,6 @@ PxRefCounted* NpShape::getMeshRefCountable()
 		case PxGeometryType::eCONVEXMESH:		return static_cast<const PxConvexMeshGeometry&>(geometry).convexMesh;
 		case PxGeometryType::eHEIGHTFIELD:		return static_cast<const PxHeightFieldGeometry&>(geometry).heightField;
 		case PxGeometryType::eTRIANGLEMESH:		return static_cast<const PxTriangleMeshGeometry&>(geometry).triangleMesh;
-		case PxGeometryType::eTETRAHEDRONMESH:	return static_cast<const PxTetrahedronMeshGeometry&>(geometry).tetrahedronMesh;
 		default:
 			break;
 	}
@@ -924,16 +855,6 @@ void NpShape::notifyActorAndUpdatePVD(Sc::ShapeChangeNotifyFlags notifyFlags)
 		Sc::RigidCore* rigidCore = getScRigidObjectSLOW();
 		if(rigidCore)
 			rigidCore->onShapeChange(mCore, notifyFlags);
-
-#if PX_SUPPORT_GPU_PHYSX
-		const PxType type = mActor->getConcreteType();
-	#if PX_ENABLE_FEATURES_UNDER_CONSTRUCTION
-		if(type==PxConcreteType::eFEM_CLOTH)
-			static_cast<NpFEMCloth*>(mActor)->getCore().onShapeChange(mCore, notifyFlags);
-	#endif
-		if(type==PxConcreteType::eSOFT_BODY)
-			static_cast<NpSoftBody*>(mActor)->getCore().onShapeChange(mCore, notifyFlags);
-#endif
 	}
 
 	UPDATE_PVD_PROPERTY

@@ -42,10 +42,6 @@ class PxMaterial;
 class PxTolerancesScale;
 struct PxvOffsetTable;
 
-#if PX_SUPPORT_GPU_PHYSX
-class PxPhysXGpu;
-#endif
-
 namespace Sc
 {
 	class Scene;
@@ -90,11 +86,6 @@ namespace Sc
 		ptrdiff_t	scRigidStatic2PxActor;
 		ptrdiff_t 	scRigidDynamic2PxActor;
 		ptrdiff_t 	scArticulationLink2PxActor;
-		ptrdiff_t 	scSoftBody2PxActor;
-		ptrdiff_t 	scPBDParticleSystem2PxActor;
-		ptrdiff_t 	scFLIPParticleSystem2PxActor;
-		ptrdiff_t 	scMPMParticleSystem2PxActor;
-		ptrdiff_t 	scCustomParticleSystem2PxActor;
 		ptrdiff_t 	scShape2Px;
 		ptrdiff_t 	scArticulationRC2Px;
 		ptrdiff_t 	scArticulationJointRC2Px;

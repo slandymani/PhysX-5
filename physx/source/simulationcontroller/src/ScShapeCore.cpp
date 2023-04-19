@@ -32,7 +32,6 @@
 #include "GuConvexMesh.h"
 #include "GuTriangleMesh.h"
 #include "GuHeightField.h"
-#include "GuTetrahedronMesh.h"
 
 using namespace physx;
 using namespace Gu;
@@ -80,14 +79,6 @@ void GeometryUnion::set(const PxGeometry& g)
 		case PxGeometryType::eCONVEXMESH:
 		{
 			reinterpret_cast<PxConvexMeshGeometry&>(mGeometry) = static_cast<const PxConvexMeshGeometry&>(g);
-			reinterpret_cast<PxConvexMeshGeometryLL&>(mGeometry).gpuCompatible = ::getConvexMesh(get<PxConvexMeshGeometryLL>().convexMesh).isGpuCompatible();
-		}
-		break;
-
-		case PxGeometryType::ePARTICLESYSTEM:
-		{
-			reinterpret_cast<PxParticleSystemGeometry&>(mGeometry) = static_cast<const PxParticleSystemGeometry&>(g);
-			reinterpret_cast<PxParticleSystemGeometryLL&>(mGeometry).materialsLL = MaterialIndicesStruct();
 		}
 		break;
 
@@ -95,13 +86,6 @@ void GeometryUnion::set(const PxGeometry& g)
 		{
 			reinterpret_cast<PxTriangleMeshGeometry&>(mGeometry) = static_cast<const PxTriangleMeshGeometry&>(g);
 			reinterpret_cast<PxTriangleMeshGeometryLL&>(mGeometry).materialsLL = MaterialIndicesStruct();
-		}
-		break;
-
-		case PxGeometryType::eTETRAHEDRONMESH:
-		{
-			reinterpret_cast<PxTetrahedronMeshGeometry&>(mGeometry) = static_cast<const PxTetrahedronMeshGeometry&>(g);
-			reinterpret_cast<PxTetrahedronMeshGeometryLL&>(mGeometry).materialsLL = MaterialIndicesStruct();
 		}
 		break;
 
@@ -131,8 +115,6 @@ static PxConvexMeshGeometryLL extendForLL(const PxConvexMeshGeometry& hlGeom)
 {
 	PxConvexMeshGeometryLL llGeom;
 	static_cast<PxConvexMeshGeometry&>(llGeom) = hlGeom;
-
-	llGeom.gpuCompatible = hlGeom.convexMesh->isGpuCompatible();
 
 	return llGeom;
 }
@@ -200,10 +182,6 @@ static PX_FORCE_INLINE const MaterialIndicesStruct* getMaterials(const GeometryU
 		return &gu.get<PxTriangleMeshGeometryLL>().materialsLL;
 	else if(type == PxGeometryType::eHEIGHTFIELD)
 		return &gu.get<PxHeightFieldGeometryLL>().materialsLL;
-	else if(type == PxGeometryType::eTETRAHEDRONMESH)
-		return &gu.get<PxTetrahedronMeshGeometryLL>().materialsLL;
-	else if(type == PxGeometryType::ePARTICLESYSTEM)
-		return &gu.get<PxParticleSystemGeometryLL>().materialsLL;
 	else
 		return NULL;
 }
@@ -266,8 +244,7 @@ void ShapeCore::setGeometry(const PxGeometry& geom)
 
 	mCore.mGeometry.set(geom);
 
-	if((newGeomType == PxGeometryType::eTRIANGLEMESH) || (newGeomType == PxGeometryType::eHEIGHTFIELD) 
-		|| (newGeomType == PxGeometryType::eTETRAHEDRONMESH)|| (newGeomType == PxGeometryType::ePARTICLESYSTEM))
+	if((newGeomType == PxGeometryType::eTRIANGLEMESH) || (newGeomType == PxGeometryType::eHEIGHTFIELD))
 	{
 		MaterialIndicesStruct* newMaterials = const_cast<MaterialIndicesStruct*>(getMaterials(mCore.mGeometry));
 		PX_ASSERT(newMaterials);
@@ -378,8 +355,6 @@ void ShapeCore::resolveReferences(PxDeserializationContext& context)
 		static_cast<PxTriangleMeshGeometryLL&>(geom) = extendForLL(meshGeom);
 	}
 	break;
-	case PxGeometryType::eTETRAHEDRONMESH:
-	case PxGeometryType::ePARTICLESYSTEM:
 	case PxGeometryType::eCUSTOM:
 	{
 		// implement

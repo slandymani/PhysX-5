@@ -44,7 +44,6 @@
 
 #include "DyConstraintPrep.h"
 #include "DyConstraintPartition.h"
-#include "DySoftBody.h"
 
 #include "CmFlushPool.h"
 #include "DyArticulationPImpl.h"

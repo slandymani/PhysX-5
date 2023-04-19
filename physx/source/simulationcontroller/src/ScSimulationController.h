@@ -40,8 +40,6 @@ namespace Dy
 {
 	class FeatherstoneArticulation;
 	struct ArticulationJointCore;
-	class ParticleSystem;
-	class FEMCloth;
 }
 
 namespace Sc
@@ -76,11 +74,9 @@ namespace Sc
 		virtual void updateBodies(PxBaseTask* /*continuation*/){}
 		virtual void updateShapes(PxBaseTask* /*continuation*/) {}
 		virtual	void preIntegrateAndUpdateBound(PxBaseTask* /*continuation*/, const PxVec3 /*gravity*/, const PxReal /*dt*/){}
-		virtual void updateParticleSystemsAndSoftBodies(){}
 		virtual void sortContacts(){}
 		virtual void update(PxBitMapPinned& /*changedHandleMap*/){}
 		virtual void mergeChangedAABBMgHandle(const PxU32 /*maxAABBMgHandles*/, const bool /*suppressedReadback*/) {}
-		virtual void gpuDmabackData(PxsTransformCache& /*cache*/, Bp::BoundsArray& /*boundArray*/, PxBitMapPinned& /*changedAABBMgrHandles*/, bool /*suppress*/){}
 		virtual void updateScBodyAndShapeSim(PxsTransformCache& /*cache*/, Bp::BoundsArray& /*boundArray*/, PxBaseTask* /*continuation*/);
 		virtual void updateArticulation(Dy::FeatherstoneArticulation* /*articulation*/, const PxNodeIndex& /*nodeIndex*/) {}
 		virtual void updateArticulationJoint(Dy::FeatherstoneArticulation* /*articulation*/, const PxNodeIndex& /*nodeIndex*/) {}
@@ -106,39 +102,6 @@ namespace Sc
 
 		
 		virtual PxU32   getArticulationRemapIndex(const PxU32 /*nodeIndex*/) { return PX_INVALID_U32;}
-		
-		//virtual void	setParticleSystemManager(PxgParticleSystemCore* /* psCore*/) {}
-
-		virtual void	copyArticulationData(void* /*jointData*/, void* /*index*/, PxArticulationGpuDataType::Enum /*flag*/, const PxU32 /*nbUpdatedArticulations*/, void* /*copyEvent*/) {}
-		virtual void	applyArticulationData(void* /*data*/, void* /*index*/, PxArticulationGpuDataType::Enum /*flag*/, const PxU32 /*nbUpdatedArticulations*/, void* /*waitEvent*/, void* /*signalEvent*/) {}
-
-		virtual void	copySoftBodyData(void** /*data*/, void* /*dataSizes*/, void* /*softBodyIndices*/, PxSoftBodyDataFlag::Enum /*flag*/, const PxU32 /*nbCopySoftBodies*/, const PxU32 /*maxSize*/, void* /*copyEvent*/) {}
-		virtual void	applySoftBodyData(void** /*data*/, void* /*dataSizes*/, void* /*softBodyIndices*/, PxSoftBodyDataFlag::Enum /*flag*/, const PxU32 /*nbUpdatedSoftBodies*/, const PxU32 /*maxSize*/, void* /*applyEvent*/) {}
-
-		virtual	void	copyContactData(Dy::Context* /*dyContext*/, void* /*data*/, const PxU32 /*maxContactPairs*/, void* /*numContactPairs*/, void* /*copyEvent*/) {}
-		virtual	void	copyBodyData(PxGpuBodyData* /*data*/, PxGpuActorPair* /*index*/, const PxU32 /*nbCopyActors*/, void* /*copyEvent*/){}
-		
-		virtual	void	applyActorData(void* /*data*/, PxGpuActorPair* /*index*/, PxActorCacheFlag::Enum /*flag*/, const PxU32 /*nbUpdatedActors*/, void* /*waitEvent*/, void* /*signalEvent*/) {}
-
-		virtual void*	getMPMDataPointer(const Dy::ParticleSystem& /*psLL*/, PxMPMParticleDataFlag::Enum /*flags*/) { return NULL; }
-		virtual void*	getSparseGridDataPointer(const Dy::ParticleSystem& /*psLL*/, PxSparseGridDataFlag::Enum /*flags*/, PxParticleSolverType::Enum /*type*/) { return NULL; }
-
-		virtual void    allocatePBDMaterialsBuffer(PxPhysXGpu* /*physxGpu*/, Dy::ParticleSystemCore& /*core*/, PxU64* /*gpuMemStat*/) {}
-		virtual void    allocateFLIPMaterialsBuffer(PxPhysXGpu* /*physxGpu*/, Dy::ParticleSystemCore& /*core*/, PxU64* /*gpuMemStat*/) {}
-		virtual void    allocateMPMMaterialsBuffer(PxPhysXGpu* /*physxGpu*/, Dy::ParticleSystemCore& /*core*/, PxU64* /*gpuMemStat*/) {}
-
-		virtual void	syncParticleData() {}
-
-		virtual void    updateBoundsAndShapes(Bp::AABBManagerBase& /*aabbManager*/, const bool/* useGpuBp*/, const bool /*useDirectApi*/){}
-
-		virtual	void	computeDenseJacobians(const PxIndexDataPair* /*indices*/, PxU32 /*nbIndices*/, void* /*computeEvent*/){}
-		virtual	void	computeGeneralizedMassMatrices(const PxIndexDataPair* /*indices*/, PxU32 /*nbIndices*/, void* /*computeEvent*/){}
-		virtual	void	computeGeneralizedGravityForces(const PxIndexDataPair* /*indices*/, PxU32 /*nbIndices*/, const PxVec3& /*gravity*/, void* /*computeEvent*/){}
-		virtual	void	computeCoriolisAndCentrifugalForces(const PxIndexDataPair* /*indices*/, PxU32 /*nbIndices*/, void* /*computeEvent*/) {}
-		virtual void    applyParticleBufferData(const PxU32* /*indices*/, const PxGpuParticleBufferIndexPair* /*indexPairs*/, const PxParticleBufferFlags* /*flags*/, PxU32 /*nbUpdatedBuffers*/, void* /*waitEvent*/, void* /*signalEvent*/) {}
-
-		virtual void flushInsertions() {}
-
 	};
 }
 

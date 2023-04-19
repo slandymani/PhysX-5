@@ -41,11 +41,6 @@
 #include "NpAggregate.h"
 #include "NpPruningStructure.h"
 #include "NpMaterial.h"
-#include "NpFEMSoftBodyMaterial.h"
-#include "NpFEMClothMaterial.h"
-#include "NpMPMMaterial.h"
-#include "NpFLIPMaterial.h"
-#include "NpPBDMaterial.h"
 #include "GuConvexMesh.h"
 #include "GuTriangleMesh.h"
 #include "GuTriangleMeshBV4.h"
@@ -210,74 +205,6 @@ void NpMaterial::getBinaryMetaData(PxOutputStream& stream)
 	PX_DEF_BIN_METADATA_ITEM(stream,		NpMaterial, PxsMaterialCore,	mMaterial,	0)
 }
 
-///////////////////////////////////////////////////////////////////////////////
-
-void NpFEMSoftBodyMaterial::getBinaryMetaData(PxOutputStream& stream)
-{
-	PX_DEF_BIN_METADATA_VCLASS(stream, NpFEMSoftBodyMaterial)
-	PX_DEF_BIN_METADATA_BASE_CLASS(stream, NpFEMSoftBodyMaterial, PxBase)
-
-	PX_DEF_BIN_METADATA_ITEM(stream, NpFEMSoftBodyMaterial, void, userData, PxMetaDataFlag::ePTR)
-	PX_DEF_BIN_METADATA_ITEM(stream, NpFEMSoftBodyMaterial, PxsFEMSoftBodyMaterialCore, mMaterial, 0)
-}
-
-///////////////////////////////////////////////////////////////////////////////
-
-#if PX_ENABLE_FEATURES_UNDER_CONSTRUCTION
-void NpFEMClothMaterial::getBinaryMetaData(PxOutputStream& stream)
-{
-	PX_DEF_BIN_METADATA_VCLASS(stream, NpFEMClothMaterial)
-	PX_DEF_BIN_METADATA_BASE_CLASS(stream, NpFEMClothMaterial, PxBase)
-
-	PX_DEF_BIN_METADATA_ITEM(stream, NpFEMClothMaterial, void, userData, PxMetaDataFlag::ePTR)
-	PX_DEF_BIN_METADATA_ITEM(stream, NpFEMClothMaterial, PxsFEMClothMaterialCore, mMaterial, 0)
-}
-#endif
-
-///////////////////////////////////////////////////////////////////////////////
-
-void NpPBDMaterial::getBinaryMetaData(PxOutputStream& stream)
-{
-	PX_DEF_BIN_METADATA_VCLASS(stream, NpPBDMaterial)
-	PX_DEF_BIN_METADATA_BASE_CLASS(stream, NpPBDMaterial, PxBase)
-
-	PX_DEF_BIN_METADATA_ITEM(stream, NpPBDMaterial, void, userData, PxMetaDataFlag::ePTR)
-	PX_DEF_BIN_METADATA_ITEM(stream, NpPBDMaterial, PxsPBDMaterialCore, mMaterial, 0)
-}
-
-///////////////////////////////////////////////////////////////////////////////
-#if PX_ENABLE_FEATURES_UNDER_CONSTRUCTION
-void NpCustomMaterial::getBinaryMetaData(PxOutputStream& stream)
-{
-	PX_DEF_BIN_METADATA_VCLASS(stream, NpCustomMaterial)
-	PX_DEF_BIN_METADATA_BASE_CLASS(stream, NpCustomMaterial, PxBase)
-
-	PX_DEF_BIN_METADATA_ITEM(stream, NpCustomMaterial, void, userData, PxMetaDataFlag::ePTR)
-	PX_DEF_BIN_METADATA_ITEM(stream, NpCustomMaterial, PxsCustomMaterialCore, mMaterial, 0)
-}
-
-///////////////////////////////////////////////////////////////////////////////
-
-void NpFLIPMaterial::getBinaryMetaData(PxOutputStream& stream)
-{
-	PX_DEF_BIN_METADATA_VCLASS(stream, NpFLIPMaterial)
-	PX_DEF_BIN_METADATA_BASE_CLASS(stream, NpFLIPMaterial, PxBase)
-
-	PX_DEF_BIN_METADATA_ITEM(stream, NpFLIPMaterial, void, userData, PxMetaDataFlag::ePTR)
-	PX_DEF_BIN_METADATA_ITEM(stream, NpFLIPMaterial, PxsFLIPMaterialCore, mMaterial, 0)
-}
-
-///////////////////////////////////////////////////////////////////////////////
-
-void NpMPMMaterial::getBinaryMetaData(PxOutputStream& stream)
-{
-	PX_DEF_BIN_METADATA_VCLASS(stream, NpMPMMaterial)
-	PX_DEF_BIN_METADATA_BASE_CLASS(stream, NpMPMMaterial, PxBase)
-
-	PX_DEF_BIN_METADATA_ITEM(stream, NpMPMMaterial, void, userData, PxMetaDataFlag::ePTR)
-	PX_DEF_BIN_METADATA_ITEM(stream, NpMPMMaterial, PxsMPMMaterialCore, mMaterial, 0)
-}
-#endif
 ///////////////////////////////////////////////////////////////////////////////
 
 void NpConstraint::getBinaryMetaData(PxOutputStream& stream)
@@ -758,12 +685,6 @@ static void getFoundationMetaData(PxOutputStream& stream)
 namespace physx
 {
 template<> void PxsMaterialCore::getBinaryMetaData(PxOutputStream& stream);
-template<> void PxsFEMSoftBodyMaterialCore::getBinaryMetaData(PxOutputStream& stream);
-template<> void PxsFEMClothMaterialCore::getBinaryMetaData(PxOutputStream& stream);
-template<> void PxsPBDMaterialCore::getBinaryMetaData(PxOutputStream& stream);
-template<> void PxsCustomMaterialCore::getBinaryMetaData(PxOutputStream& stream);
-template<> void PxsFLIPMaterialCore::getBinaryMetaData(PxOutputStream& stream);
-template<> void PxsMPMMaterialCore::getBinaryMetaData(PxOutputStream& stream);
 }
 
 void PxGetPhysicsBinaryMetaData(PxOutputStream& stream)
@@ -778,12 +699,6 @@ void PxGetPhysicsBinaryMetaData(PxOutputStream& stream)
 	Gu::HeightField::getBinaryMetaData(stream);
 
 	PxsMaterialCore::getBinaryMetaData(stream);
-	PxsFEMSoftBodyMaterialCore::getBinaryMetaData(stream);
-	PxsFEMClothMaterialCore::getBinaryMetaData(stream);
-	PxsPBDMaterialCore::getBinaryMetaData(stream);
-	PxsCustomMaterialCore::getBinaryMetaData(stream);
-	PxsFLIPMaterialCore::getBinaryMetaData(stream);
-	PxsMPMMaterialCore::getBinaryMetaData(stream);
 
 	MaterialIndicesStruct::getBinaryMetaData(stream);
 	GeometryUnion::getBinaryMetaData(stream);
@@ -807,16 +722,6 @@ void PxGetPhysicsBinaryMetaData(PxOutputStream& stream)
 	NpBase::getBinaryMetaData(stream);
 	NpActor::getBinaryMetaData(stream);
 	NpMaterial::getBinaryMetaData(stream);
-	NpFEMSoftBodyMaterial::getBinaryMetaData(stream);
-#if PX_ENABLE_FEATURES_UNDER_CONSTRUCTION
-	NpFEMClothMaterial::getBinaryMetaData(stream);
-#endif
-	NpPBDMaterial::getBinaryMetaData(stream);
-#if PX_ENABLE_FEATURES_UNDER_CONSTRUCTION
-	NpCustomMaterial::getBinaryMetaData(stream);
-	NpFLIPMaterial::getBinaryMetaData(stream);
-	NpMPMMaterial::getBinaryMetaData(stream);
-#endif
 	NpRigidDynamic::getBinaryMetaData(stream);
 	NpRigidStatic::getBinaryMetaData(stream);
 	NpShape::getBinaryMetaData(stream);

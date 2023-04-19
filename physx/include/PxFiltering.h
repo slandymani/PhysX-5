@@ -461,25 +461,6 @@ struct PxFilterObjectType
 		*/
 		eARTICULATION,
 
-		/**
-		\brief A particle system
-		@see PxParticleSystem
-		*/
-		ePARTICLESYSTEM,
-
-		/**
-		\brief A FEM-based soft body
-		@see PxSoftBody
-		*/
-		eSOFTBODY,
-
-		/**
-		\brief A FEM-based cloth
-		\note In development
-		@see PxFEMCloth
-		*/
-		eFEMCLOTH,
-
 		//! \brief internal use only!
 		eMAX_TYPE_COUNT = 16,
 
@@ -736,39 +717,6 @@ struct PxPairFilteringMode
 		eDEFAULT PX_DEPRECATED = eSUPPRESS
 	};
 };
-
-/**
-\brief Struct for storing a particle/vertex - rigid filter pair with comparison operators
-*/
-struct PxParticleRigidFilterPair
-{
-	PxU64 mID0; //!< Rigid node index
-	PxU64 mID1; //!< Particle/vertex id
-
-	PX_CUDA_CALLABLE bool operator<(const PxParticleRigidFilterPair& other) const
-	{
-		if(mID0 < other.mID0)
-			return true;
-		if(mID0 == other.mID0 && mID1 < other.mID1)
-			return true;
-		return false;
-	}
-
-	PX_CUDA_CALLABLE bool operator>(const PxParticleRigidFilterPair& other) const
-	{
-		if(mID0 > other.mID0)
-			return true;
-		if(mID0 == other.mID0 && mID1 > other.mID1)
-			return true;
-		return false;
-	}
-
-	PX_CUDA_CALLABLE bool operator==(const PxParticleRigidFilterPair& other) const
-	{
-		return (mID0 == other.mID0 && mID1 == other.mID1);
-	}
-};
-
 
 #if !PX_DOXYGEN
 } // namespace physx

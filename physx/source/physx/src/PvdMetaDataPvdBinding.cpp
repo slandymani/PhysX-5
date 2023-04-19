@@ -286,11 +286,6 @@ void PvdMetaDataBinding::registerSDKProperties(PvdDataStream& inStream)
 		definePropertyStruct<PxConvexMeshGeometry, PxConvexMeshGeometryGeneratedValues, PxConvexMeshGeometry>(inStream);
 	}
 
-	{ // PxTetrahedronMeshGeometry
-		createClassDeriveAndDefineProperties<PxTetrahedronMeshGeometry, PxGeometry>(inStream);
-		definePropertyStruct<PxTetrahedronMeshGeometry, PxTetrahedronMeshGeometryGeneratedValues, PxTetrahedronMeshGeometry>(inStream);
-	}
-
 	{ // PxTriangleMeshGeometry
 		createClassDeriveAndDefineProperties<PxTriangleMeshGeometry, PxGeometry>(inStream);
 		definePropertyStruct<PxTriangleMeshGeometry, PxTriangleMeshGeometryGeneratedValues, PxTriangleMeshGeometry>(inStream);
@@ -411,30 +406,6 @@ void PvdMetaDataBinding::registerSDKProperties(PvdDataStream& inStream)
 		inStream.createProperty<PxTriangleMesh, PxU16>("MaterialIndices", "", PropertyType::Array);
 		inStream.createProperty<PxTriangleMesh, ObjectRef>("Physics", "parents", PropertyType::Scalar);
 	}
-
-	// PxTetrahedronMesh
-	{
-		inStream.createClass<PxTetrahedronMesh>();
-		inStream.createProperty<PxTetrahedronMesh, PxVec3>("Points", "", PropertyType::Array);
-		inStream.createProperty<PxTetrahedronMesh, PxU32>("NbTriangles", "", PropertyType::Scalar);
-		inStream.createProperty<PxTetrahedronMesh, PxU32>("Triangles", "", PropertyType::Array);
-		inStream.createProperty<PxTetrahedronMesh, ObjectRef>("Physics", "parents", PropertyType::Scalar);
-	}
-
-	// PxFEMSoftBodyMaterial
-	{
-		createClassAndDefineProperties<PxFEMSoftBodyMaterial>(inStream);
-		definePropertyStruct<PxFEMSoftBodyMaterial, PxFEMSoftBodyMaterialGeneratedValues, PxFEMSoftBodyMaterial>(inStream);
-		inStream.createProperty<PxFEMSoftBodyMaterial, ObjectRef>("Physics", "parents", PropertyType::Scalar);
-	}
-
-	// PxFEMClothMaterial
-	// jcarius: Commented-out until FEMCloth is not under construction anymore
-	// {
-	// 	createClassAndDefineProperties<PxFEMClothMaterial>(inStream);
-	// 	definePropertyStruct<PxFEMClothMaterial, PxFEMClothMaterialGeneratedValues, PxFEMClothMaterial>(inStream);
-	// 	inStream.createProperty<PxFEMClothMaterial, ObjectRef>("Physics", "parents", PropertyType::Scalar);
-	// }
 
 	{ // PxShape
 		createClassAndDefineProperties<PxShape>(inStream);
@@ -825,42 +796,6 @@ void PvdMetaDataBinding::destroyInstance(PvdDataStream& inStream, const PxMateri
 	removePhysicsGroupProperty(inStream, "Materials", inMaterial, ownerPhysics);
 }
 
-void PvdMetaDataBinding::createInstance(PvdDataStream& inStream, const PxFEMSoftBodyMaterial& inMaterial, const PxPhysics& ownerPhysics)
-{
-	inStream.createInstance(&inMaterial);
-	sendAllProperties(inStream, inMaterial);
-	addPhysicsGroupProperty(inStream, "FEMMaterials", inMaterial, ownerPhysics);
-}
-
-void PvdMetaDataBinding::sendAllProperties(PvdDataStream& /*inStream*/, const PxFEMSoftBodyMaterial& /*inMaterial*/)
-{
-	/*PxMaterialGeneratedValues values(&inMaterial);
-	inStream.setPropertyMessage(&inMaterial, values);*/
-}
-
-void PvdMetaDataBinding::destroyInstance(PvdDataStream& /*inStream*/, const PxFEMSoftBodyMaterial& /*inMaterial*/, const PxPhysics& /*ownerPhysics*/)
-{
-	//removePhysicsGroupProperty(inStream, "Materials", inMaterial, ownerPhysics);
-}
-// jcarius: Commented-out until FEMCloth is not under construction anymore
-// void PvdMetaDataBinding::createInstance(PvdDataStream& inStream, const PxFEMClothMaterial& inMaterial, const PxPhysics& ownerPhysics)
-// {
-// 	inStream.createInstance(&inMaterial);
-// 	sendAllProperties(inStream, inMaterial);
-// 	addPhysicsGroupProperty(inStream, "FEMMaterials", inMaterial, ownerPhysics);
-// }
-
-// void PvdMetaDataBinding::sendAllProperties(PvdDataStream& /*inStream*/, const PxFEMClothMaterial& /*inMaterial*/)
-// {
-// 	/*PxMaterialGeneratedValues values(&inMaterial);
-// 	inStream.setPropertyMessage(&inMaterial, values);*/
-// }
-
-// void PvdMetaDataBinding::destroyInstance(PvdDataStream& /*inStream*/, const PxFEMClothMaterial& /*inMaterial*/, const PxPhysics& /*ownerPhysics*/)
-// {
-// 	//removePhysicsGroupProperty(inStream, "Materials", inMaterial, ownerPhysics);
-// }
-
 void PvdMetaDataBinding::createInstance(PvdDataStream& inStream, const PxPBDMaterial& inMaterial, const PxPhysics& ownerPhysics)
 {
 	inStream.createInstance(&inMaterial);
@@ -966,49 +901,6 @@ void PvdMetaDataBinding::destroyInstance(PvdDataStream& inStream, const PxConvex
 	removePhysicsGroupProperty(inStream, "ConvexMeshes", inData, ownerPhysics);
 }
 
-void PvdMetaDataBinding::createInstance(PvdDataStream& inStream, const PxTetrahedronMesh& inData, const PxPhysics& ownerPhysics)
-{
-	inStream.createInstance(&inData);
-	
-	// vertex Array:
-	{
-		const PxVec3* vertexPtr = inData.getVertices();
-		const PxU32 numVertices = inData.getNbVertices();
-		inStream.setPropertyValue(&inData, "Vertices", vertexPtr, numVertices);
-	}
-
-	////invert mass array
-	//{
-	//	const float* invMassPtr = inData.getVertInvMasses();
-	//	const PxU32 numVertices = inData.getCollisionMesh().getNbVertices();
-	//	inStream.setPropertyValue(&inData, "invert mass", invMassPtr, numVertices);
-	//}
-
-	// index Array:
-	{
-		const bool has16BitIndices = inData.getTetrahedronMeshFlags() & PxTetrahedronMeshFlag::e16_BIT_INDICES ? true : false;
-		const PxU32 numTetrahedrons= inData.getNbTetrahedrons();
-
-		inStream.setPropertyValue(&inData, "NbTetrahedron", numTetrahedrons);
-
-		const PxU32 numIndexes = numTetrahedrons * 4;
-		const PxU8* tetrahedronsPtr = reinterpret_cast<const PxU8*>(inData.getTetrahedrons());
-		// We declared this type as a 32 bit integer above.
-		// PVD will automatically unsigned-extend data that is smaller than the target type.
-		if (has16BitIndices)
-			inStream.setPropertyValue(&inData, "Tetrahedrons", reinterpret_cast<const PxU16*>(tetrahedronsPtr), numIndexes);
-		else
-			inStream.setPropertyValue(&inData, "Tetrahedrons", reinterpret_cast<const PxU32*>(tetrahedronsPtr), numIndexes);
-	}
-
-	addPhysicsGroupProperty(inStream, "TetrahedronMeshes", inData, ownerPhysics);
-}
-
-void PvdMetaDataBinding::destroyInstance(PvdDataStream& inStream, const PxTetrahedronMesh& inData, const PxPhysics& ownerPhysics)
-{
-	removePhysicsGroupProperty(inStream, "TetrahedronMeshes", inData, ownerPhysics);
-}
-
 void PvdMetaDataBinding::createInstance(PvdDataStream& inStream, const PxTriangleMesh& inData, const PxPhysics& ownerPhysics)
 {
 	inStream.createInstance(&inData);
@@ -1068,13 +960,6 @@ void PvdMetaDataBinding::registrarPhysicsObject<PxConvexMeshGeometry>(PvdDataStr
 }
 
 template <>
-void PvdMetaDataBinding::registrarPhysicsObject<PxTetrahedronMeshGeometry>(PvdDataStream& inStream, const PxTetrahedronMeshGeometry& geom, PsPvd* pvd)
-{
-	if (pvd->registerObject(geom.tetrahedronMesh))
-		createInstance(inStream, *geom.tetrahedronMesh, PxGetPhysics());
-}
-
-template <>
 void PvdMetaDataBinding::registrarPhysicsObject<PxTriangleMeshGeometry>(PvdDataStream& inStream, const PxTriangleMeshGeometry& geom, PsPvd* pvd)
 {
 	if(pvd->registerObject(geom.triangleMesh))
@@ -1128,14 +1013,10 @@ static void setGeometry(PvdMetaDataBinding& metaBind, PvdDataStream& inStream, c
 		SEND_PVD_GEOM_TYPE(eCAPSULE, CapsuleGeometry, PxCapsuleGeometryGeneratedValues);
 		SEND_PVD_GEOM_TYPE(eBOX, BoxGeometry, PxBoxGeometryGeneratedValues);
 		SEND_PVD_GEOM_TYPE(eCONVEXMESH, ConvexMeshGeometry, PxConvexMeshGeometryGeneratedValues);
-		SEND_PVD_GEOM_TYPE(eTETRAHEDRONMESH, TetrahedronMeshGeometry, PxTetrahedronMeshGeometryGeneratedValues);
 		SEND_PVD_GEOM_TYPE(eTRIANGLEMESH, TriangleMeshGeometry, PxTriangleMeshGeometryGeneratedValues);
 		SEND_PVD_GEOM_TYPE(eHEIGHTFIELD, HeightFieldGeometry, PxHeightFieldGeometryGeneratedValues);		
 		SEND_PVD_GEOM_TYPE(eCUSTOM, CustomGeometry, PxCustomGeometryGeneratedValues);
 #undef SEND_PVD_GEOM_TYPE
-	case PxGeometryType::ePARTICLESYSTEM:
-		// A.B. implement later
-		break;
 	case PxGeometryType::eGEOMETRY_COUNT:
 	case PxGeometryType::eINVALID:
 		PX_ASSERT(false);
@@ -1431,139 +1312,6 @@ void PvdMetaDataBinding::sendAllProperties(PvdDataStream& inStream, const PxArti
 {
 	PxArticulationJointReducedCoordinateGeneratedValues values(&inObj);
 	inStream.setPropertyMessage(&inObj, values);
-}
-
-void PvdMetaDataBinding::createInstance(PvdDataStream& inStream, const PxSoftBody& inObj, const PxScene& ownerScene, const PxPhysics& ownerPhysics, PsPvd* pvd)
-{
-	PX_UNUSED(inStream);
-	PX_UNUSED(inObj);
-	PX_UNUSED(ownerScene);
-	PX_UNUSED(ownerPhysics);
-	PX_UNUSED(pvd);
-}
-
-void PvdMetaDataBinding::sendAllProperties(PvdDataStream& inStream, const PxSoftBody& inObj)
-{
-	PX_UNUSED(inStream);
-	PX_UNUSED(inObj);
-}
-
-void PvdMetaDataBinding::destroyInstance(PvdDataStream& inStream, const PxSoftBody& inObj, const PxScene& ownerScene)
-{
-	PX_UNUSED(inStream);
-	PX_UNUSED(inObj);
-	PX_UNUSED(ownerScene);
-}
-
-void PvdMetaDataBinding::createInstance(PvdDataStream& inStream, const PxFEMCloth& inObj, const PxScene& ownerScene, const PxPhysics& ownerPhysics, PsPvd* pvd)
-{
-	PX_UNUSED(inStream);
-	PX_UNUSED(inObj);
-	PX_UNUSED(ownerScene);
-	PX_UNUSED(ownerPhysics);
-	PX_UNUSED(pvd);
-}
-
-void PvdMetaDataBinding::sendAllProperties(PvdDataStream& inStream, const PxFEMCloth& inObj)
-{
-	PX_UNUSED(inStream);
-	PX_UNUSED(inObj);
-}
-
-void PvdMetaDataBinding::destroyInstance(PvdDataStream& inStream, const PxFEMCloth& inObj, const PxScene& ownerScene)
-{
-	PX_UNUSED(inStream);
-	PX_UNUSED(inObj);
-	PX_UNUSED(ownerScene);
-}
-
-void PvdMetaDataBinding::createInstance(PvdDataStream& inStream, const PxPBDParticleSystem& inObj, const PxScene& ownerScene, const PxPhysics& ownerPhysics, PsPvd* pvd)
-{
-	PX_UNUSED(inStream);
-	PX_UNUSED(inObj);
-	PX_UNUSED(ownerScene);
-	PX_UNUSED(ownerPhysics);
-	PX_UNUSED(pvd);
-}
-
-void PvdMetaDataBinding::sendAllProperties(PvdDataStream& inStream, const PxPBDParticleSystem& inObj)
-{
-	PX_UNUSED(inStream);
-	PX_UNUSED(inObj);
-}
-
-void PvdMetaDataBinding::destroyInstance(PvdDataStream& inStream, const PxPBDParticleSystem& inObj, const PxScene& ownerScene)
-{
-	PX_UNUSED(inStream);
-	PX_UNUSED(inObj);
-	PX_UNUSED(ownerScene);
-}
-
-
-void PvdMetaDataBinding::createInstance(PvdDataStream& inStream, const PxFLIPParticleSystem& inObj, const PxScene& ownerScene, const PxPhysics& ownerPhysics, PsPvd* pvd)
-{
-	PX_UNUSED(inStream);
-	PX_UNUSED(inObj);
-	PX_UNUSED(ownerScene);
-	PX_UNUSED(ownerPhysics);
-	PX_UNUSED(pvd);
-}
-
-void PvdMetaDataBinding::sendAllProperties(PvdDataStream& inStream, const PxFLIPParticleSystem& inObj)
-{
-	PX_UNUSED(inStream);
-	PX_UNUSED(inObj);
-}
-
-void PvdMetaDataBinding::destroyInstance(PvdDataStream& inStream, const PxFLIPParticleSystem& inObj, const PxScene& ownerScene)
-{
-	PX_UNUSED(inStream);
-	PX_UNUSED(inObj);
-	PX_UNUSED(ownerScene);
-}
-
-void PvdMetaDataBinding::createInstance(PvdDataStream& inStream, const PxMPMParticleSystem& inObj, const PxScene& ownerScene, const PxPhysics& ownerPhysics, PsPvd* pvd)
-{
-	PX_UNUSED(inStream);
-	PX_UNUSED(inObj);
-	PX_UNUSED(ownerScene);
-	PX_UNUSED(ownerPhysics);
-	PX_UNUSED(pvd);
-}
-
-void PvdMetaDataBinding::sendAllProperties(PvdDataStream& inStream, const PxMPMParticleSystem& inObj)
-{
-	PX_UNUSED(inStream);
-	PX_UNUSED(inObj);
-}
-
-void PvdMetaDataBinding::destroyInstance(PvdDataStream& inStream, const PxMPMParticleSystem& inObj, const PxScene& ownerScene)
-{
-	PX_UNUSED(inStream);
-	PX_UNUSED(inObj);
-	PX_UNUSED(ownerScene);
-}
-
-void PvdMetaDataBinding::createInstance(PvdDataStream& inStream, const PxCustomParticleSystem& inObj, const PxScene& ownerScene, const PxPhysics& ownerPhysics, PsPvd* pvd)
-{
-	PX_UNUSED(inStream);
-	PX_UNUSED(inObj);
-	PX_UNUSED(ownerScene);
-	PX_UNUSED(ownerPhysics);
-	PX_UNUSED(pvd);
-}
-
-void PvdMetaDataBinding::sendAllProperties(PvdDataStream& inStream, const PxCustomParticleSystem& inObj)
-{
-	PX_UNUSED(inStream);
-	PX_UNUSED(inObj);
-}
-
-void PvdMetaDataBinding::destroyInstance(PvdDataStream& inStream, const PxCustomParticleSystem& inObj, const PxScene& ownerScene)
-{
-	PX_UNUSED(inStream);
-	PX_UNUSED(inObj);
-	PX_UNUSED(ownerScene);
 }
 
 void PvdMetaDataBinding::originShift(PvdDataStream& inStream, const PxScene* inScene, PxVec3 shift)
@@ -1978,8 +1726,7 @@ void PvdMetaDataBinding::sendSceneQueries(PvdDataStream& inStream, const PxScene
 			case PxGeometryType::ePLANE:
 			case PxGeometryType::eTRIANGLEMESH:
 			case PxGeometryType::eHEIGHTFIELD:
-			case PxGeometryType::eTETRAHEDRONMESH:
-			case PxGeometryType::ePARTICLESYSTEM:
+			case PxGeometryType::eMESH:
 			case PxGeometryType::eCUSTOM:
 			case PxGeometryType::eGEOMETRY_COUNT:
 			case PxGeometryType::eINVALID:

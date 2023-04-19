@@ -26,7 +26,6 @@
 
 #include "DyConstraintPartition.h"
 #include "DyArticulationUtils.h"
-#include "DySoftBody.h"
 #include "foundation/PxHashMap.h"
 #include "DyFeatherstoneArticulation.h"
 

@@ -78,11 +78,6 @@ bool NpScene::checkResults(bool block)
 	return checkResultsInternal(block);
 }
 
-void NpScene::fetchResultsParticleSystem()
-{
-	mScene.getSimulationController()->syncParticleData();
-}
-
 void NpScene::fireOutOfBoundsCallbacks()
 {
 	PX_PROFILE_ZONE("Sim.fireOutOfBoundsCallbacks", getContextId());
@@ -196,22 +191,6 @@ bool NpScene::fetchResults(bool block, PxU32* errorState)
 
 	if(!checkResultsInternal(block))
 		return false;
-
-#if PX_SUPPORT_GPU_PHYSX
-	if (mCudaContextManager)
-	{
-		if (mScene.isUsingGpuDynamicsOrBp())
-		{
-			PxCUresult res = mCudaContextManager->getCudaContext()->getLastError();
-			if (res)
-			{
-				outputError<PxErrorCode::eINTERNAL_ERROR>(__LINE__, "PhysX Internal CUDA error. Simulation can not continue!");
-				if(errorState)
-					*errorState = res;
-			}
-		}
-	}
-#endif
 
 	{
 		PX_SIMD_GUARD;
@@ -443,21 +422,6 @@ void NpScene::processCallbacks(PxBaseTask* continuation)
 
 void NpScene::fetchResultsFinish(PxU32* errorState)
 {
-#if PX_SUPPORT_GPU_PHYSX
-	if (mCudaContextManager)
-	{
-		if (mScene.isUsingGpuDynamicsOrBp())
-		{
-			if (mCudaContextManager->getCudaContext()->getLastError())
-			{
-				outputError<PxErrorCode::eINTERNAL_ERROR>(__LINE__, "PhysX Internal CUDA error. Simulation can not continue!");
-				if (errorState)
-					*errorState = mCudaContextManager->getCudaContext()->getLastError();
-			}
-		}
-	}
-#endif
-
 	{
 		PX_SIMD_GUARD;
 		PX_PROFILE_STOP_CROSSTHREAD("Basic.processCallbacks", getContextId());

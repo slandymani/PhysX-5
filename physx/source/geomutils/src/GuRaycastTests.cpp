@@ -28,7 +28,6 @@
 
 #include "geometry/PxSphereGeometry.h"
 #include "geometry/PxConvexMeshGeometry.h"
-#include "geometry/PxTetrahedronMeshGeometry.h"
 #include "geometry/PxCustomGeometry.h"
 #include "GuMidphaseInterface.h"
 #include "GuInternal.h"
@@ -376,47 +375,6 @@ PxU32 raycast_convexMesh(GU_RAY_FUNC_PARAMS)
 	return 0;
 }
 
-PxU32 raycast_particlesystem(GU_RAY_FUNC_PARAMS)
-{
-	PX_ASSERT(geom.getType() == PxGeometryType::ePARTICLESYSTEM);
-	PX_ASSERT(PxAbs(rayDir.magnitudeSquared() - 1)<1e-4f);
-	PX_UNUSED(threadContext);
-	PX_UNUSED(stride);
-	PX_UNUSED(rayDir);
-	PX_UNUSED(pose);
-	PX_UNUSED(rayOrigin);
-	PX_UNUSED(maxHits);
-	PX_UNUSED(maxDist);
-	PX_UNUSED(hits);
-	PX_UNUSED(hitFlags);
-	PX_UNUSED(geom);
-
-	return 0;
-}
-
-PxU32 raycast_softbody(GU_RAY_FUNC_PARAMS)
-{
-	PX_ASSERT(geom.getType() == PxGeometryType::eTETRAHEDRONMESH);
-	PX_ASSERT(PxAbs(rayDir.magnitudeSquared() - 1)<1e-4f);
-
-	PX_UNUSED(threadContext);
-	PX_UNUSED(stride);
-	PX_UNUSED(rayDir);
-	PX_UNUSED(pose);
-	PX_UNUSED(rayOrigin);
-	PX_UNUSED(maxHits);
-	PX_UNUSED(maxDist);
-	PX_UNUSED(hits);
-	PX_UNUSED(hitFlags);
-
-	const PxTetrahedronMeshGeometry& meshGeom = static_cast<const PxTetrahedronMeshGeometry&>(geom);
-
-	PX_UNUSED(meshGeom);
-
-	//ML: need to implement raycastTetrahedronMesh
-	return 0;
-}
-
 PxU32 raycast_triangleMesh(GU_RAY_FUNC_PARAMS) 
 {
 	PX_UNUSED(threadContext);
@@ -615,9 +573,7 @@ RaycastFunc gRaycastMap[] =
 	raycast_capsule,
 	raycast_box,
 	raycast_convexMesh,
-	raycast_particlesystem,
-	raycast_softbody,
-	raycast_triangleMesh,	
+	raycast_triangleMesh,
 	raycast_heightField_unregistered,
 	raycast_custom
 };

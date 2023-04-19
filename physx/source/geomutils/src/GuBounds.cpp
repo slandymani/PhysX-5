@@ -32,7 +32,6 @@
 #include "geometry/PxSphereGeometry.h"
 #include "geometry/PxPlaneGeometry.h"
 #include "geometry/PxConvexMeshGeometry.h"
-#include "geometry/PxTetrahedronMeshGeometry.h"
 #include "geometry/PxTriangleMeshGeometry.h"
 #include "geometry/PxHeightFieldGeometry.h"
 #include "geometry/PxCustomGeometry.h"
@@ -41,7 +40,6 @@
 #include "GuConvexMesh.h"
 #include "GuConvexMeshData.h"
 #include "GuTriangleMesh.h"
-#include "GuTetrahedronMesh.h"
 #include "GuHeightFieldData.h"
 #include "GuHeightField.h"
 #include "GuConvexUtilsInternal.h"
@@ -427,20 +425,6 @@ void Gu::computeBounds(PxBounds3& bounds, const PxGeometry& geometry, const PxTr
 		{
 			const PxHeightFieldGeometry& shape = static_cast<const PxHeightFieldGeometry&>(geometry);
 			computeMeshBounds(bounds, contactOffset, inflation, pose, &static_cast<const Gu::HeightField*>(shape.heightField)->getData().getPaddedBounds(), PxMeshScale(PxVec3(shape.rowScale, shape.heightScale, shape.columnScale)));
-		}
-		break;
-
-		case PxGeometryType::eTETRAHEDRONMESH:
-		{		
-			const PxTetrahedronMeshGeometry& shape = static_cast<const PxTetrahedronMeshGeometry&>(geometry);
-			computeMeshBounds(bounds, contactOffset, inflation, pose, &static_cast<const Gu::TetrahedronMesh*>(shape.tetrahedronMesh)->getPaddedBounds(), PxMeshScale());
-		}
-		break;
-
-		case PxGeometryType::ePARTICLESYSTEM:
-		{
-			// implement!
-			PX_ASSERT(0);			
 		}
 		break;
 

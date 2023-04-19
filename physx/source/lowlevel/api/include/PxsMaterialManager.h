@@ -30,11 +30,6 @@
 #define PXS_MATERIAL_MANAGER_H
 
 #include "PxsMaterialCore.h"
-#include "PxsFEMSoftBodyMaterialCore.h"
-#include "PxsFEMClothMaterialCore.h"
-#include "PxsPBDMaterialCore.h"
-#include "PxsFLIPMaterialCore.h"
-#include "PxsMPMMaterialCore.h"
 #include "foundation/PxAlignedMalloc.h"
 
 namespace physx
@@ -123,30 +118,6 @@ namespace physx
 
 	//This class is used for forward declaration
 	class PxsMaterialManager : public PxsMaterialManagerT<PxsMaterialCore>
-	{
-	};
-
-	class PxsFEMMaterialManager : public PxsMaterialManagerT<PxsFEMSoftBodyMaterialCore>
-	{
-	};
-
-	class PxsFEMClothMaterialManager : public PxsMaterialManagerT<PxsFEMClothMaterialCore>
-	{
-	};
-
-	class PxsPBDMaterialManager : public PxsMaterialManagerT<PxsPBDMaterialCore>
-	{
-	};
-
-	class PxsFLIPMaterialManager : public PxsMaterialManagerT<PxsFLIPMaterialCore>
-	{
-	};
-
-	class PxsMPMMaterialManager : public PxsMaterialManagerT<PxsMPMMaterialCore>
-	{
-	};
-
-	class PxsCustomMaterialManager : public PxsMaterialManagerT<PxsCustomMaterialCore>
 	{
 	};
 

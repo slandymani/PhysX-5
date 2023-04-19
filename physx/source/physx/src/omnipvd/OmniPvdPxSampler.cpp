@@ -37,7 +37,6 @@
 #include "NpRigidDynamic.h"
 #include "NpRigidStatic.h"
 #include "NpActor.h"
-#include "NpSoftBody.h"
 #include "NpAggregate.h"
 #include "NpOmniPvd.h"
 #include "OmniPvdWriter.h"
@@ -560,36 +559,6 @@ void streamAggregate(const physx::PxAggregate* agg)
 	OMNI_PVD_SET(aggregate, scene, *agg, const_cast<physx::PxAggregate*>(agg)->getScene());
 }
 
-void streamSoBo(const physx::PxSoftBody* b)
-{
-	OMNI_PVD_CREATE(actor, *b); // @@@
-}
-
-void streamMPMMaterial(const physx::PxMPMMaterial* m)
-{
-	OMNI_PVD_CREATE(mpmmaterial, *m);
-}
-
-void streamFLIPMaterial(const physx::PxFLIPMaterial* m)
-{
-	OMNI_PVD_CREATE(flipmaterial, *m);
-}
-
-void streamPBDMaterial(const physx::PxPBDMaterial* m)
-{
-	OMNI_PVD_CREATE(pbdmaterial, *m);
-}
-
-void streamFEMClothMaterial(const physx::PxFEMClothMaterial* m)
-{
-	OMNI_PVD_CREATE(femclothmaterial, *m);
-}
-
-void streamFEMSoBoMaterial(const physx::PxFEMSoftBodyMaterial* m)
-{
-	OMNI_PVD_CREATE(femsoftbodymaterial, *m);
-}
-
 void streamMaterial(const physx::PxMaterial* m)
 {
 	OMNI_PVD_CREATE(material, *m);
@@ -631,57 +600,6 @@ void streamShape(const physx::PxShape* shape)
 void streamBVH(const physx::PxBVH* bvh)
 {
 	OMNI_PVD_CREATE(bvh, *bvh);
-}
-
-void streamSoBoMesh(const physx::PxSoftBodyMesh* mesh)
-{
-	OMNI_PVD_CREATE(softbodymesh, *mesh);
-	OMNI_PVD_SET(softbodymesh, collisionMesh, *mesh, mesh->getCollisionMesh());
-	OMNI_PVD_SET(softbodymesh, simulationMesh, *mesh, mesh->getSimulationMesh());
-}
-
-void streamTetMesh(const physx::PxTetrahedronMesh* mesh)
-{
-	OMNI_PVD_CREATE(tetrahedronmesh, *mesh);
-	//this gets done at the bottom now
-	const physx::PxU32 tetrahedronCount = mesh->getNbTetrahedrons();
-	const physx::PxU32 has16BitIndices = mesh->getTetrahedronMeshFlags() & physx::PxTetrahedronMeshFlag::e16_BIT_INDICES;
-	const void* indexBuffer = mesh->getTetrahedrons();
-	const physx::PxVec3* vertexBuffer = mesh->getVertices();
-	const physx::PxU32* intIndices = reinterpret_cast<const physx::PxU32*>(indexBuffer);
-	const physx::PxU16* shortIndices = reinterpret_cast<const physx::PxU16*>(indexBuffer);
-	//TODO: not needed to copy this
-	const int nbrVerts = mesh->getNbVertices();
-	const int nbrTets = mesh->getNbTetrahedrons();
-	float* tmpVerts = (float*)PX_ALLOC(sizeof(float)*(nbrVerts * 3), "tmpVerts");
-	int vertIndex = 0;
-	for (int v = 0; v < nbrVerts; v++)
-	{
-		tmpVerts[vertIndex + 0] = vertexBuffer[v].x;
-		tmpVerts[vertIndex + 1] = vertexBuffer[v].y;
-		tmpVerts[vertIndex + 2] = vertexBuffer[v].z;
-		vertIndex += 3;
-	}
-	int* tmpIndices = (int*)PX_ALLOC(sizeof(int)*(nbrTets * 4), "tmpIndices");
-	const int totalIndexCount = tetrahedronCount * 4;
-	if (has16BitIndices)
-	{
-		for (int i = 0; i < totalIndexCount; ++i)
-		{
-			tmpIndices[i] = shortIndices[i];
-		}
-	}
-	else
-	{
-		for (int i = 0; i < totalIndexCount; ++i)
-		{
-			tmpIndices[i] = intIndices[i];
-		}
-	}
-	OMNI_PVD_SETB(tetrahedronmesh, verts, *mesh, tmpVerts, sizeof(float) * 3 * nbrVerts);
-	OMNI_PVD_SETB(tetrahedronmesh, tets, *mesh, tmpIndices, sizeof(int) * 4 * nbrTets);
-	PX_FREE(tmpVerts);
-	PX_FREE(tmpIndices);
 }
 
 void streamTriMesh(const physx::PxTriangleMesh* mesh)
@@ -989,14 +907,6 @@ void OmniPvdPxSampler::onObjectAdd(const physx::PxBase* object)
 		streamTriMesh(static_cast<const physx::PxTriangleMesh*>(object));
 		OMNI_PVD_ADD(physics, triangleMeshes, static_cast<PxPhysics&>(NpPhysics::getInstance()), static_cast<const physx::PxTriangleMesh&>(*object));
 		break;
-	case physx::PxConcreteType::eTETRAHEDRON_MESH:
-		streamTetMesh(static_cast<const physx::PxTetrahedronMesh*>(object));
-		OMNI_PVD_ADD(physics, tetrahedronMeshes, static_cast<PxPhysics&>(NpPhysics::getInstance()), static_cast<const physx::PxTetrahedronMesh&>(*object));
-		break;
-	case physx::PxConcreteType::eSOFTBODY_MESH:
-		streamSoBoMesh(static_cast<const physx::PxSoftBodyMesh*>(object));
-		OMNI_PVD_ADD(physics, softBodyMeshes, static_cast<PxPhysics&>(NpPhysics::getInstance()), static_cast<const physx::PxSoftBodyMesh&>(*object));
-		break;
 	case physx::PxConcreteType::eBVH:
 		streamBVH(static_cast<const physx::PxBVH*>(object));
 		OMNI_PVD_ADD(physics, bvhs, static_cast<PxPhysics&>(NpPhysics::getInstance()), static_cast<const physx::PxBVH&>(*object));
@@ -1009,30 +919,6 @@ void OmniPvdPxSampler::onObjectAdd(const physx::PxBase* object)
 	case physx::PxConcreteType::eMATERIAL:
 		streamMaterial(static_cast<const physx::PxMaterial*>(object));
 		OMNI_PVD_ADD(physics, materials, static_cast<PxPhysics&>(NpPhysics::getInstance()), static_cast<const physx::PxMaterial&>(*object));
-		break;
-	case physx::PxConcreteType::eSOFTBODY_MATERIAL:
-		streamFEMSoBoMaterial(static_cast<const physx::PxFEMSoftBodyMaterial*>(object));
-		OMNI_PVD_ADD(physics, FEMSoftBodyMaterials, static_cast<PxPhysics&>(NpPhysics::getInstance()), static_cast<const physx::PxFEMSoftBodyMaterial&>(*object));
-		break;
-	case physx::PxConcreteType::eCLOTH_MATERIAL:
-		streamFEMClothMaterial(static_cast<const physx::PxFEMClothMaterial*>(object));
-		OMNI_PVD_ADD(physics, FEMClothMaterials, static_cast<PxPhysics&>(NpPhysics::getInstance()), static_cast<const physx::PxFEMClothMaterial&>(*object));
-		break;
-	case physx::PxConcreteType::ePBD_MATERIAL:
-		streamPBDMaterial(static_cast<const physx::PxPBDMaterial*>(object));
-		OMNI_PVD_ADD(physics, PBDMaterials, static_cast<PxPhysics&>(NpPhysics::getInstance()), static_cast<const physx::PxPBDMaterial&>(*object));
-		break;
-	case physx::PxConcreteType::eFLIP_MATERIAL:
-		streamFLIPMaterial(static_cast<const physx::PxFLIPMaterial*>(object));
-		OMNI_PVD_ADD(physics, FLIPMaterials, static_cast<PxPhysics&>(NpPhysics::getInstance()), static_cast<const physx::PxFLIPMaterial&>(*object));
-		break;
-	case physx::PxConcreteType::eMPM_MATERIAL:
-		streamMPMMaterial(static_cast<const physx::PxMPMMaterial*>(object));
-		OMNI_PVD_ADD(physics, MPMMaterials, static_cast<PxPhysics&>(NpPhysics::getInstance()), static_cast<const physx::PxMPMMaterial&>(*object));
-		break;
-	case physx::PxConcreteType::eSOFT_BODY:
-		streamSoBo(static_cast<const physx::PxSoftBody*>(object));
-		OMNI_PVD_ADD(physics, softBodies, static_cast<PxPhysics&>(NpPhysics::getInstance()), static_cast<const physx::PxActor&>(*object));
 		break;
 	case physx::PxConcreteType::eAGGREGATE:
 		streamAggregate(static_cast<const physx::PxAggregate*>(object));
@@ -1078,14 +964,6 @@ void OmniPvdPxSampler::onObjectRemove(const physx::PxBase* object)
 		OMNI_PVD_REMOVE(physics, triangleMeshes, static_cast<PxPhysics&>(NpPhysics::getInstance()), static_cast<const physx::PxTriangleMesh&>(*object));
 		OMNI_PVD_DESTROY(trianglemesh, static_cast<const physx::PxTriangleMesh&>(*object));
 		break;
-	case physx::PxConcreteType::eTETRAHEDRON_MESH:
-		OMNI_PVD_REMOVE(physics, tetrahedronMeshes, static_cast<PxPhysics&>(NpPhysics::getInstance()), static_cast<const physx::PxTetrahedronMesh&>(*object));
-		OMNI_PVD_DESTROY(tetrahedronmesh, static_cast<const physx::PxTetrahedronMesh&>(*object));
-		break;
-	case physx::PxConcreteType::eSOFTBODY_MESH:
-		OMNI_PVD_REMOVE(physics, softBodyMeshes, static_cast<PxPhysics&>(NpPhysics::getInstance()), static_cast<const physx::PxSoftBodyMesh&>(*object));
-		OMNI_PVD_DESTROY(softbodymesh, static_cast<const physx::PxSoftBodyMesh&>(*object));
-		break;
 	case physx::PxConcreteType::eBVH:
 		OMNI_PVD_REMOVE(physics, bvhs, static_cast<PxPhysics&>(NpPhysics::getInstance()), static_cast<const physx::PxBVH&>(*object));
 		OMNI_PVD_DESTROY(bvh, static_cast<const physx::PxBVH&>(*object));
@@ -1098,30 +976,6 @@ void OmniPvdPxSampler::onObjectRemove(const physx::PxBase* object)
 	case physx::PxConcreteType::eMATERIAL:
 		OMNI_PVD_REMOVE(physics, materials, static_cast<PxPhysics&>(NpPhysics::getInstance()), static_cast<const physx::PxMaterial&>(*object));
 		OMNI_PVD_DESTROY(material, static_cast<const physx::PxMaterial&>(*object));
-		break;
-	case physx::PxConcreteType::eSOFTBODY_MATERIAL:
-		OMNI_PVD_REMOVE(physics, FEMSoftBodyMaterials, static_cast<PxPhysics&>(NpPhysics::getInstance()), static_cast<const physx::PxFEMSoftBodyMaterial&>(*object));
-		OMNI_PVD_DESTROY(femsoftbodymaterial, static_cast<const physx::PxFEMSoftBodyMaterial&>(*object));
-		break;
-	case physx::PxConcreteType::eCLOTH_MATERIAL:
-		OMNI_PVD_REMOVE(physics, FEMClothMaterials, static_cast<PxPhysics&>(NpPhysics::getInstance()), static_cast<const physx::PxFEMClothMaterial&>(*object));
-		OMNI_PVD_DESTROY(femclothmaterial, static_cast<const physx::PxFEMClothMaterial&>(*object));
-		break;
-	case physx::PxConcreteType::ePBD_MATERIAL:
-		OMNI_PVD_REMOVE(physics, PBDMaterials, static_cast<PxPhysics&>(NpPhysics::getInstance()), static_cast<const physx::PxPBDMaterial&>(*object));
-		OMNI_PVD_DESTROY(pbdmaterial, static_cast<const physx::PxPBDMaterial&>(*object));
-		break;
-	case physx::PxConcreteType::eFLIP_MATERIAL:
-		OMNI_PVD_REMOVE(physics, FLIPMaterials, static_cast<PxPhysics&>(NpPhysics::getInstance()), static_cast<const physx::PxFLIPMaterial&>(*object));
-		OMNI_PVD_DESTROY(flipmaterial, static_cast<const physx::PxFLIPMaterial&>(*object));
-		break;
-	case physx::PxConcreteType::eMPM_MATERIAL:
-		OMNI_PVD_REMOVE(physics, MPMMaterials, static_cast<PxPhysics&>(NpPhysics::getInstance()), static_cast<const physx::PxMPMMaterial&>(*object));
-		OMNI_PVD_DESTROY(mpmmaterial, static_cast<const physx::PxMPMMaterial&>(*object));
-		break;
-	case physx::PxConcreteType::eSOFT_BODY:
-		OMNI_PVD_REMOVE(physics, softBodies, static_cast<PxPhysics&>(NpPhysics::getInstance()), static_cast<const physx::PxSoftBody&>(*object));
-		OMNI_PVD_DESTROY(actor, static_cast<const physx::PxSoftBody&>(*object)); // @@@
 		break;
 	case physx::PxConcreteType::eAGGREGATE:
 		OMNI_PVD_REMOVE(physics, aggregates, static_cast<PxPhysics&>(NpPhysics::getInstance()), static_cast<const physx::PxAggregate&>(*object));

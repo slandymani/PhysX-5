@@ -696,10 +696,6 @@ static void visualize(const PxGeometry& geometry, PxRenderOutput& out, const PxT
 	case PxGeometryType::eHEIGHTFIELD:
 		visualizeHeightField(static_cast<const PxHeightFieldGeometry&>(geometry), out, absPose, cullbox, useCullBox);
 		break;
-	case PxGeometryType::eTETRAHEDRONMESH:
-	case PxGeometryType::ePARTICLESYSTEM:
-		// A.B. missing visualization code
-		break;
 	case PxGeometryType::eCUSTOM:
 		PX_ASSERT(static_cast<const PxCustomGeometry&>(geometry).isValid());
 		static_cast<const PxCustomGeometry&>(geometry).callbacks->visualize(geometry, out, absPose, cullbox);

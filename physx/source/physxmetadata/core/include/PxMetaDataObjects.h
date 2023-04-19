@@ -53,9 +53,6 @@
 #include "geometry/PxTriangle.h"
 #include "geometry/PxTriangleMesh.h"
 #include "geometry/PxTriangleMeshGeometry.h"
-#include "geometry/PxTetrahedron.h"
-#include "geometry/PxTetrahedronMesh.h"
-#include "geometry/PxTetrahedronMeshGeometry.h"
 
 // PhysX Core SDK
 #include "PxActor.h"
@@ -73,11 +70,6 @@
 #include "PxForceMode.h"
 #include "PxLockedData.h"
 #include "PxMaterial.h"
-#include "PxFEMSoftBodyMaterial.h"
-#include "PxFEMClothMaterial.h"
-#include "PxPBDMaterial.h"
-#include "PxFLIPMaterial.h"
-#include "PxMPMMaterial.h"
 #include "PxPhysics.h"
 #include "PxPhysXConfig.h"
 #include "PxQueryFiltering.h"
@@ -509,8 +501,6 @@ struct PxShapeGeomPropertyHelper
 	PX_PHYSX_CORE_API bool getGeometry(const PxShape* inShape, PxCapsuleGeometry& geometry) const;
 	PX_PHYSX_CORE_API bool getGeometry(const PxShape* inShape, PxPlaneGeometry& geometry) const;
 	PX_PHYSX_CORE_API bool getGeometry(const PxShape* inShape, PxConvexMeshGeometry& geometry) const;
-	PX_PHYSX_CORE_API bool getGeometry(const PxShape* inShape, PxTetrahedronMeshGeometry& geometry) const;
-	PX_PHYSX_CORE_API bool getGeometry(const PxShape* inShape, PxParticleSystemGeometry& geometry) const;
 	PX_PHYSX_CORE_API bool getGeometry(const PxShape* inShape, PxTriangleMeshGeometry& geometry) const;
 	PX_PHYSX_CORE_API bool getGeometry(const PxShape* inShape, PxHeightFieldGeometry& geometry) const;
 };

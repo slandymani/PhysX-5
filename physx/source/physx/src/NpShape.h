@@ -85,12 +85,8 @@ public:
 	virtual			void						setQueryFilterData(const PxFilterData& data)	PX_OVERRIDE;
 	virtual			PxFilterData				getQueryFilterData() const	PX_OVERRIDE;
 	virtual			void						setMaterials(PxMaterial*const* materials, PxU16 materialCount)	PX_OVERRIDE;
-	virtual			void						setSoftBodyMaterials(PxFEMSoftBodyMaterial*const* materials, PxU16 materialCount)	PX_OVERRIDE;
-	virtual			void						setClothMaterials(PxFEMClothMaterial*const* materials, PxU16 materialCount)	PX_OVERRIDE;
 	virtual			PxU16						getNbMaterials()															const	PX_OVERRIDE;
 	virtual			PxU32						getMaterials(PxMaterial** userBuffer, PxU32 bufferSize, PxU32 startIndex=0)	const	PX_OVERRIDE;
-	virtual			PxU32						getSoftBodyMaterials(PxFEMSoftBodyMaterial** userBuffer, PxU32 bufferSize, PxU32 startIndex = 0)	const	PX_OVERRIDE;
-	virtual			PxU32						getClothMaterials(PxFEMClothMaterial** userBuffer, PxU32 bufferSize, PxU32 startIndex = 0)	const	PX_OVERRIDE;
 	virtual			PxBaseMaterial*				getMaterialFromInternalFaceIndex(PxU32 faceIndex)							const	PX_OVERRIDE;
 	virtual			void						setContactOffset(PxReal)	PX_OVERRIDE;
 	virtual			PxReal						getContactOffset() const	PX_OVERRIDE;
@@ -261,7 +257,7 @@ PX_INLINE bool NpShape::checkMaterialSetup(const PxGeometry& geom, const char* e
 	}
 
 	// check that simple shapes don't get assigned multiple materials
-	if (materialCount > 1 && (geom.getType() != PxGeometryType::eHEIGHTFIELD) && (geom.getType() != PxGeometryType::eTRIANGLEMESH) && (geom.getType() != PxGeometryType::eTETRAHEDRONMESH))
+	if (materialCount > 1 && (geom.getType() != PxGeometryType::eHEIGHTFIELD) && (geom.getType() != PxGeometryType::eTRIANGLEMESH))
 	{
 		PxGetFoundation().error(PxErrorCode::eINVALID_PARAMETER, __FILE__, __LINE__,
 			"%s: multiple materials defined for single material geometry!", errorMsgPrefix);
@@ -295,27 +291,6 @@ PX_INLINE bool NpShape::checkMaterialSetup(const PxGeometry& geom, const char* e
 				}
 			}
 		}
-	}
-
-	if (materialCount > 1 && (geom.getType() == PxGeometryType::eTETRAHEDRONMESH))
-	{
-		const PxTetrahedronMeshGeometry& meshGeom = static_cast<const PxTetrahedronMeshGeometry&>(geom);
-		const PxTetrahedronMesh& mesh = *meshGeom.tetrahedronMesh;
-		PX_UNUSED(mesh);
-		//Need to fill in material
-		/*if (mesh.getTriangleMaterialIndex(0) != 0xffff)
-		{
-			for (PxU32 i = 0; i < mesh.getNbTriangles(); i++)
-			{
-				const PxMaterialTableIndex meshMaterialIndex = mesh.getTriangleMaterialIndex(i);
-				if (meshMaterialIndex >= materialCount)
-				{
-					PxGetFoundation().error(PxErrorCode::eINVALID_PARAMETER, __FILE__, __LINE__,
-						"%s: PxTriangleMesh material indices reference more materials than provided!", errorMsgPrefix);
-					break;
-				}
-			}
-		}*/
 	}
 
 	if (materialCount > 1 && (geom.getType() == PxGeometryType::eHEIGHTFIELD))

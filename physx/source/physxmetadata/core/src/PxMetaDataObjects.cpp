@@ -40,8 +40,6 @@ PX_PHYSX_CORE_API bool PxShapeGeomPropertyHelper::getGeometry(const PxShape* inS
 PX_PHYSX_CORE_API bool PxShapeGeomPropertyHelper::getGeometry(const PxShape* inShape, PxCapsuleGeometry& geometry) const { return inShape->getCapsuleGeometry( geometry ); }
 PX_PHYSX_CORE_API bool PxShapeGeomPropertyHelper::getGeometry(const PxShape* inShape, PxPlaneGeometry& geometry) const { return inShape->getPlaneGeometry( geometry ); }
 PX_PHYSX_CORE_API bool PxShapeGeomPropertyHelper::getGeometry(const PxShape* inShape, PxConvexMeshGeometry& geometry) const { return inShape->getConvexMeshGeometry( geometry ); }
-PX_PHYSX_CORE_API bool PxShapeGeomPropertyHelper::getGeometry(const PxShape* inShape, PxTetrahedronMeshGeometry& geometry) const { return inShape->getTetrahedronMeshGeometry(geometry); }
-PX_PHYSX_CORE_API bool PxShapeGeomPropertyHelper::getGeometry(const PxShape* inShape, PxParticleSystemGeometry& geometry) const { return inShape->getParticleSystemGeometry(geometry); }
 PX_PHYSX_CORE_API bool PxShapeGeomPropertyHelper::getGeometry(const PxShape* inShape, PxTriangleMeshGeometry& geometry) const { return inShape->getTriangleMeshGeometry( geometry ); }
 PX_PHYSX_CORE_API bool PxShapeGeomPropertyHelper::getGeometry(const PxShape* inShape, PxHeightFieldGeometry& geometry) const { return inShape->getHeightFieldGeometry( geometry ); }
 

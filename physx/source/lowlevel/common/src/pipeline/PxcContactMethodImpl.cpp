@@ -101,8 +101,6 @@ PxcContactMethod g_ContactMethodTable[][PxGeometryType::eGEOMETRY_COUNT] =
 		PxcContactSphereCapsule,		//PxGeometryType::eCAPSULE
 		PxcContactSphereBox,			//PxGeometryType::eBOX
 		PxcContactSphereConvex,			//PxGeometryType::eCONVEXMESH
-		PxcInvalidContactPair,			//PxGeometryType::ePARTICLESYSTEM
-		PxcInvalidContactPair,			//PxGeometryType::eTETRAHEDRONMESH
 		PxcContactSphereMesh,			//PxGeometryType::eTRIANGLEMESH
 		DYNAMIC_CONTACT_REGISTRATION(PxcContactSphereHeightField),	//PxGeometryType::eHEIGHTFIELD	//TODO: make HF midphase that will mask this
 		PxcContactGeometryCustomGeometry,	//PxGeometryType::eCUSTOM
@@ -115,8 +113,6 @@ PxcContactMethod g_ContactMethodTable[][PxGeometryType::eGEOMETRY_COUNT] =
 		PxcContactPlaneCapsule,			//PxGeometryType::eCAPSULE
 		PxcContactPlaneBox,				//PxGeometryType::eBOX
 		PxcContactPlaneConvex,			//PxGeometryType::eCONVEXMESH
-		PxcInvalidContactPair,			//PxGeometryType::ePARTICLESYSTEM
-		PxcInvalidContactPair,			//PxGeometryType::eTETRAHEDRONMESH
 		PxcInvalidContactPair,			//PxGeometryType::eTRIANGLEMESH
 		PxcInvalidContactPair,			//PxGeometryType::eHEIGHTFIELD
 		PxcContactGeometryCustomGeometry,	//PxGeometryType::eCUSTOM
@@ -129,8 +125,6 @@ PxcContactMethod g_ContactMethodTable[][PxGeometryType::eGEOMETRY_COUNT] =
 		PxcContactCapsuleCapsule,		//PxGeometryType::eCAPSULE
 		PxcContactCapsuleBox,			//PxGeometryType::eBOX
 		PxcContactCapsuleConvex,		//PxGeometryType::eCONVEXMESH
-		PxcInvalidContactPair,			//PxGeometryType::ePARTICLESYSTEM
-		PxcInvalidContactPair,			//PxGeometryType::eTETRAHEDRONMESH
 		PxcContactCapsuleMesh,			//PxGeometryType::eTRIANGLEMESH
 		DYNAMIC_CONTACT_REGISTRATION(PxcContactCapsuleHeightField),	//PxGeometryType::eHEIGHTFIELD		//TODO: make HF midphase that will mask this
 		PxcContactGeometryCustomGeometry,	//PxGeometryType::eCUSTOM
@@ -143,8 +137,6 @@ PxcContactMethod g_ContactMethodTable[][PxGeometryType::eGEOMETRY_COUNT] =
 		0,								//PxGeometryType::eCAPSULE
 		PxcContactBoxBox,				//PxGeometryType::eBOX
 		PxcContactBoxConvex,			//PxGeometryType::eCONVEXMESH
-		PxcInvalidContactPair,			//PxGeometryType::ePARTICLESYSTEM
-		PxcInvalidContactPair,			//PxGeometryType::eTETRAHEDRONMESH
 		PxcContactBoxMesh,				//PxGeometryType::eTRIANGLEMESH
 		DYNAMIC_CONTACT_REGISTRATION(PxcContactBoxHeightField),		//PxGeometryType::eHEIGHTFIELD		//TODO: make HF midphase that will mask this
 		PxcContactGeometryCustomGeometry,	//PxGeometryType::eCUSTOM
@@ -157,39 +149,9 @@ PxcContactMethod g_ContactMethodTable[][PxGeometryType::eGEOMETRY_COUNT] =
 		0,								//PxGeometryType::eCAPSULE
 		0,								//PxGeometryType::eBOX
 		PxcContactConvexConvex,			//PxGeometryType::eCONVEXMESH
-		PxcInvalidContactPair,			//PxGeometryType::ePARTICLESYSTEM
-		PxcInvalidContactPair,			//PxGeometryType::eTETRAHEDRONMESH
 		PxcContactConvexMesh,			//PxGeometryType::eTRIANGLEMESH
 		DYNAMIC_CONTACT_REGISTRATION(PxcContactConvexHeightField),	//PxGeometryType::eHEIGHTFIELD		//TODO: make HF midphase that will mask this
 		PxcContactGeometryCustomGeometry,	//PxGeometryType::eCUSTOM
-	},
-
-	//PxGeometryType::ePARTICLESYSTEM
-	{
-		0,								//PxGeometryType::eSPHERE
-		0,								//PxGeometryType::ePLANE
-		0,								//PxGeometryType::eCAPSULE
-		0,								//PxGeometryType::eBOX
-		0,								//PxGeometryType::eCONVEXMESH
-		PxcInvalidContactPair,			//PxGeometryType::ePARTICLESYSTEM
-		PxcInvalidContactPair,			//PxGeometryType::eTETRAHEDRONMESH
-		PxcInvalidContactPair,			//PxGeometryType::eTRIANGLEMESH
-		PxcInvalidContactPair,			//PxGeometryType::eHEIGHTFIELD
-		PxcInvalidContactPair,			//PxGeometryType::eCUSTOM
-	},
-
-	//PxGeometryType::eTETRAHEDRONMESH
-	{
-		0,								//PxGeometryType::eSPHERE
-		0,								//PxGeometryType::ePLANE
-		0,								//PxGeometryType::eCAPSULE
-		0,								//PxGeometryType::eBOX
-		0,								//PxGeometryType::eCONVEXMESH
-		0,								//PxGeometryType::ePARTICLESYSTEM
-		PxcInvalidContactPair,			//PxGeometryType::eTETRAHEDRONMESH
-		PxcInvalidContactPair,			//PxGeometryType::eTRIANGLEMESH
-		PxcInvalidContactPair,			//PxGeometryType::eHEIGHTFIELD
-		PxcInvalidContactPair,			//PxGeometryType::eCUSTOM
 	},
 
 	//PxGeometryType::eTRIANGLEMESH
@@ -199,8 +161,6 @@ PxcContactMethod g_ContactMethodTable[][PxGeometryType::eGEOMETRY_COUNT] =
 		0,									//PxGeometryType::eCAPSULE
 		0,									//PxGeometryType::eBOX
 		0,									//PxGeometryType::eCONVEXMESH
-		0,									//PxGeometryType::ePARTICLESYSTEM
-		0,									//PxGeometryType::eTETRAHEDRONMESH
 		PxcInvalidContactPair,				//PxGeometryType::eTRIANGLEMESH
 		PxcInvalidContactPair,				//PxGeometryType::eHEIGHTFIELD
 		PxcContactGeometryCustomGeometry,	//PxGeometryType::eCUSTOM
@@ -213,8 +173,6 @@ PxcContactMethod g_ContactMethodTable[][PxGeometryType::eGEOMETRY_COUNT] =
 		0,									//PxGeometryType::eCAPSULE
 		0,									//PxGeometryType::eBOX
 		0,									//PxGeometryType::eCONVEXMESH
-		0,									//PxGeometryType::ePARTICLESYSTEM
-		0,									//PxGeometryType::eTETRAHEDRONMESH
 		0,									//PxGeometryType::eTRIANGLEMESH
 		PxcInvalidContactPair,				//PxGeometryType::eHEIGHTFIELD
 		PxcContactGeometryCustomGeometry,	//PxGeometryType::eCUSTOM
@@ -227,8 +185,6 @@ PxcContactMethod g_ContactMethodTable[][PxGeometryType::eGEOMETRY_COUNT] =
 		0,									//PxGeometryType::eCAPSULE
 		0,									//PxGeometryType::eBOX
 		0,									//PxGeometryType::eCONVEXMESH
-		0,									//PxGeometryType::ePARTICLESYSTEM
-		0,									//PxGeometryType::eTETRAHEDRONMESH
 		0,									//PxGeometryType::eTRIANGLEMESH
 		0,									//PxGeometryType::eHEIGHTFIELD
 		PxcContactGeometryCustomGeometry,	//PxGeometryType::eCUSTOM
@@ -246,8 +202,6 @@ PxcContactMethod g_PCMContactMethodTable[][PxGeometryType::eGEOMETRY_COUNT] =
 		PxcPCMContactSphereCapsule,										//PxGeometryType::eCAPSULE
 		PxcPCMContactSphereBox,											//PxGeometryType::eBOX
 		PxcPCMContactSphereConvex,										//PxGeometryType::eCONVEXMESH
-		PxcInvalidContactPair,											//PxGeometryType::ePARTICLESYSTEM
-		PxcInvalidContactPair,											//PxGeometryType::eTETRAHEDRONMESH
 		PxcPCMContactSphereMesh,										//PxGeometryType::eTRIANGLEMESH
 		DYNAMIC_CONTACT_REGISTRATION(PxcPCMContactSphereHeightField),	//PxGeometryType::eHEIGHTFIELD	//TODO: make HF midphase that will mask this
 		PxcPCMContactGeometryCustomGeometry,							//PxGeometryType::eCUSTOM
@@ -260,8 +214,6 @@ PxcContactMethod g_PCMContactMethodTable[][PxGeometryType::eGEOMETRY_COUNT] =
 		PxcPCMContactPlaneCapsule,			//PxGeometryType::eCAPSULE
 		PxcPCMContactPlaneBox,				//PxGeometryType::eBOX  
 		PxcPCMContactPlaneConvex,			//PxGeometryType::eCONVEXMESH
-		PxcInvalidContactPair,				//PxGeometryType::ePARTICLESYSTEM
-		PxcInvalidContactPair,				//PxGeometryType::eTETRAHEDRONMESH
 		PxcInvalidContactPair,				//PxGeometryType::eTRIANGLEMESH
 		PxcInvalidContactPair,				//PxGeometryType::eHEIGHTFIELD
 		PxcPCMContactGeometryCustomGeometry,//PxGeometryType::eCUSTOM
@@ -274,8 +226,6 @@ PxcContactMethod g_PCMContactMethodTable[][PxGeometryType::eGEOMETRY_COUNT] =
 		PxcPCMContactCapsuleCapsule,									//PxGeometryType::eCAPSULE
 		PxcPCMContactCapsuleBox,										//PxGeometryType::eBOX
 		PxcPCMContactCapsuleConvex,										//PxGeometryType::eCONVEXMESH
-		PxcInvalidContactPair,											//PxGeometryType::ePARTICLESYSTEM
-		PxcInvalidContactPair,											//PxGeometryType::eTETRAHEDRONMESH
 		PxcPCMContactCapsuleMesh,										//PxGeometryType::eTRIANGLEMESH	
 		DYNAMIC_CONTACT_REGISTRATION(PxcPCMContactCapsuleHeightField),	//PxGeometryType::eHEIGHTFIELD		//TODO: make HF midphase that will mask this
 		PxcPCMContactGeometryCustomGeometry,							//PxGeometryType::eCUSTOM
@@ -288,8 +238,6 @@ PxcContactMethod g_PCMContactMethodTable[][PxGeometryType::eGEOMETRY_COUNT] =
 		0,																//PxGeometryType::eCAPSULE
 		PxcPCMContactBoxBox,											//PxGeometryType::eBOX
 		PxcPCMContactBoxConvex,											//PxGeometryType::eCONVEXMESH
-		PxcInvalidContactPair,											//PxGeometryType::ePARTICLESYSTEM
-		PxcInvalidContactPair,											//PxGeometryType::eTETRAHEDRONMESH
 		PxcPCMContactBoxMesh,											//PxGeometryType::eTRIANGLEMESH
 		DYNAMIC_CONTACT_REGISTRATION(PxcPCMContactBoxHeightField),		//PxGeometryType::eHEIGHTFIELD		//TODO: make HF midphase that will mask this
 		PxcPCMContactGeometryCustomGeometry,							//PxGeometryType::eCUSTOM
@@ -302,39 +250,9 @@ PxcContactMethod g_PCMContactMethodTable[][PxGeometryType::eGEOMETRY_COUNT] =
 		0,																//PxGeometryType::eCAPSULE
 		0,																//PxGeometryType::eBOX
 		PxcPCMContactConvexConvex,										//PxGeometryType::eCONVEXMESH
-		PxcInvalidContactPair,											//PxGeometryType::ePARTICLESYSTEM
-		PxcInvalidContactPair,											//PxGeometryType::eTETRAHEDRONMESH
 		PxcPCMContactConvexMesh,										//PxGeometryType::eTRIANGLEMESH
 		DYNAMIC_CONTACT_REGISTRATION(PxcPCMContactConvexHeightField),	//PxGeometryType::eHEIGHTFIELD		//TODO: make HF midphase that will mask this
 		PxcPCMContactGeometryCustomGeometry,							//PxGeometryType::eCUSTOM
-	},
-
-	//PxGeometryType::ePARTICLESYSTEM
-	{
-		0,						//PxGeometryType::eSPHERE
-		0,						//PxGeometryType::ePLANE
-		0,						//PxGeometryType::eCAPSULE
-		0,						//PxGeometryType::eBOX
-		0,						//PxGeometryType::eCONVEXMESH
-		PxcInvalidContactPair,	//PxGeometryType::ePARTICLESYSTEM
-		PxcInvalidContactPair,	//PxGeometryType::eTETRAHEDRONMESH
-		PxcInvalidContactPair,	//PxGeometryType::eTRIANGLEMESH
-		PxcInvalidContactPair,	//PxGeometryType::eHEIGHTFIELD		//TODO: make HF midphase that will mask this
-		PxcInvalidContactPair,	//PxGeometryType::eCUSTOM
-	},
-
-	//PxGeometryType::eTETRAHEDRONMESH
-	{
-		0,							//PxGeometryType::eSPHERE
-		0,							//PxGeometryType::ePLANE
-		0,							//PxGeometryType::eCAPSULE
-		0,							//PxGeometryType::eBOX
-		0,							//PxGeometryType::eCONVEXMESH
-		PxcInvalidContactPair,		//PxGeometryType::ePARTICLESYSTEM
-		PxcInvalidContactPair,		//PxGeometryType::eTETRAHEDRONMESH
-		PxcInvalidContactPair,		//PxGeometryType::eTRIANGLEMESH
-		PxcInvalidContactPair,		//PxGeometryType::eHEIGHTFIELD		//TODO: make HF midphase that will mask this
-		PxcInvalidContactPair,		//PxGeometryType::eCUSTOM
 	},
 
 	//PxGeometryType::eTRIANGLEMESH
@@ -344,8 +262,6 @@ PxcContactMethod g_PCMContactMethodTable[][PxGeometryType::eGEOMETRY_COUNT] =
 		0,									//PxGeometryType::eCAPSULE
 		0,									//PxGeometryType::eBOX
 		0,									//PxGeometryType::eCONVEXMESH
-		0,									//PxGeometryType::ePARTICLESYSTEM
-		0,									//PxGeometryType::eTETRAHEDRONMESH
 		PxcInvalidContactPair,				//PxGeometryType::eTRIANGLEMESH
 		PxcInvalidContactPair,				//PxGeometryType::eHEIGHTFIELD
 		PxcPCMContactGeometryCustomGeometry,//PxGeometryType::eCUSTOM
@@ -358,8 +274,6 @@ PxcContactMethod g_PCMContactMethodTable[][PxGeometryType::eGEOMETRY_COUNT] =
 		0,									//PxGeometryType::eCAPSULE
 		0,									//PxGeometryType::eBOX
 		0,									//PxGeometryType::eCONVEXMESH
-		0,									//PxGeometryType::ePARTICLESYSTEM
-		0,									//PxGeometryType::eTETRAHEDRONMESH
 		0,									//PxGeometryType::eTRIANGLEMESH
 		PxcInvalidContactPair,				//PxGeometryType::eHEIGHTFIELD
 		PxcPCMContactGeometryCustomGeometry,//PxGeometryType::eCUSTOM
@@ -372,8 +286,6 @@ PxcContactMethod g_PCMContactMethodTable[][PxGeometryType::eGEOMETRY_COUNT] =
 		0,									//PxGeometryType::eCAPSULE
 		0,									//PxGeometryType::eBOX
 		0,									//PxGeometryType::eCONVEXMESH
-		0,									//PxGeometryType::ePARTICLESYSTEM
-		0,									//PxGeometryType::eTETRAHEDRONMESH
 		0,									//PxGeometryType::eTRIANGLEMESH
 		0,									//PxGeometryType::eHEIGHTFIELD
 		PxcPCMContactGeometryCustomGeometry,//PxGeometryType::eCUSTOM

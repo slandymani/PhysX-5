@@ -137,46 +137,6 @@ struct PxActorType
 		*/
 		eARTICULATION_LINK,
 
-		/**
-		\brief A FEM-based soft body
-		@see PxSoftBody
-		*/
-		eSOFTBODY PX_DEPRECATED,
-
-		/**
-		\brief A FEM-based cloth
-		\note In development
-		@see PxFEMCloth
-		*/
-		eFEMCLOTH PX_DEPRECATED,
-
-		/**
-		\brief A PBD ParticleSystem
-		@see PxPBDParticleSystem
-		*/
-		ePBD_PARTICLESYSTEM PX_DEPRECATED,
-
-		/**
-		\brief A FLIP ParticleSystem
-		\note In development
-		@see PxFLIPParticleSystem
-		*/
-		eFLIP_PARTICLESYSTEM PX_DEPRECATED,
-
-		/**
-		\brief A MPM ParticleSystem
-		\note In development
-		@see PxMPMParticleSystem
-		*/
-		eMPM_PARTICLESYSTEM PX_DEPRECATED,
-
-		/**
-		\brief A CUSTOM ParticleSystem
-		\note In development
-		@see PxCUSTOMParticleSystem
-		*/
-		eCUSTOM_PARTICLESYSTEM PX_DEPRECATED,
-
 		//! \brief internal use only!
 		eACTOR_COUNT PX_DEPRECATED,
 

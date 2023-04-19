@@ -77,11 +77,6 @@ class PxsMemoryManager;
 
 struct PxConeLimitedConstraint;
 
-#if PX_SUPPORT_GPU_PHYSX
-class PxsKernelWranglerManager;
-class PxsHeapMemoryAllocatorManager;
-#endif
-
 namespace IG
 {
 	class SimpleIslandManager;
@@ -126,14 +121,8 @@ namespace Sc
 	class ArticulationSensorCore;
 	class LLArticulationPool;
 	class LLArticulationRCPool;
-	class LLSoftBodyPool;
-	class LLFEMClothPool;
-	class LLParticleSystemPool;
 
 	class BodyCore;
-	class SoftBodyCore;
-	class FEMClothCore;
-	class ParticleSystemCore;
 
 	class NPhaseCore;
 	class ConstraintInteraction;
@@ -153,9 +142,6 @@ namespace Sc
 	class ShapeInteraction;
 	class ElementInteractionMarker;
 	class ArticulationSim;
-	class SoftBodySim;
-	class FEMClothSim;
-	class ParticleSystemSim;
 
 	class SimStats;
 
@@ -219,14 +205,6 @@ namespace Sc
 	struct SqBoundsSync;
 	struct SqRefFinder;
 
-	struct ParticleOrSoftBodyRigidInteraction
-	{
-		IG::EdgeIndex mIndex;
-		PxU32 mCount;
-
-		ParticleOrSoftBodyRigidInteraction() : mCount(0) {}
-	};
-
 	class Scene : public PxUserAllocated
 	{
 		struct SimpleBodyPair
@@ -286,15 +264,6 @@ namespace Sc
 					void						addConstraint(ConstraintCore&, RigidCore*, RigidCore*);
 					void						removeConstraint(ConstraintCore&);
 
-					void						addSoftBody(SoftBodyCore&);
-					void						removeSoftBody(SoftBodyCore&);
-
-					void						addFEMCloth(FEMClothCore&);
-					void						removeFEMCloth(FEMClothCore&);
-
-					void						addParticleSystem(ParticleSystemCore&);
-					void						removeParticleSystem(ParticleSystemCore&);
-
 					void						addArticulation(ArticulationCore&, BodyCore& root);
 					void						removeArticulation(ArticulationCore&);
 
@@ -312,12 +281,6 @@ namespace Sc
 
 					void						addArticulationSimControl(ArticulationCore& core);
 					void						removeArticulationSimControl(ArticulationCore& core);
-					void						addSoftBodySimControl(SoftBodyCore& core);
-					void						removeSoftBodySimControl(SoftBodyCore& core);
-					void						addFEMClothSimControl(FEMClothCore& core);
-					void						removeFEMClothSimControl(FEMClothCore& core);
-					void						addParticleSystemSimControl(ParticleSystemCore& core);
-					void						removeParticleSystemSimControl(ParticleSystemCore& core);
 
 					void						updateBodySim(BodySim& sim);
 
@@ -444,12 +407,6 @@ namespace Sc
 					PxActor**					getActiveActors(PxU32& nbActorsOut);
 					void						setActiveActors(PxActor** actors, PxU32 nbActors);
 
-					PxActor**					getActiveSoftBodyActors(PxU32& nbActorsOut);
-					void						setActiveSoftBodyActors(PxActor** actors, PxU32 nbActors);
-
-					//PxActor**					getActiveFEMClothActors(PxU32& nbActorsOut);
-					//void						setActiveFEMClothActors(PxActor** actors, PxU32 nbActors);
-
 					PxActor**					getFrozenActors(PxU32& nbActorsOut);
 
 					void						finalizeContactStreamAndCreateHeader(PxContactPairHeader& header, 
@@ -457,7 +414,6 @@ namespace Sc
 						ContactStreamManager& cs, PxU32 removedShapeTestMask);
 
 					PxTaskManager*				getTaskManagerPtr() const { return mTaskManager; }
-					PxCudaContextManager*		getCudaContextManager() const { return mCudaContextManager; }
 
 					void						shiftOrigin(const PxVec3& shift);
 
@@ -538,14 +494,6 @@ namespace Sc
 
 	// Get the active non-kinematic actors
 	PX_FORCE_INLINE	BodyCore*const*				getActiveDynamicBodies() const { return mActiveBodies.begin() + mActiveKinematicBodyCount; }
-
-#if PX_SUPPORT_GPU_PHYSX
-	// Get the active soft body actors
-	PX_FORCE_INLINE	SoftBodyCore*const*			getActiveSoftBodies() const { return mActiveSoftBodies.begin(); }
-
-	// Get the active FEM-cloth actors
-	PX_FORCE_INLINE	FEMClothCore*const*			getActiveFEMCloths() const { return mActiveFEMCloths.begin(); }
-#endif
 
 					void						swapInteractionArrayIndices(PxU32 id1, PxU32 id2, InteractionType::Enum type);
 	public:
@@ -632,8 +580,6 @@ namespace Sc
 
 		PX_FORCE_INLINE BodyCore* const*			getSleepBodiesArray(PxU32& count)				{ count = mSleepBodies.size(); return mSleepBodies.getEntries(); }
 
-		PX_FORCE_INLINE SoftBodyCore* const*		getSleepSoftBodiesArray(PxU32& count)			{ count = mSleepSoftBodies.size(); return mSleepSoftBodies.getEntries(); }
-
 		PX_FORCE_INLINE PxTaskManager&				getTaskManager()						const	{ PX_ASSERT(mTaskManager); return *mTaskManager; }
 
 		Cm::FlushPool*								getFlushPool();
@@ -663,70 +609,12 @@ namespace Sc
 		PX_FORCE_INLINE void						resetSpeculativeCCDArticulationLink(const PxU32 index) { if(index < mSpeculativeCDDArticulationBitMap.size()) mSpeculativeCDDArticulationBitMap.reset(index); }
 
 		PX_FORCE_INLINE	PxU64						getContextId() const { return mContextId; }
-		PX_FORCE_INLINE bool						isUsingGpuDynamicsOrBp() const { return mUseGpuBp || mUseGpuDynamics; }
-		PX_FORCE_INLINE bool						isUsingGpuDynamicsAndBp() const { return mUseGpuBp && mUseGpuDynamics; }
-		PX_FORCE_INLINE bool						isUsingGpuDynamics() const { return mUseGpuDynamics; }
-		PX_FORCE_INLINE bool						isUsingGpuBp() const { return mUseGpuBp; }
 
 		// statistics counters increase/decrease
 		PX_FORCE_INLINE	void						increaseNumKinematicsCounter() { mNbRigidKinematic++; }
 		PX_FORCE_INLINE	void						decreaseNumKinematicsCounter() { mNbRigidKinematic--; }
 		PX_FORCE_INLINE	void						increaseNumDynamicsCounter() { mNbRigidDynamics++; }
 		PX_FORCE_INLINE	void						decreaseNumDynamicsCounter() { mNbRigidDynamics--; }
-
-						void						addParticleFilter(Sc::ParticleSystemCore* core, SoftBodySim& sim, PxU32 particleId, PxU32 userBufferId, PxU32 tetId);
-						void						removeParticleFilter(Sc::ParticleSystemCore* core, SoftBodySim& sim, PxU32 particleId, PxU32 userBufferId, PxU32 tetId);
-
-						PxU32						addParticleAttachment(Sc::ParticleSystemCore* core, SoftBodySim& sim, PxU32 particleId, PxU32 userBufferId, PxU32 tetId, const PxVec4& barycentric);
-						void						removeParticleAttachment(Sc::ParticleSystemCore* core, SoftBodySim& sim, PxU32 handle);
-
-						void						addRigidFilter(BodyCore* core, SoftBodySim& sim, PxU32 vertId);
-						void						removeRigidFilter(BodyCore* core, SoftBodySim& sim, PxU32 vertId);
-
-						PxU32						addRigidAttachment(BodyCore* core, SoftBodySim& sim, PxU32 vertId, const PxVec3& actorSpacePose, PxConeLimitedConstraint* constraint);
-						void						removeRigidAttachment(BodyCore* core, SoftBodySim& sim, PxU32 handle);
-						
-						void						addTetRigidFilter(BodyCore* core, SoftBodySim& sim, PxU32 tetIdx);
-						void						removeTetRigidFilter(BodyCore* core, SoftBodySim& sim, PxU32 tetIdx);
-
-						PxU32						addTetRigidAttachment(BodyCore* core, SoftBodySim& sim, PxU32 tetIdx, const PxVec4& barycentric, const PxVec3& actorSpacePose, PxConeLimitedConstraint* constraint);
-						
-						void						addSoftBodyFilter(SoftBodyCore& core, PxU32 tetIdx0,  SoftBodySim& sim, PxU32 tetIdx1);
-						void						removeSoftBodyFilter(SoftBodyCore& core, PxU32 tetIdx0, SoftBodySim& sim, PxU32 tetIdx1);
-						void						addSoftBodyFilters(SoftBodyCore& core, SoftBodySim& sim, PxU32* tetIndices0, PxU32* tetIndices1, PxU32 tetIndicesSize);
-						void						removeSoftBodyFilters(SoftBodyCore& core, SoftBodySim& sim, PxU32* tetIndices0, PxU32* tetIndices1, PxU32 tetIndicesSize);
-
-						PxU32						addSoftBodyAttachment(SoftBodyCore& core, PxU32 tetIdx0, const PxVec4& triBarycentric0, SoftBodySim& sim, PxU32 tetIdx1, const PxVec4& tetBarycentric1,
-													PxConeLimitedConstraint* constraint);
-						void						removeSoftBodyAttachment(SoftBodyCore& core, SoftBodySim& sim, PxU32 handle);
-
-						void						addClothFilter(Sc::FEMClothCore& core, PxU32 triIdx, Sc::SoftBodySim& sim, PxU32 tetIdx);
-						void						removeClothFilter(Sc::FEMClothCore& core, PxU32 triIdx, Sc::SoftBodySim& sim, PxU32 tetIdx);
-
-						PxU32						addClothAttachment(FEMClothCore& core, PxU32 triIdx, const PxVec4& triBarycentric, SoftBodySim& sim, PxU32 tetIdx, const PxVec4& tetBarycentric,
-													PxConeLimitedConstraint* constraint);
-						void						removeClothAttachment(FEMClothCore& core, SoftBodySim& sim, PxU32 handle);
-
-						void						addRigidFilter(BodyCore* core, FEMClothSim& sim, PxU32 vertId);
-						void						removeRigidFilter(BodyCore* core, FEMClothSim& sim, PxU32 vertId);
-
-						PxU32						addRigidAttachment(BodyCore* core, FEMClothSim& sim, PxU32 vertId, const PxVec3& actorSpacePose, PxConeLimitedConstraint* constraint);
-						void						removeRigidAttachment(BodyCore* core, FEMClothSim& sim, PxU32 handle);
-
-						void						addClothFilter(FEMClothCore& core0, PxU32 triIdx0, Sc::FEMClothSim& sim1, PxU32 triIdx1);
-						void						removeClothFilter(FEMClothCore& core, PxU32 triIdx0, FEMClothSim& sim1, PxU32 triIdx1);
-
-						PxU32						addTriClothAttachment(FEMClothCore& core0, PxU32 triIdx0, const PxVec4& barycentric0, Sc::FEMClothSim& sim1, PxU32 triIdx1, const PxVec4& barycentric1);
-						void						removeTriClothAttachment(FEMClothCore& core, FEMClothSim& sim1, PxU32 handle);
-
-						void						addTriRigidFilter(BodyCore* core, FEMClothSim& sim, PxU32 triIdx);
-						void						removeTriRigidFilter(BodyCore* core, FEMClothSim& sim, PxU32 triIdx);
-
-						PxU32						addTriRigidAttachment(BodyCore* core, FEMClothSim& sim, PxU32 triIdx, const PxVec4& barycentric, const PxVec3& actorSpacePose, PxConeLimitedConstraint* constraint);
-						void						removeTriRigidAttachment(BodyCore* core, FEMClothSim& sim, PxU32 handle);
-
-						void						addRigidAttachment(BodyCore* core, ParticleSystemSim& sim);
-						void						removeRigidAttachment(BodyCore* core, ParticleSystemSim& sim);
 
 						ConstraintCore*				findConstraintCore(const ActorSim* sim0, const ActorSim* sim1);
 
@@ -821,11 +709,6 @@ namespace Sc
 
 					PxsMemoryManager*			mMemoryManager;
 
-#if PX_SUPPORT_GPU_PHYSX
-					PxsKernelWranglerManager*				mGpuWranglerManagers;
-					PxsHeapMemoryAllocatorManager*			mHeapMemoryAllocationManager;
-#endif
-
 					PxsSimulationController*	mSimulationController;
 
 					PxsSimulationControllerCallback*	mSimulationControllerCallback;
@@ -892,12 +775,8 @@ namespace Sc
 					PxCoalescedHashSet<BodyCore*> mSleepBodies;
 					PxCoalescedHashSet<BodyCore*> mWokeBodies;
 
-					PxCoalescedHashSet<SoftBodyCore*> mSleepSoftBodies;
-					PxCoalescedHashSet<SoftBodyCore*> mWokeSoftBodies;
 					bool						mWokeBodyListValid;
 					bool						mSleepBodyListValid;
-					bool						mWokeSoftBodyListValid;
-					bool						mSleepSoftBodyListValid;
 			const	bool						mEnableStabilization;
 
 						PxArray<PxActor*>				mActiveActors;
@@ -927,8 +806,6 @@ namespace Sc
 					Cm::PreallocatingPool<BodySim>*		mBodySimPool;
 					PxPool<ConstraintSim>*				mConstraintSimPool;
 					LLArticulationRCPool*				mLLArticulationRCPool;
-
-					PxHashMap<PxPair<PxU32, PxU32>, ParticleOrSoftBodyRigidInteraction> mParticleOrSoftBodyRigidInteractionMap;
 
 					PxHashMap<PxPair<const ActorSim*, const ActorSim*>, ConstraintCore*> mConstraintMap;
 														
@@ -1079,11 +956,8 @@ namespace Sc
 
 					Cm::FlushPool														mTaskPool;
 					PxTaskManager*														mTaskManager;
-					PxCudaContextManager*												mCudaContextManager;
 
-					bool																mContactReportsNeedPostSolverVelocity;			
-					bool																mUseGpuDynamics;
-					bool																mUseGpuBp;
+					bool																mContactReportsNeedPostSolverVelocity;
 					bool																mCCDBp;
 
 					SimulationStage::Enum												mSimulationStage;

@@ -636,8 +636,6 @@ GeomOverlapTable gGeomOverlapMethodTable[] =
 		GeomOverlapCallback_SphereCapsule,				//PxGeometryType::eCAPSULE
 		GeomOverlapCallback_SphereBox,					//PxGeometryType::eBOX
 		GeomOverlapCallback_SphereConvex,				//PxGeometryType::eCONVEXMESH
-		GeomOverlapCallback_NotSupported,				//PxGeometryType::ePARTICLESYSTEM
-		GeomOverlapCallback_NotSupported,				//PxGeometryType::eTETRAHEDRONMESH
 		GeomOverlapCallback_SphereMesh,					//PxGeometryType::eTRIANGLEMESH
 		GeomOverlapCallback_HeightfieldUnregistered,	//PxGeometryType::eHEIGHTFIELD
 		GeomOverlapCallback_CustomGeometry,				//PxGeometryType::eCUSTOM
@@ -650,8 +648,6 @@ GeomOverlapTable gGeomOverlapMethodTable[] =
 		GeomOverlapCallback_PlaneCapsule,				//PxGeometryType::eCAPSULE
 		GeomOverlapCallback_PlaneBox,					//PxGeometryType::eBOX
 		GeomOverlapCallback_PlaneConvex,				//PxGeometryType::eCONVEXMESH
-		GeomOverlapCallback_NotSupported,				//PxGeometryType::ePARTICLESYSTEM
-		GeomOverlapCallback_NotSupported,				//PxGeometryType::eTETRAHEDRONMESH
 		GeomOverlapCallback_NotSupported,				//PxGeometryType::eTRIANGLEMESH
 		GeomOverlapCallback_NotSupported,				//PxGeometryType::eHEIGHTFIELD
 		GeomOverlapCallback_CustomGeometry,				//PxGeometryType::eCUSTOM
@@ -664,8 +660,6 @@ GeomOverlapTable gGeomOverlapMethodTable[] =
 		GeomOverlapCallback_CapsuleCapsule,				//PxGeometryType::eCAPSULE
 		GeomOverlapCallback_CapsuleBox,					//PxGeometryType::eBOX
 		GeomOverlapCallback_CapsuleConvex,				//PxGeometryType::eCONVEXMESH
-		GeomOverlapCallback_NotSupported,				//PxGeometryType::ePARTICLESYSTEM
-		GeomOverlapCallback_NotSupported,				//PxGeometryType::eTETRAHEDRONMESH
 		GeomOverlapCallback_CapsuleMesh,				//PxGeometryType::eTRIANGLEMESH
 		GeomOverlapCallback_HeightfieldUnregistered,	//PxGeometryType::eHEIGHTFIELD
 		GeomOverlapCallback_CustomGeometry,				//PxGeometryType::eCUSTOM
@@ -678,8 +672,6 @@ GeomOverlapTable gGeomOverlapMethodTable[] =
 		0,												//PxGeometryType::eCAPSULE
 		GeomOverlapCallback_BoxBox,						//PxGeometryType::eBOX
 		GeomOverlapCallback_BoxConvex,					//PxGeometryType::eCONVEXMESH
-		GeomOverlapCallback_NotSupported,				//PxGeometryType::ePARTICLESYSTEM
-		GeomOverlapCallback_NotSupported,				//PxGeometryType::eTETRAHEDRONMESH
 		GeomOverlapCallback_BoxMesh,					//PxGeometryType::eTRIANGLEMESH
 		GeomOverlapCallback_HeightfieldUnregistered,	//PxGeometryType::eHEIGHTFIELD
 		GeomOverlapCallback_CustomGeometry,				//PxGeometryType::eCUSTOM
@@ -692,39 +684,9 @@ GeomOverlapTable gGeomOverlapMethodTable[] =
 		0,												//PxGeometryType::eCAPSULE
 		0,												//PxGeometryType::eBOX
 		GeomOverlapCallback_ConvexConvex,				//PxGeometryType::eCONVEXMESH
-		GeomOverlapCallback_NotSupported,				//PxGeometryType::ePARTICLESYSTEM
-		GeomOverlapCallback_NotSupported,				//PxGeometryType::eTETRAHEDRONMESH
 		GeomOverlapCallback_ConvexMesh,					//PxGeometryType::eTRIANGLEMESH		//not used: mesh always uses swept method for midphase.
 		GeomOverlapCallback_HeightfieldUnregistered,	//PxGeometryType::eHEIGHTFIELD		//TODO: make HF midphase that will mask this
 		GeomOverlapCallback_CustomGeometry,				//PxGeometryType::eCUSTOM
-	},
-
-	//PxGeometryType::ePARTICLESYSTEM
-	{
-		0,										//PxGeometryType::eSPHERE
-		0,										//PxGeometryType::ePLANE
-		0,										//PxGeometryType::eCAPSULE
-		0,										//PxGeometryType::eBOX
-		0,										//PxGeometryType::eCONVEXMESH
-		GeomOverlapCallback_NotSupported,		//PxGeometryType::ePARTICLESYSTEM
-		GeomOverlapCallback_NotSupported,		//PxGeometryType::eTETRAHEDRONMESH
-		GeomOverlapCallback_NotSupported,		//PxGeometryType::eTRIANGLEMESH
-		GeomOverlapCallback_NotSupported,		//PxGeometryType::eHEIGHTFIELD
-		GeomOverlapCallback_NotSupported,		//PxGeometryType::eCUSTOM
-	},
-
-	//PxGeometryType::eTETRAHEDRONMESH
-	{
-		0,										//PxGeometryType::eSPHERE
-		0,										//PxGeometryType::ePLANE
-		0,										//PxGeometryType::eCAPSULE
-		0,										//PxGeometryType::eBOX
-		0,										//PxGeometryType::eCONVEXMESH
-		0,										//PxGeometryType::ePARTICLESYSTEM
-		GeomOverlapCallback_NotSupported,		//PxGeometryType::eTETRAHEDRONMESH
-		GeomOverlapCallback_NotSupported,		//PxGeometryType::eTRIANGLEMESH
-		GeomOverlapCallback_NotSupported,		//PxGeometryType::eHEIGHTFIELD
-		GeomOverlapCallback_NotSupported,		//PxGeometryType::eCUSTOM
 	},
 
 	//PxGeometryType::eTRIANGLEMESH
@@ -734,8 +696,6 @@ GeomOverlapTable gGeomOverlapMethodTable[] =
 		0,										//PxGeometryType::eCAPSULE
 		0,										//PxGeometryType::eBOX
 		0,										//PxGeometryType::eCONVEXMESH
-		0,										//PxGeometryType::ePARTICLESYSTEM
-		0,										//PxGeometryType::eTETRAHEDRONMESH
 		GeomOverlapCallback_MeshMesh,			//PxGeometryType::eTRIANGLEMESH
 		GeomOverlapCallback_NotSupported,		//PxGeometryType::eHEIGHTFIELD
 		GeomOverlapCallback_CustomGeometry,		//PxGeometryType::eCUSTOM
@@ -748,8 +708,6 @@ GeomOverlapTable gGeomOverlapMethodTable[] =
 		0,										//PxGeometryType::eCAPSULE
 		0,										//PxGeometryType::eBOX
 		0,										//PxGeometryType::eCONVEXMESH
-		0,										//PxGeometryType::ePARTICLESYSTEM
-		0,										//PxGeometryType::eTETRAHEDRONMESH
 		0,										//PxGeometryType::eTRIANGLEMESH
 		GeomOverlapCallback_NotSupported,		//PxGeometryType::eHEIGHTFIELD
 		GeomOverlapCallback_CustomGeometry,		//PxGeometryType::eCUSTOM
@@ -762,8 +720,6 @@ GeomOverlapTable gGeomOverlapMethodTable[] =
 		0,										//PxGeometryType::eCAPSULE
 		0,										//PxGeometryType::eBOX
 		0,										//PxGeometryType::eCONVEXMESH
-		0,										//PxGeometryType::ePARTICLESYSTEM
-		0,										//PxGeometryType::eTETRAHEDRONMESH
 		0,										//PxGeometryType::eTRIANGLEMESH
 		0,										//PxGeometryType::eHEIGHTFIELD
 		GeomOverlapCallback_CustomGeometry,		//PxGeometryType::eCUSTOM

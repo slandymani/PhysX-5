@@ -36,11 +36,6 @@
 
 // PT: TODO: forward decl don't work easily with templates, to revisit
 #include "PxsMaterialCore.h"
-#include "PxsFEMClothMaterialCore.h"
-#include "PxsFEMSoftBodyMaterialCore.h"
-#include "PxsFLIPMaterialCore.h"
-#include "PxsMPMMaterialCore.h"
-#include "PxsPBDMaterialCore.h"
 
 namespace physx
 {
@@ -144,30 +139,6 @@ public:
 	virtual void						registerMaterial(const PxsMaterialCore& materialCore) = 0;
 	virtual void						updateMaterial(const PxsMaterialCore& materialCore) = 0;
 	virtual void						unregisterMaterial(const PxsMaterialCore& materialCore) = 0;
-
-	virtual void						registerMaterial(const PxsFEMSoftBodyMaterialCore& materialCore) = 0;
-	virtual void						updateMaterial(const PxsFEMSoftBodyMaterialCore& materialCore) = 0;
-	virtual void						unregisterMaterial(const PxsFEMSoftBodyMaterialCore& materialCore) = 0;
-
-	virtual void						registerMaterial(const PxsFEMClothMaterialCore& materialCore) = 0;
-	virtual void						updateMaterial(const PxsFEMClothMaterialCore& materialCore) = 0;
-	virtual void						unregisterMaterial(const PxsFEMClothMaterialCore& materialCore) = 0;
-
-	virtual void						registerMaterial(const PxsPBDMaterialCore& materialCore) = 0;
-	virtual void						updateMaterial(const PxsPBDMaterialCore& materialCore) = 0;
-	virtual void						unregisterMaterial(const PxsPBDMaterialCore& materialCore) = 0;
-
-	virtual void						registerMaterial(const PxsFLIPMaterialCore& materialCore) = 0;
-	virtual void						updateMaterial(const PxsFLIPMaterialCore& materialCore) = 0;
-	virtual void						unregisterMaterial(const PxsFLIPMaterialCore& materialCore) = 0;
-
-	virtual void						registerMaterial(const PxsMPMMaterialCore& materialCore) = 0;
-	virtual void						updateMaterial(const PxsMPMMaterialCore& materialCore) = 0;
-	virtual void						unregisterMaterial(const PxsMPMMaterialCore& materialCore) = 0;
-
-	virtual void						registerMaterial(const PxsCustomMaterialCore& materialCore) = 0;
-	virtual void						updateMaterial(const PxsCustomMaterialCore& materialCore) = 0;
-	virtual void						unregisterMaterial(const PxsCustomMaterialCore& materialCore) = 0;
 
 	virtual void						updateShapeMaterial(const PxsShapeCore& shapeCore) = 0;
 

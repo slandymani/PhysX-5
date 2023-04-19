@@ -40,8 +40,6 @@
 #include "foundation/PxThread.h"
 #include "BpBroadPhase.h"
 #include "common/PxProfileZone.h"
-#include "ScSoftBodyShapeSim.h"
-#include "ScParticleSystemShapeSim.h"
 #include "ScArticulationSim.h"
 
 using namespace physx;
@@ -128,13 +126,7 @@ static void getFilterInfo_ShapeSim(PxFilterObjectAttributes& filterAttr, PxFilte
 	}
 	else
 	{
-		// For softbody and particle system, the bodySim is set to null
-		if (shape.getActor().isSoftBody())
-			setFilterObjectAttributeType(filterAttr, PxFilterObjectType::eSOFTBODY);
-		else if (shape.getActor().isParticleSystem())
-			setFilterObjectAttributeType(filterAttr, PxFilterObjectType::ePARTICLESYSTEM);
-		else
-			setFilterObjectAttributeType(filterAttr, PxFilterObjectType::eRIGID_STATIC);
+		setFilterObjectAttributeType(filterAttr, PxFilterObjectType::eRIGID_STATIC);
 	}
 
 	filterData = shape.getCore().getSimulationFilterData();
@@ -245,15 +237,7 @@ static PX_FORCE_INLINE void fetchActorAndShape(const ElementSim& e, PxActor*& a,
 {
 	const ShapeSimBase& sim = static_cast<const ShapeSimBase&>(e);
 	a = sim.getActor().getPxActor();
-
-	PxActorType::Enum type = sim.getActor().getActorType();
-	if (type == PxActorType::ePBD_PARTICLESYSTEM ||
-		type == PxActorType::eFLIP_PARTICLESYSTEM ||
-		type == PxActorType::eMPM_PARTICLESYSTEM ||
-		type == PxActorType::eCUSTOM_PARTICLESYSTEM)
-		s = NULL;	// Particle system does not have a valid shape so set it to null
-	else
-		s = sim.getPxShape();
+	s = sim.getPxShape();
 }
 
 static void runFilter(PxFilterInfo& filterInfo, const FilteringContext& context, const ElementSim& e0, const ElementSim& e1, PxU32 filterPairIndex, bool doCallbacks)
@@ -572,19 +556,7 @@ static const PxU32 gTypeData[] = {
 	PxFilterObjectType::eRIGID_STATIC<<1,
 	(PxFilterObjectType::eRIGID_DYNAMIC<<1)|1,
 	(PxFilterObjectType::eARTICULATION<<1)|1,
-	(PxFilterObjectType::eSOFTBODY<<1)|1,
-	(PxFilterObjectType::eFEMCLOTH << 1) | 1,
-	(PxFilterObjectType::ePARTICLESYSTEM<<1)|1, //PBD
-	(PxFilterObjectType::ePARTICLESYSTEM<<1)|1, //FLIP
-	(PxFilterObjectType::ePARTICLESYSTEM<<1)|1, //MPM
-	(PxFilterObjectType::ePARTICLESYSTEM<<1)|1, //Custom
 };
-
-static PX_FORCE_INLINE bool isParticleSystem(const PxActorType::Enum actorType)
-{
-	return actorType == PxActorType::ePBD_PARTICLESYSTEM || actorType == PxActorType::eFLIP_PARTICLESYSTEM
-		|| actorType == PxActorType::eMPM_PARTICLESYSTEM || actorType == PxActorType::eCUSTOM_PARTICLESYSTEM;
-}
 
 // PT: version specialized for ShapeSim/ShapeSim (no triggers)
 static PX_FORCE_INLINE PxFilterInfo filterRbCollisionPair(const FilteringContext& context, const ShapeSimBase& s0, const ShapeSimBase& s1)
@@ -632,9 +604,6 @@ static PX_FORCE_INLINE PxFilterInfo filterRbCollisionPair(const FilteringContext
 
 	if(filterJointedBodies(rbActor0, rbActor1))
 		return PxFilterInfo(PxFilterFlag::eSUPPRESS);
-
-	if(isParticleSystem(actorType0) && isParticleSystem(actorType1))
-		return PxFilterInfo(PxFilterFlag::eKILL);
 
 	if ((actorType0 == PxActorType::eARTICULATION_LINK) ^ (actorType1 == PxActorType::eARTICULATION_LINK))
 	{
@@ -973,7 +942,6 @@ ShapeInteraction* NPhaseCore::createShapeInteraction(ShapeSimBase& s0, ShapeSimB
 		if(	 actorType0 == PxActorType::eRIGID_STATIC
 			 || (actorType1 == PxActorType::eRIGID_DYNAMIC && actorType0 == PxActorType::eARTICULATION_LINK)
 			 || articulationLinkSwap
-			 || (isParticleSystem(actorType0) && actorType1 != PxActorType::eRIGID_STATIC)
 			 || ((actorType0 == PxActorType::eRIGID_DYNAMIC && actorType1 == PxActorType::eRIGID_DYNAMIC) && actorAKinematic)
 			 || (actorType0 == actorType1 && rs0.getActorID() < rs1.getActorID() && !actorBKinematic))
 			PxSwap(_s0, _s1);
@@ -1405,20 +1373,8 @@ static bool findTriggerContacts(TriggerInteraction* tri, bool toBeDeleted, bool 
 		const ActorCore& actorCore0 = s0.getActor().getActorCore();
 		const ActorCore& actorCore1 = s1.getActor().getActorCore();
 
-#if PX_SUPPORT_GPU_PHYSX
-		if (actorCore0.getActorCoreType() == PxActorType::eSOFTBODY)
-			triggerPair.triggerActor = static_cast<const SoftBodyCore&>(actorCore0).getPxActor();
-		else
-#endif
-			triggerPair.triggerActor = static_cast<const RigidCore&>(actorCore0).getPxActor();
-
-#if PX_SUPPORT_GPU_PHYSX
-		if (actorCore0.getActorCoreType() == PxActorType::eSOFTBODY)
-			triggerPair.otherActor = static_cast<const SoftBodyCore&>(actorCore1).getPxActor();
-		else
-#endif
-			triggerPair.otherActor = static_cast<const RigidCore&>(actorCore1).getPxActor();
-		
+		triggerPair.triggerActor = static_cast<const RigidCore&>(actorCore0).getPxActor();
+		triggerPair.otherActor = static_cast<const RigidCore&>(actorCore1).getPxActor();
 
 		triggerPairExtra = TriggerPairExtraData(s0.getElementID(), s1.getElementID(),
 							actorCore0.getOwnerClient(), actorCore1.getOwnerClient());

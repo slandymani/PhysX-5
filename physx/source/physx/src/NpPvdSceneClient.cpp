@@ -29,8 +29,6 @@
 #if PX_SUPPORT_PVD
 #include "common/PxProfileZone.h"
 #include "common/PxRenderBuffer.h"
-#include "PxParticleSystem.h"
-#include "PxPBDParticleSystem.h"
 #include "PxPhysics.h"
 #include "PxConstraintDesc.h"
 #include "NpPvdSceneClient.h"
@@ -45,7 +43,6 @@
 #include "NpRigidStatic.h"
 #include "NpRigidDynamic.h"
 #include "NpArticulationLink.h"
-#include "NpSoftBody.h"
 #include "NpAggregate.h"
 #include "NpScene.h"
 #include "NpArticulationJointReducedCoordinate.h"
@@ -161,26 +158,6 @@ namespace
 			break;
 		case PxActorType::eARTICULATION_LINK:
 			op(*static_cast<const PxArticulationLink*>(actor));
-			break;
-		case PxActorType::eSOFTBODY:
-			op(*static_cast<const PxSoftBody*>(actor));
-			break;
-		case PxActorType::eFEMCLOTH:
-			//op(*static_cast<const PxFEMCloth*>(actor));
-			break;
-		case PxActorType::ePBD_PARTICLESYSTEM:
-		#if PX_SUPPORT_GPU_PHYSX
-			op(*static_cast<const PxPBDParticleSystem*>(actor));
-		#endif
-			break;
-		case PxActorType::eFLIP_PARTICLESYSTEM:
-			//op(*static_cast<const PxFLIPParticleSystem*>(actor));
-			break;
-		case PxActorType::eMPM_PARTICLESYSTEM:
-			//op(*static_cast<const PxMPMParticleSystem*>(actor));
-			break;
-		case PxActorType::eCUSTOM_PARTICLESYSTEM:
-			//op(*static_cast<const PxCustomParticleSystem*>(actor));
 			break;
 		case PxActorType::eACTOR_COUNT:
 		case PxActorType::eACTOR_FORCE_DWORD:
@@ -702,61 +679,6 @@ void PvdSceneClient::releasePvdInstance(const PxsMaterialCore* materialCore)
 {
 	if(checkPvdDebugFlag() && mPvd->unRegisterObject(materialCore->mMaterial))
 		mMetaDataBinding.destroyInstance(*mPvdDataStream, *materialCore->mMaterial, PxGetPhysics());
-}
-
-///////////////////////////////////////////////////////////////////////////////
-
-void PvdSceneClient::createPvdInstance(const PxsFEMSoftBodyMaterialCore* materialCore)
-{
-	if (checkPvdDebugFlag())
-	{
-		const PxFEMSoftBodyMaterial* theMaterial = materialCore->mMaterial;
-		if (mPvd->registerObject(theMaterial))
-			mMetaDataBinding.createInstance(*mPvdDataStream, *theMaterial, PxGetPhysics());
-	}
-}
-
-void PvdSceneClient::updatePvdProperties(const PxsFEMSoftBodyMaterialCore* materialCore)
-{
-	if (checkPvdDebugFlag())
-		mMetaDataBinding.sendAllProperties(*mPvdDataStream, *materialCore->mMaterial);
-}
-
-void PvdSceneClient::releasePvdInstance(const PxsFEMSoftBodyMaterialCore* materialCore)
-{
-	if (checkPvdDebugFlag() && mPvd->unRegisterObject(materialCore->mMaterial))
-		mMetaDataBinding.destroyInstance(*mPvdDataStream, *materialCore->mMaterial, PxGetPhysics());
-}
-
-///////////////////////////////////////////////////////////////////////////////
-
-void PvdSceneClient::createPvdInstance(const PxsFEMClothMaterialCore* /*materialCore*/)
-{
-	// jcarius: Commented-out until FEMCloth is not under construction anymore
-	PX_ASSERT(0);
-
-	// if (checkPvdDebugFlag())
-	// {
-	// 	const PxFEMClothMaterial* theMaterial = materialCore->mMaterial;
-	// 	if (mPvd->registerObject(theMaterial))
-	// 		mMetaDataBinding.createInstance(*mPvdDataStream, *theMaterial, PxGetPhysics());
-	// }
-}
-
-void PvdSceneClient::updatePvdProperties(const PxsFEMClothMaterialCore* /*materialCore*/)
-{
-	// jcarius: Commented-out until FEMCloth is not under construction anymore
-	PX_ASSERT(0);
-	// if (checkPvdDebugFlag())
-	// 	mMetaDataBinding.sendAllProperties(*mPvdDataStream, *materialCore->mMaterial);
-}
-
-void PvdSceneClient::releasePvdInstance(const PxsFEMClothMaterialCore* /*materialCore*/)
-{
-	// jcarius: Commented-out until FEMCloth is not under construction anymore
-	PX_ASSERT(0);
-	// if (checkPvdDebugFlag() && mPvd->unRegisterObject(materialCore->mMaterial))
-	// 	mMetaDataBinding.destroyInstance(*mPvdDataStream, *materialCore->mMaterial, PxGetPhysics());
 }
 
 ///////////////////////////////////////////////////////////////////////////////

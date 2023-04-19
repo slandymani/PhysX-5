@@ -41,10 +41,6 @@
 #include "CmRenderBuffer.h"
 #include "CmIDPool.h"
 
-#if PX_SUPPORT_GPU_PHYSX
-	#include "device/PhysXIndicator.h"
-#endif
-
 #include "NpSceneQueries.h"
 #include "NpSceneAccessor.h"
 #include "NpPruningStructure.h"
@@ -150,15 +146,6 @@ class NpScene : public NpSceneAccessor, public PxUserAllocated
 	virtual			PxU32							getNbArticulations() const;
 	virtual			PxU32							getArticulations(PxArticulationReducedCoordinate** userBuffer, PxU32 bufferSize, PxU32 startIndex=0) const;
 
-	virtual			PxU32							getNbSoftBodies() const;
-	virtual			PxU32							getSoftBodies(PxSoftBody** userBuffer, PxU32 bufferSize, PxU32 startIndex = 0) const;
-
-	virtual			PxU32							getNbParticleSystems(PxParticleSolverType::Enum type) const;
-	virtual			PxU32							getParticleSystems(PxParticleSolverType::Enum type, PxParticleSystem** userBuffer, PxU32 bufferSize, PxU32 startIndex = 0) const;
-
-	virtual			PxU32							getNbFEMCloths() const;
-	virtual			PxU32							getFEMCloths(PxFEMCloth** userBuffer, PxU32 bufferSize, PxU32 startIndex = 0) const;
-
 	// Aggregates
     virtual			bool							addAggregate(PxAggregate&);
 	virtual			void							removeAggregate(PxAggregate&, bool wakeOnLostTouch);
@@ -248,8 +235,6 @@ class NpScene : public NpSceneAccessor, public PxUserAllocated
 	virtual			PxTaskManager*					getTaskManager()	const	{ return mTaskManager; }
 					void							checkBeginWrite()	const	{}
 
-	virtual			PxCudaContextManager*			getCudaContextManager() { return mCudaContextManager; }
-					
 	virtual         void							setNbContactDataBlocks(PxU32 numBlocks);
 	virtual         PxU32							getNbContactDataBlocksUsed() const;
 	virtual         PxU32							getMaxNbContactDataBlocksUsed() const;
@@ -259,8 +244,6 @@ class NpScene : public NpSceneAccessor, public PxUserAllocated
 	virtual			PxU32							getTimestamp()	const;
 
 	virtual			PxCpuDispatcher*				getCpuDispatcher() const;
-	virtual			PxCudaContextManager*			getCudaContextManager() const;
-
 
 	virtual			PxBroadPhaseType::Enum			getBroadPhaseType()									const;
 	virtual			bool							getBroadPhaseCaps(PxBroadPhaseCaps& caps)			const;
@@ -288,18 +271,6 @@ class NpScene : public NpSceneAccessor, public PxUserAllocated
 	virtual			void							copyArticulationData(void* data, void* index, PxArticulationGpuDataType::Enum dataType, const PxU32 nbCopyArticulations, void* copyEvent);
 	virtual			void							applyArticulationData(void* data, void* index, PxArticulationGpuDataType::Enum dataType, const PxU32 nbUpdatedArticulations, void* waitEvent, void* signalEvent);
 	virtual			void							copyContactData(void* data, const PxU32 numContactPatches, void* numContactPairs, void* copyEvent);
-	
-	virtual			void							copySoftBodyData(void** data, void* dataSizes, void* softBodyIndices, PxSoftBodyDataFlag::Enum flag, const PxU32 nbCopySoftBodies, const PxU32 maxSize, void* copyEvent);
-	virtual			void							applySoftBodyData(void** data, void* dataSizes, void* softBodyIndices, PxSoftBodyDataFlag::Enum flag, const PxU32 nbUpdatedSoftBodies, const PxU32 maxSize, void* applyEvent);
-
-	virtual			void							copyBodyData(PxGpuBodyData* data, PxGpuActorPair* index, const PxU32 nbCopyActors, void* copyEvent);	
-	virtual			void							applyActorData(void* data, PxGpuActorPair* index, PxActorCacheFlag::Enum flag, const PxU32 nbUpdatedActors, void* waitEvent, void* signalEvent);
-
-	virtual			void							computeDenseJacobians(const PxIndexDataPair* indices, PxU32 nbIndices, void* computeEvent);
-	virtual			void							computeGeneralizedMassMatrices(const PxIndexDataPair* indices, PxU32 nbIndices, void* computeEvent);
-	virtual			void							computeGeneralizedGravityForces(const PxIndexDataPair* indices, PxU32 nbIndices, void* computeEvent);
-	virtual			void							computeCoriolisAndCentrifugalForces(const PxIndexDataPair* indices, PxU32 nbIndices, void* computeEvent);
-	virtual			void							applyParticleBufferData(const PxU32* indices, const PxGpuParticleBufferIndexPair* bufferIndexPairs, const PxParticleBufferFlags* flags, PxU32 nbUpdatedBuffers, void* waitEvent, void* signalEvent);
 
 	virtual			PxSolverType::Enum				getSolverType()	const;
 
@@ -376,31 +347,6 @@ class NpScene : public NpSceneAccessor, public PxUserAllocated
 					void							addMaterial(const NpMaterial& mat);
 					void							updateMaterial(const NpMaterial& mat);
 					void							removeMaterial(const NpMaterial& mat);
-#if PX_SUPPORT_GPU_PHYSX
-					void							addMaterial(const NpFEMSoftBodyMaterial& mat);
-					void							updateMaterial(const NpFEMSoftBodyMaterial& mat);
-					void							removeMaterial(const NpFEMSoftBodyMaterial& mat);
-
-					void							addMaterial(const NpFEMClothMaterial& mat);
-					void							updateMaterial(const NpFEMClothMaterial& mat);
-					void							removeMaterial(const NpFEMClothMaterial& mat);
-					
-					void							addMaterial(const NpPBDMaterial& mat);
-					void							updateMaterial(const NpPBDMaterial& mat);
-					void							removeMaterial(const NpPBDMaterial& mat);
-					
-					void							addMaterial(const NpFLIPMaterial& mat);
-					void							updateMaterial(const NpFLIPMaterial& mat);
-					void							removeMaterial(const NpFLIPMaterial& mat);
-					
-					void							addMaterial(const NpMPMMaterial& mat);
-					void							updateMaterial(const NpMPMMaterial& mat);
-					void							removeMaterial(const NpMPMMaterial& mat);
-
-					void							addMaterial(const NpCustomMaterial& mat);
-					void							updateMaterial(const NpCustomMaterial& mat);
-					void							removeMaterial(const NpCustomMaterial& mat);
-#endif
 
 					void							executeScene(PxBaseTask* continuation);
 					void							executeCollide(PxBaseTask* continuation);
@@ -414,12 +360,6 @@ class NpScene : public NpSceneAccessor, public PxUserAllocated
 					void							removeFromRigidDynamicList(NpRigidDynamic&);
 					void							removeFromRigidStaticList(NpRigidStatic&);
 	PX_FORCE_INLINE	void							removeFromArticulationList(PxArticulationReducedCoordinate&);
-	PX_FORCE_INLINE	void							removeFromSoftBodyList(PxSoftBody&);
-	PX_FORCE_INLINE	void							removeFromFEMClothList(PxFEMCloth&);
-	PX_FORCE_INLINE	void							removeFromParticleSystemList(PxPBDParticleSystem&);
-	PX_FORCE_INLINE	void							removeFromParticleSystemList(PxFLIPParticleSystem&);
-	PX_FORCE_INLINE	void							removeFromParticleSystemList(PxMPMParticleSystem&);
-	PX_FORCE_INLINE	void							removeFromParticleSystemList(PxCustomParticleSystem&);
 	PX_FORCE_INLINE	void							removeFromAggregateList(PxAggregate&);
 
 #ifdef NEW_DIRTY_SHADERS_CODE
@@ -459,11 +399,7 @@ class NpScene : public NpSceneAccessor, public PxUserAllocated
 					void							checkPositionSanity(const PxRigidActor& a, const PxTransform& pose, const char* fnName) const;
 #endif
 
-#if PX_SUPPORT_GPU_PHYSX
-					void							updatePhysXIndicator();
-#else
 	PX_FORCE_INLINE	void							updatePhysXIndicator() {}
-#endif
 
 					void							scAddAggregate(NpAggregate&);
 					void							scRemoveAggregate(NpAggregate&);
@@ -539,12 +475,6 @@ private:
 					bool							addRigidDynamic(NpRigidDynamic& , const Gu::BVH* bvh, const Sq::PruningStructure* ps = NULL);
 					void							removeRigidDynamic(NpRigidDynamic&, bool wakeOnLostTouch, bool removeFromAggregate);
 
-					bool							addSoftBody(PxSoftBody&);
-					void							removeSoftBody(PxSoftBody&, bool wakeOnLostTouch);
-
-					bool							addParticleSystem(PxParticleSystem& particleSystem);
-					void							removeParticleSystem(PxParticleSystem& particleSystem, bool wakeOnLostTouch);
-
 					void							visualize();
 
 					void							updateDirtyShaders();
@@ -552,7 +482,6 @@ private:
 					void							fireOutOfBoundsCallbacks();
 					void							fetchResultsPreContactCallbacks();
 					void							fetchResultsPostContactCallbacks();
-					void							fetchResultsParticleSystem();
 
 					bool							addSpatialTendonInternal(NpArticulationReducedCoordinate* npaRC, Sc::ArticulationSim* scArtSim);
 					bool							addFixedTendonInternal(NpArticulationReducedCoordinate* npaRC, Sc::ArticulationSim* scArtSim);
@@ -577,12 +506,6 @@ private:
 					PxArray<NpRigidDynamic*>								mRigidDynamics;  // no hash set used because it would be quite a bit slower when adding a large number of actors
 					PxArray<NpRigidStatic*>									mRigidStatics;  // no hash set used because it would be quite a bit slower when adding a large number of actors
 					PxCoalescedHashSet<PxArticulationReducedCoordinate*>	mArticulations;
-					PxCoalescedHashSet<PxSoftBody*>							mSoftBodies;
-					PxCoalescedHashSet<PxFEMCloth*>							mFEMCloths;
-					PxCoalescedHashSet<PxPBDParticleSystem*>				mPBDParticleSystems;
-					PxCoalescedHashSet<PxFLIPParticleSystem*>				mFLIPParticleSystems;
-					PxCoalescedHashSet<PxMPMParticleSystem*>				mMPMParticleSystems;
-					PxCoalescedHashSet<PxCustomParticleSystem*>				mCustomParticleSystems;
 					PxCoalescedHashSet<PxAggregate*>						mAggregates;
 
 #ifdef NEW_DIRTY_SHADERS_CODE
@@ -592,9 +515,6 @@ private:
 #endif
 
 					PxBounds3						mSanityBounds;
-#if PX_SUPPORT_GPU_PHYSX
-					PhysXIndicator					mPhysXIndicator;
-#endif
 
 					PxSync							mPhysicsDone;		// physics thread signals this when update ready
 					PxSync							mCollisionDone;		// physics thread signals this when all collisions ready
@@ -640,7 +560,6 @@ private:
 					typedef Cm::DelegateTask<NpScene, &NpScene::executeAdvance> SceneAdvance;
 					
 					PxTaskManager*					mTaskManager;
-					PxCudaContextManager*			mCudaContextManager;
 					SceneCompletion					mSceneCompletion;
 					SceneCompletion					mCollisionCompletion;
 					SceneCompletion					mSceneQueriesCompletion;
@@ -692,19 +611,7 @@ private:
 					};
 	private:
 					PxArray<MaterialEvent>		mSceneMaterialBuffer;
-					PxArray<MaterialEvent>		mSceneFEMSoftBodyMaterialBuffer;
-					PxArray<MaterialEvent>		mSceneFEMClothMaterialBuffer;
-					PxArray<MaterialEvent>		mScenePBDMaterialBuffer;
-					PxArray<MaterialEvent>		mSceneFLIPMaterialBuffer;
-					PxArray<MaterialEvent>		mSceneMPMMaterialBuffer;
-					PxArray<MaterialEvent>		mSceneCustomMaterialBuffer;
 					PxMutex						mSceneMaterialBufferLock;
-					PxMutex						mSceneFEMSoftBodyMaterialBufferLock;
-					PxMutex						mSceneFEMClothMaterialBufferLock;
-					PxMutex						mScenePBDMaterialBufferLock;
-					PxMutex						mSceneFLIPMaterialBufferLock;
-					PxMutex						mSceneMPMMaterialBufferLock;
-					PxMutex						mSceneCustomMaterialBufferLock;
 					Sc::Scene					mScene;
 #if PX_SUPPORT_PVD
 					Vd::PvdSceneClient			mScenePvdClient;
@@ -734,50 +641,6 @@ PX_FORCE_INLINE void NpScene::removeFromArticulationList(PxArticulationReducedCo
 	PX_ASSERT(exists);
 	PX_UNUSED(exists);
 }
-
-PX_FORCE_INLINE	void NpScene::removeFromSoftBodyList(PxSoftBody& softBody)
-{
-	const bool exists = mSoftBodies.erase(&softBody);
-	PX_ASSERT(exists);
-	PX_UNUSED(exists);
-}
-
-PX_FORCE_INLINE	void NpScene::removeFromFEMClothList(PxFEMCloth& femCloth)
-{
-	const bool exists = mFEMCloths.erase(&femCloth);
-	PX_ASSERT(exists);
-	PX_UNUSED(exists);
-}
-
-PX_FORCE_INLINE	void NpScene::removeFromParticleSystemList(PxPBDParticleSystem& particleSystem)
-{
-	const bool exists = mPBDParticleSystems.erase(&particleSystem);
-	PX_ASSERT(exists);
-	PX_UNUSED(exists);
-}
-
-#if PX_ENABLE_FEATURES_UNDER_CONSTRUCTION
-PX_FORCE_INLINE	void NpScene::removeFromParticleSystemList(PxFLIPParticleSystem& particleSystem)
-{
-	const bool exists = mFLIPParticleSystems.erase(&particleSystem);
-	PX_ASSERT(exists);
-	PX_UNUSED(exists);
-}
-
-PX_FORCE_INLINE	void NpScene::removeFromParticleSystemList(PxMPMParticleSystem& particleSystem)
-{
-	const bool exists = mMPMParticleSystems.erase(&particleSystem);
-	PX_ASSERT(exists);
-	PX_UNUSED(exists);
-}
-
-PX_FORCE_INLINE	void NpScene::removeFromParticleSystemList(PxCustomParticleSystem& particleSystem)
-{
-	const bool exists = mCustomParticleSystems.erase(&particleSystem);
-	PX_ASSERT(exists);
-	PX_UNUSED(exists);
-}
-#endif
 
 PX_FORCE_INLINE void NpScene::removeFromAggregateList(PxAggregate& aggregate)
 {

@@ -355,7 +355,7 @@ namespace
 	PX_FORCE_INLINE static bool isSimGeom(const PxShape& shape)
 	{
 		const PxGeometryType::Enum t = shape.getGeometryType();
-		return t != PxGeometryType::ePLANE && t != PxGeometryType::eHEIGHTFIELD && t != PxGeometryType::eTETRAHEDRONMESH &&
+		return t != PxGeometryType::ePLANE && t != PxGeometryType::eHEIGHTFIELD &&
 			(t != PxGeometryType::eTRIANGLEMESH || isDynamicMesh(shape.getGeometry()));
 	}
 }
@@ -372,7 +372,7 @@ bool NpRigidBodyTemplate<APIClass>::attachShape(PxShape& shape)
 	PX_CHECK_AND_RETURN_VAL(!(shape.getFlags() & PxShapeFlag::eSIMULATION_SHAPE) 
 						|| isSimGeom(shape) 
 						|| isKinematic(),
-						"attachShape: non-SDF triangle mesh, tetrahedron mesh, heightfield or plane geometry shapes configured as eSIMULATION_SHAPE are not supported for non-kinematic PxRigidDynamic instances.", false);
+						"attachShape: non-SDF triangle mesh, heightfield or plane geometry shapes configured as eSIMULATION_SHAPE are not supported for non-kinematic PxRigidDynamic instances.", false);
 
 	return RigidActorTemplateClass::attachShape(shape);
 }

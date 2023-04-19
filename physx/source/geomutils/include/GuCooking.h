@@ -122,40 +122,6 @@ namespace physx
 		{
 			return createTriangleMesh(params, desc, *getInsertionCallback());
 		}
-
-		// Tetrahedron & soft body meshes
-		PX_C_EXPORT PX_PHYSX_COMMON_API	bool cookTetrahedronMesh(const PxCookingParams& params, const PxTetrahedronMeshDesc& meshDesc, PxOutputStream& stream);
-		PX_C_EXPORT PX_PHYSX_COMMON_API	PxTetrahedronMesh* createTetrahedronMesh(const PxCookingParams& params, const PxTetrahedronMeshDesc& meshDesc, PxInsertionCallback& insertionCallback);
-
-		PX_FORCE_INLINE	PxTetrahedronMesh*	createTetrahedronMesh(const PxCookingParams& params, const PxTetrahedronMeshDesc& meshDesc)
-		{
-			return createTetrahedronMesh(params, meshDesc, *getInsertionCallback());
-		}
-
-		PX_C_EXPORT PX_PHYSX_COMMON_API	bool cookSoftBodyMesh(const PxCookingParams& params, const PxTetrahedronMeshDesc& simulationMeshDesc, const PxTetrahedronMeshDesc& collisionMeshDesc,
-																const PxSoftBodySimulationDataDesc& softbodyDataDesc, PxOutputStream& stream);
-
-		PX_C_EXPORT PX_PHYSX_COMMON_API	PxSoftBodyMesh* createSoftBodyMesh(const PxCookingParams& params, const PxTetrahedronMeshDesc& simulationMeshDesc, const PxTetrahedronMeshDesc& collisionMeshDesc,
-																		const PxSoftBodySimulationDataDesc& softbodyDataDesc, PxInsertionCallback& insertionCallback);
-
-		PX_FORCE_INLINE	PxSoftBodyMesh*	createSoftBodyMesh(const PxCookingParams& params, const PxTetrahedronMeshDesc& simulationMeshDesc, const PxTetrahedronMeshDesc& collisionMeshDesc,
-			const PxSoftBodySimulationDataDesc& softbodyDataDesc)
-		{
-			return createSoftBodyMesh(params, simulationMeshDesc, collisionMeshDesc, softbodyDataDesc, *getInsertionCallback());
-		}
-
-		PX_C_EXPORT PX_PHYSX_COMMON_API	PxCollisionMeshMappingData* computeModelsMapping(const PxCookingParams& params, PxTetrahedronMeshData& simulationMesh, const PxTetrahedronMeshData& collisionMesh, 
-																						const PxSoftBodyCollisionData& collisionData, const PxBoundedData* vertexToTet = NULL);
-	
-		PX_C_EXPORT PX_PHYSX_COMMON_API	PxCollisionTetrahedronMeshData* computeCollisionData(const PxCookingParams& params, const PxTetrahedronMeshDesc& collisionMeshDesc);
-
-		PX_C_EXPORT PX_PHYSX_COMMON_API	PxSimulationTetrahedronMeshData* computeSimulationData(const PxCookingParams& params, const PxTetrahedronMeshDesc& simulationMeshDesc);
-
-		PX_C_EXPORT PX_PHYSX_COMMON_API	PxSoftBodyMesh*	assembleSoftBodyMesh(PxTetrahedronMeshData& simulationMesh, PxSoftBodySimulationData& simulationData, PxTetrahedronMeshData& collisionMesh,
-																			PxSoftBodyCollisionData& collisionData, PxCollisionMeshMappingData& mappingData, PxInsertionCallback& insertionCallback);
-	
-		PX_C_EXPORT PX_PHYSX_COMMON_API	PxSoftBodyMesh*	assembleSoftBodyMesh_Sim(PxSimulationTetrahedronMeshData& simulationMesh, PxCollisionTetrahedronMeshData& collisionMesh, 
-																			PxCollisionMeshMappingData& mappingData, PxInsertionCallback& insertionCallback);
 	}
 }
 

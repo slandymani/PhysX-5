@@ -301,12 +301,6 @@ namespace physx { namespace Sn {
 					case PxGeometryType::eHEIGHTFIELD :
 						static_cast<PxHeightFieldGeometry*>(geometry)->~PxHeightFieldGeometry();
 						break;
-					case PxGeometryType::eTETRAHEDRONMESH :
-						static_cast<PxTetrahedronMeshGeometry*>(geometry)->~PxTetrahedronMeshGeometry();
-						break;
-					case PxGeometryType::ePARTICLESYSTEM:
-						static_cast<PxParticleSystemGeometry*>(geometry)->~PxParticleSystemGeometry();
-						break;
 					case PxGeometryType::eCUSTOM :
 						static_cast<PxCustomGeometry*>(geometry)->~PxCustomGeometry();
 						break;

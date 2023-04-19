@@ -426,7 +426,6 @@ public:
 	DEFINE_PVD_PROPERTY_NOP( PxContactModifyCallback * )
 	DEFINE_PVD_PROPERTY_NOP( PxCCDContactModifyCallback * )
 	DEFINE_PVD_PROPERTY_NOP( PxSimulationEventCallback * )
-	DEFINE_PVD_PROPERTY_NOP( physx::PxCudaContextManager* )
 	DEFINE_PVD_PROPERTY_NOP( physx::PxCpuDispatcher * )
 	DEFINE_PVD_PROPERTY_NOP( PxRigidActor )
 	DEFINE_PVD_PROPERTY_NOP( const PxRigidActor )

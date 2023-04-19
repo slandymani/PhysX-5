@@ -110,30 +110,6 @@ public:
 	virtual void							updateMaterial(const PxsMaterialCore&)					{}
 	virtual void							unregisterMaterial(const PxsMaterialCore&)				{}
 
-	virtual void							registerMaterial(const PxsFEMSoftBodyMaterialCore&)		{}
-	virtual void							updateMaterial(const PxsFEMSoftBodyMaterialCore&)		{}
-	virtual void							unregisterMaterial(const PxsFEMSoftBodyMaterialCore&)	{}
-
-	virtual void							registerMaterial(const PxsFEMClothMaterialCore&)		{}
-	virtual void							updateMaterial(const PxsFEMClothMaterialCore&)			{}
-	virtual void							unregisterMaterial(const PxsFEMClothMaterialCore&)		{}
-
-	virtual void							registerMaterial(const PxsPBDMaterialCore&)				{}
-	virtual void							updateMaterial(const PxsPBDMaterialCore&)				{}
-	virtual void							unregisterMaterial(const PxsPBDMaterialCore&)			{}
-
-	virtual void							registerMaterial(const PxsFLIPMaterialCore&)			{}
-	virtual void							updateMaterial(const PxsFLIPMaterialCore&)				{}
-	virtual void							unregisterMaterial(const PxsFLIPMaterialCore&)			{}
-
-	virtual void							registerMaterial(const PxsMPMMaterialCore&)				{}
-	virtual void							updateMaterial(const PxsMPMMaterialCore&)				{}
-	virtual void							unregisterMaterial(const PxsMPMMaterialCore&)			{}
-
-	virtual void							registerMaterial(const PxsCustomMaterialCore&)			{}
-	virtual void							updateMaterial(const PxsCustomMaterialCore&)			{}
-	virtual void							unregisterMaterial(const PxsCustomMaterialCore&)		{}
-
 	virtual void							appendContactManagers();
 	virtual void							appendContactManagersFallback(PxsContactManagerOutput* cmOutputs);
 

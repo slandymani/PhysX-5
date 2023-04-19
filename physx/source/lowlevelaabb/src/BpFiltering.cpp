@@ -48,18 +48,6 @@ BpFilter::BpFilter(bool discardKineKine, bool discardStaticKine)
 	mLUT[Bp::FilterType::KINEMATIC][Bp::FilterType::AGGREGATE] = mLUT[Bp::FilterType::AGGREGATE][Bp::FilterType::KINEMATIC] = true;
 	mLUT[Bp::FilterType::DYNAMIC][Bp::FilterType::AGGREGATE] = mLUT[Bp::FilterType::AGGREGATE][Bp::FilterType::DYNAMIC] = true;
 	mLUT[Bp::FilterType::AGGREGATE][Bp::FilterType::AGGREGATE] = true;
-
-	//Enable soft body interactions
-	mLUT[Bp::FilterType::SOFTBODY][Bp::FilterType::DYNAMIC] = mLUT[Bp::FilterType::DYNAMIC][Bp::FilterType::SOFTBODY] = true;
-	mLUT[Bp::FilterType::SOFTBODY][Bp::FilterType::STATIC] = mLUT[Bp::FilterType::STATIC][Bp::FilterType::SOFTBODY] = true;
-	mLUT[Bp::FilterType::SOFTBODY][Bp::FilterType::KINEMATIC] = mLUT[Bp::FilterType::KINEMATIC][Bp::FilterType::SOFTBODY] = true;
-	mLUT[Bp::FilterType::SOFTBODY][Bp::FilterType::SOFTBODY] = true;
-
-	//Enable particle system interactions
-	mLUT[Bp::FilterType::PARTICLESYSTEM][Bp::FilterType::DYNAMIC] = mLUT[Bp::FilterType::DYNAMIC][Bp::FilterType::PARTICLESYSTEM] = true;
-	mLUT[Bp::FilterType::PARTICLESYSTEM][Bp::FilterType::STATIC] = mLUT[Bp::FilterType::STATIC][Bp::FilterType::PARTICLESYSTEM] = true;
-	mLUT[Bp::FilterType::PARTICLESYSTEM][Bp::FilterType::KINEMATIC] = mLUT[Bp::FilterType::KINEMATIC][Bp::FilterType::PARTICLESYSTEM] = true;
-	mLUT[Bp::FilterType::PARTICLESYSTEM][Bp::FilterType::PARTICLESYSTEM] = true;
 }
 
 BpFilter::~BpFilter()

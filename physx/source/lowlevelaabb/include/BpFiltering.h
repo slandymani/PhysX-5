@@ -72,9 +72,6 @@ namespace physx
 			KINEMATIC		= 1,
 			DYNAMIC			= 2,
 			AGGREGATE		= 3,
-			SOFTBODY		= 4,
-			PARTICLESYSTEM	= 5,
-			FEMCLOTH		= 6,
 
 			COUNT,
 		};
