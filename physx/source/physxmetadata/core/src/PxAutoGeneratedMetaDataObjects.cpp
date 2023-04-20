@@ -57,9 +57,6 @@ PxConvexMesh * createPxPhysics_ConvexMeshes( PxPhysics* inObj, PxInputStream & i
 PxU32 getPxPhysics_BVHs( const PxPhysics* inObj, PxBVH ** outBuffer, PxU32 inBufSize ) { return inObj->getBVHs( outBuffer, inBufSize ); }
 PxU32 getNbPxPhysics_BVHs( const PxPhysics* inObj ) { return inObj->getNbBVHs(  ); }
 PxBVH * createPxPhysics_BVHs( PxPhysics* inObj, PxInputStream & inCreateParam ){ return inObj->createBVH( inCreateParam ); }
-PxU32 getPxPhysics_BVHStructures( const PxPhysics* inObj, PxBVHStructure ** outBuffer, PxU32 inBufSize ) { return inObj->getBVHStructures( outBuffer, inBufSize ); }
-PxU32 getNbPxPhysics_BVHStructures( const PxPhysics* inObj ) { return inObj->getNbBVHStructures(  ); }
-PxBVHStructure * createPxPhysics_BVHStructures( PxPhysics* inObj, PxInputStream & inCreateParam ){ return inObj->createBVHStructure( inCreateParam ); }
 PxU32 getPxPhysics_Scenes( const PxPhysics* inObj, PxScene ** outBuffer, PxU32 inBufSize ) { return inObj->getScenes( outBuffer, inBufSize ); }
 PxU32 getNbPxPhysics_Scenes( const PxPhysics* inObj ) { return inObj->getNbScenes(  ); }
 PxScene * createPxPhysics_Scenes( PxPhysics* inObj, const PxSceneDesc & inCreateParam ){ return inObj->createScene( inCreateParam ); }
@@ -73,7 +70,6 @@ PX_PHYSX_CORE_API PxPhysicsGeneratedInfo::PxPhysicsGeneratedInfo()
 	, HeightFields( "HeightFields", getPxPhysics_HeightFields, getNbPxPhysics_HeightFields, createPxPhysics_HeightFields )
 	, ConvexMeshes( "ConvexMeshes", getPxPhysics_ConvexMeshes, getNbPxPhysics_ConvexMeshes, createPxPhysics_ConvexMeshes )
 	, BVHs( "BVHs", getPxPhysics_BVHs, getNbPxPhysics_BVHs, createPxPhysics_BVHs )
-	, BVHStructures( "BVHStructures", getPxPhysics_BVHStructures, getNbPxPhysics_BVHStructures, createPxPhysics_BVHStructures )
 	, Scenes( "Scenes", getPxPhysics_Scenes, getNbPxPhysics_Scenes, createPxPhysics_Scenes )
 	, Shapes( "Shapes", getPxPhysics_Shapes, getNbPxPhysics_Shapes )
 	, Materials( "Materials", getPxPhysics_Materials, getNbPxPhysics_Materials )
@@ -798,7 +794,6 @@ PxSceneLimits getPxScene_Limits( const PxScene* inObj ) { return inObj->getLimit
 PxU32 getPxScene_Timestamp( const PxScene* inObj ) { return inObj->getTimestamp(); }
 PxU32 getPxScene_Actors( const PxScene* inObj, PxActorTypeFlags inFilter, PxActor ** outBuffer, PxU32 inBufSize ) { return inObj->getActors( inFilter, outBuffer, inBufSize ); }
 PxU32 getNbPxScene_Actors( const PxScene* inObj, PxActorTypeFlags inFilter ) { return inObj->getNbActors( inFilter ); }
-PxU32 getNbPxScene_SoftBodies( const PxScene* inObj ) { return inObj->getNbSoftBodies(  ); }
 PxU32 getPxScene_Articulations( const PxScene* inObj, PxArticulationReducedCoordinate ** outBuffer, PxU32 inBufSize ) { return inObj->getArticulations( outBuffer, inBufSize ); }
 PxU32 getNbPxScene_Articulations( const PxScene* inObj ) { return inObj->getNbArticulations(  ); }
 PxU32 getPxScene_Constraints( const PxScene* inObj, PxConstraint ** outBuffer, PxU32 inBufSize ) { return inObj->getConstraints( outBuffer, inBufSize ); }
@@ -851,7 +846,6 @@ PxU32 getPxScene_SolverBatchSize( const PxScene* inObj ) { return inObj->getSolv
 void setPxScene_SolverArticulationBatchSize( PxScene* inObj, PxU32 inArg){ inObj->setSolverArticulationBatchSize( inArg ); }
 PxU32 getPxScene_SolverArticulationBatchSize( const PxScene* inObj ) { return inObj->getSolverArticulationBatchSize(); }
 PxReal getPxScene_WakeCounterResetValue( const PxScene* inObj ) { return inObj->getWakeCounterResetValue(); }
-PxgDynamicsMemoryConfig getPxScene_GpuDynamicsConfig( const PxScene* inObj ) { return inObj->getGpuDynamicsConfig(); }
 inline void * getPxSceneUserData( const PxScene* inOwner ) { return inOwner->userData; }
 inline void setPxSceneUserData( PxScene* inOwner, void * inData) { inOwner->userData = inData; }
 PX_PHYSX_CORE_API PxSceneGeneratedInfo::PxSceneGeneratedInfo()
@@ -859,12 +853,10 @@ PX_PHYSX_CORE_API PxSceneGeneratedInfo::PxSceneGeneratedInfo()
 	, Limits( "Limits", setPxScene_Limits, getPxScene_Limits)
 	, Timestamp( "Timestamp", getPxScene_Timestamp)
 	, Actors( "Actors", getPxScene_Actors, getNbPxScene_Actors )
-	, SoftBodies( "SoftBodies", getPxScene_SoftBodies, getNbPxScene_SoftBodies )
 	, Articulations( "Articulations", getPxScene_Articulations, getNbPxScene_Articulations )
 	, Constraints( "Constraints", getPxScene_Constraints, getNbPxScene_Constraints )
 	, Aggregates( "Aggregates", getPxScene_Aggregates, getNbPxScene_Aggregates )
 	, CpuDispatcher( "CpuDispatcher", getPxScene_CpuDispatcher)
-	, CudaContextManager( "CudaContextManager", getPxScene_CudaContextManager)
 	, SimulationEventCallback( "SimulationEventCallback", setPxScene_SimulationEventCallback, getPxScene_SimulationEventCallback)
 	, ContactModifyCallback( "ContactModifyCallback", setPxScene_ContactModifyCallback, getPxScene_ContactModifyCallback)
 	, CCDContactModifyCallback( "CCDContactModifyCallback", setPxScene_CCDContactModifyCallback, getPxScene_CCDContactModifyCallback)
@@ -894,7 +886,6 @@ PX_PHYSX_CORE_API PxSceneGeneratedInfo::PxSceneGeneratedInfo()
 	, SolverBatchSize( "SolverBatchSize", setPxScene_SolverBatchSize, getPxScene_SolverBatchSize)
 	, SolverArticulationBatchSize( "SolverArticulationBatchSize", setPxScene_SolverArticulationBatchSize, getPxScene_SolverArticulationBatchSize)
 	, WakeCounterResetValue( "WakeCounterResetValue", getPxScene_WakeCounterResetValue)
-	, GpuDynamicsConfig( "GpuDynamicsConfig", getPxScene_GpuDynamicsConfig)
 	, UserData( "UserData", setPxSceneUserData, getPxSceneUserData )
 {}
 PX_PHYSX_CORE_API PxSceneGeneratedValues::PxSceneGeneratedValues( const PxScene* inSource )
@@ -903,7 +894,6 @@ PX_PHYSX_CORE_API PxSceneGeneratedValues::PxSceneGeneratedValues( const PxScene*
 		,Limits( getPxScene_Limits( inSource ) )
 		,Timestamp( getPxScene_Timestamp( inSource ) )
 		,CpuDispatcher( getPxScene_CpuDispatcher( inSource ) )
-		,CudaContextManager( getPxScene_CudaContextManager( inSource ) )
 		,SimulationEventCallback( getPxScene_SimulationEventCallback( inSource ) )
 		,ContactModifyCallback( getPxScene_ContactModifyCallback( inSource ) )
 		,CCDContactModifyCallback( getPxScene_CCDContactModifyCallback( inSource ) )
@@ -931,7 +921,6 @@ PX_PHYSX_CORE_API PxSceneGeneratedValues::PxSceneGeneratedValues( const PxScene*
 		,SolverBatchSize( getPxScene_SolverBatchSize( inSource ) )
 		,SolverArticulationBatchSize( getPxScene_SolverArticulationBatchSize( inSource ) )
 		,WakeCounterResetValue( getPxScene_WakeCounterResetValue( inSource ) )
-		,GpuDynamicsConfig( getPxScene_GpuDynamicsConfig( inSource ) )
 		,UserData( inSource->userData )
 {
 	PX_UNUSED(inSource);
@@ -1121,14 +1110,6 @@ inline PxReal getPxSceneDescWakeCounterResetValue( const PxSceneDesc* inOwner ) 
 inline void setPxSceneDescWakeCounterResetValue( PxSceneDesc* inOwner, PxReal inData) { inOwner->wakeCounterResetValue = inData; }
 inline PxBounds3 getPxSceneDescSanityBounds( const PxSceneDesc* inOwner ) { return inOwner->sanityBounds; }
 inline void setPxSceneDescSanityBounds( PxSceneDesc* inOwner, PxBounds3 inData) { inOwner->sanityBounds = inData; }
-inline PxgDynamicsMemoryConfig getPxSceneDescGpuDynamicsConfig( const PxSceneDesc* inOwner ) { return inOwner->gpuDynamicsConfig; }
-inline void setPxSceneDescGpuDynamicsConfig( PxSceneDesc* inOwner, PxgDynamicsMemoryConfig inData) { inOwner->gpuDynamicsConfig = inData; }
-inline PxU32 getPxSceneDescGpuMaxNumPartitions( const PxSceneDesc* inOwner ) { return inOwner->gpuMaxNumPartitions; }
-inline void setPxSceneDescGpuMaxNumPartitions( PxSceneDesc* inOwner, PxU32 inData) { inOwner->gpuMaxNumPartitions = inData; }
-inline PxU32 getPxSceneDescGpuMaxNumStaticPartitions( const PxSceneDesc* inOwner ) { return inOwner->gpuMaxNumStaticPartitions; }
-inline void setPxSceneDescGpuMaxNumStaticPartitions( PxSceneDesc* inOwner, PxU32 inData) { inOwner->gpuMaxNumStaticPartitions = inData; }
-inline PxU32 getPxSceneDescGpuComputeVersion( const PxSceneDesc* inOwner ) { return inOwner->gpuComputeVersion; }
-inline void setPxSceneDescGpuComputeVersion( PxSceneDesc* inOwner, PxU32 inData) { inOwner->gpuComputeVersion = inData; }
 inline PxU32 getPxSceneDescContactPairSlabSize( const PxSceneDesc* inOwner ) { return inOwner->contactPairSlabSize; }
 inline void setPxSceneDescContactPairSlabSize( PxSceneDesc* inOwner, PxU32 inData) { inOwner->contactPairSlabSize = inData; }
 PX_PHYSX_CORE_API PxSceneDescGeneratedInfo::PxSceneDescGeneratedInfo()
@@ -1153,7 +1134,6 @@ PX_PHYSX_CORE_API PxSceneDescGeneratedInfo::PxSceneDescGeneratedInfo()
 	, FrictionCorrelationDistance( "FrictionCorrelationDistance", setPxSceneDescFrictionCorrelationDistance, getPxSceneDescFrictionCorrelationDistance )
 	, Flags( "Flags", setPxSceneDescFlags, getPxSceneDescFlags )
 	, CpuDispatcher( "CpuDispatcher", setPxSceneDescCpuDispatcher, getPxSceneDescCpuDispatcher )
-	, CudaContextManager( "CudaContextManager", setPxSceneDescCudaContextManager, getPxSceneDescCudaContextManager )
 	, UserData( "UserData", setPxSceneDescUserData, getPxSceneDescUserData )
 	, SolverBatchSize( "SolverBatchSize", setPxSceneDescSolverBatchSize, getPxSceneDescSolverBatchSize )
 	, SolverArticulationBatchSize( "SolverArticulationBatchSize", setPxSceneDescSolverArticulationBatchSize, getPxSceneDescSolverArticulationBatchSize )
@@ -1166,10 +1146,6 @@ PX_PHYSX_CORE_API PxSceneDescGeneratedInfo::PxSceneDescGeneratedInfo()
 	, CcdMaxSeparation( "CcdMaxSeparation", setPxSceneDescCcdMaxSeparation, getPxSceneDescCcdMaxSeparation )
 	, WakeCounterResetValue( "WakeCounterResetValue", setPxSceneDescWakeCounterResetValue, getPxSceneDescWakeCounterResetValue )
 	, SanityBounds( "SanityBounds", setPxSceneDescSanityBounds, getPxSceneDescSanityBounds )
-	, GpuDynamicsConfig( "GpuDynamicsConfig", setPxSceneDescGpuDynamicsConfig, getPxSceneDescGpuDynamicsConfig )
-	, GpuMaxNumPartitions( "GpuMaxNumPartitions", setPxSceneDescGpuMaxNumPartitions, getPxSceneDescGpuMaxNumPartitions )
-	, GpuMaxNumStaticPartitions( "GpuMaxNumStaticPartitions", setPxSceneDescGpuMaxNumStaticPartitions, getPxSceneDescGpuMaxNumStaticPartitions )
-	, GpuComputeVersion( "GpuComputeVersion", setPxSceneDescGpuComputeVersion, getPxSceneDescGpuComputeVersion )
 	, ContactPairSlabSize( "ContactPairSlabSize", setPxSceneDescContactPairSlabSize, getPxSceneDescContactPairSlabSize )
 {}
 PX_PHYSX_CORE_API PxSceneDescGeneratedValues::PxSceneDescGeneratedValues( const PxSceneDesc* inSource )
@@ -1194,7 +1170,6 @@ PX_PHYSX_CORE_API PxSceneDescGeneratedValues::PxSceneDescGeneratedValues( const 
 		,FrictionCorrelationDistance( inSource->frictionCorrelationDistance )
 		,Flags( inSource->flags )
 		,CpuDispatcher( inSource->cpuDispatcher )
-		,CudaContextManager( inSource->cudaContextManager )
 		,UserData( inSource->userData )
 		,SolverBatchSize( inSource->solverBatchSize )
 		,SolverArticulationBatchSize( inSource->solverArticulationBatchSize )
@@ -1207,10 +1182,6 @@ PX_PHYSX_CORE_API PxSceneDescGeneratedValues::PxSceneDescGeneratedValues( const 
 		,CcdMaxSeparation( inSource->ccdMaxSeparation )
 		,WakeCounterResetValue( inSource->wakeCounterResetValue )
 		,SanityBounds( inSource->sanityBounds )
-		,GpuDynamicsConfig( inSource->gpuDynamicsConfig )
-		,GpuMaxNumPartitions( inSource->gpuMaxNumPartitions )
-		,GpuMaxNumStaticPartitions( inSource->gpuMaxNumStaticPartitions )
-		,GpuComputeVersion( inSource->gpuComputeVersion )
 		,ContactPairSlabSize( inSource->contactPairSlabSize )
 {
 	PX_UNUSED(inSource);
@@ -1220,8 +1191,6 @@ inline PxBroadPhaseType::Enum getPxBroadPhaseDescMType( const PxBroadPhaseDesc* 
 inline void setPxBroadPhaseDescMType( PxBroadPhaseDesc* inOwner, PxBroadPhaseType::Enum inData) { inOwner->mType = inData; }
 inline PxU64 getPxBroadPhaseDescMContextID( const PxBroadPhaseDesc* inOwner ) { return inOwner->mContextID; }
 inline void setPxBroadPhaseDescMContextID( PxBroadPhaseDesc* inOwner, PxU64 inData) { inOwner->mContextID = inData; }
-inline PxU32 getPxBroadPhaseDescMFoundLostPairsCapacity( const PxBroadPhaseDesc* inOwner ) { return inOwner->mFoundLostPairsCapacity; }
-inline void setPxBroadPhaseDescMFoundLostPairsCapacity( PxBroadPhaseDesc* inOwner, PxU32 inData) { inOwner->mFoundLostPairsCapacity = inData; }
 inline _Bool getPxBroadPhaseDescMDiscardStaticVsKinematic( const PxBroadPhaseDesc* inOwner ) { return inOwner->mDiscardStaticVsKinematic; }
 inline void setPxBroadPhaseDescMDiscardStaticVsKinematic( PxBroadPhaseDesc* inOwner, _Bool inData) { inOwner->mDiscardStaticVsKinematic = inData; }
 inline _Bool getPxBroadPhaseDescMDiscardKinematicVsKinematic( const PxBroadPhaseDesc* inOwner ) { return inOwner->mDiscardKinematicVsKinematic; }
@@ -1230,8 +1199,6 @@ PX_PHYSX_CORE_API PxBroadPhaseDescGeneratedInfo::PxBroadPhaseDescGeneratedInfo()
 	: IsValid( "IsValid", getPxBroadPhaseDesc_IsValid)
 	, MType( "MType", setPxBroadPhaseDescMType, getPxBroadPhaseDescMType )
 	, MContextID( "MContextID", setPxBroadPhaseDescMContextID, getPxBroadPhaseDescMContextID )
-	, MContextManager( "MContextManager", setPxBroadPhaseDescMContextManager, getPxBroadPhaseDescMContextManager )
-	, MFoundLostPairsCapacity( "MFoundLostPairsCapacity", setPxBroadPhaseDescMFoundLostPairsCapacity, getPxBroadPhaseDescMFoundLostPairsCapacity )
 	, MDiscardStaticVsKinematic( "MDiscardStaticVsKinematic", setPxBroadPhaseDescMDiscardStaticVsKinematic, getPxBroadPhaseDescMDiscardStaticVsKinematic )
 	, MDiscardKinematicVsKinematic( "MDiscardKinematicVsKinematic", setPxBroadPhaseDescMDiscardKinematicVsKinematic, getPxBroadPhaseDescMDiscardKinematicVsKinematic )
 {}
@@ -1239,8 +1206,6 @@ PX_PHYSX_CORE_API PxBroadPhaseDescGeneratedValues::PxBroadPhaseDescGeneratedValu
 		:IsValid( getPxBroadPhaseDesc_IsValid( inSource ) )
 		,MType( inSource->mType )
 		,MContextID( inSource->mContextID )
-		,MContextManager( inSource->mContextManager )
-		,MFoundLostPairsCapacity( inSource->mFoundLostPairsCapacity )
 		,MDiscardStaticVsKinematic( inSource->mDiscardStaticVsKinematic )
 		,MDiscardKinematicVsKinematic( inSource->mDiscardKinematicVsKinematic )
 {
@@ -1281,47 +1246,6 @@ PX_PHYSX_CORE_API PxSceneLimitsGeneratedValues::PxSceneLimitsGeneratedValues( co
 		,MaxNbConstraints( inSource->maxNbConstraints )
 		,MaxNbRegions( inSource->maxNbRegions )
 		,MaxNbBroadPhaseOverlaps( inSource->maxNbBroadPhaseOverlaps )
-{
-	PX_UNUSED(inSource);
-}
-_Bool getPxgDynamicsMemoryConfig_IsValid( const PxgDynamicsMemoryConfig* inObj ) { return inObj->isValid(); }
-inline PxU32 getPxgDynamicsMemoryConfigTempBufferCapacity( const PxgDynamicsMemoryConfig* inOwner ) { return inOwner->tempBufferCapacity; }
-inline void setPxgDynamicsMemoryConfigTempBufferCapacity( PxgDynamicsMemoryConfig* inOwner, PxU32 inData) { inOwner->tempBufferCapacity = inData; }
-inline PxU32 getPxgDynamicsMemoryConfigMaxRigidContactCount( const PxgDynamicsMemoryConfig* inOwner ) { return inOwner->maxRigidContactCount; }
-inline void setPxgDynamicsMemoryConfigMaxRigidContactCount( PxgDynamicsMemoryConfig* inOwner, PxU32 inData) { inOwner->maxRigidContactCount = inData; }
-inline PxU32 getPxgDynamicsMemoryConfigMaxRigidPatchCount( const PxgDynamicsMemoryConfig* inOwner ) { return inOwner->maxRigidPatchCount; }
-inline void setPxgDynamicsMemoryConfigMaxRigidPatchCount( PxgDynamicsMemoryConfig* inOwner, PxU32 inData) { inOwner->maxRigidPatchCount = inData; }
-inline PxU32 getPxgDynamicsMemoryConfigHeapCapacity( const PxgDynamicsMemoryConfig* inOwner ) { return inOwner->heapCapacity; }
-inline void setPxgDynamicsMemoryConfigHeapCapacity( PxgDynamicsMemoryConfig* inOwner, PxU32 inData) { inOwner->heapCapacity = inData; }
-inline PxU32 getPxgDynamicsMemoryConfigFoundLostPairsCapacity( const PxgDynamicsMemoryConfig* inOwner ) { return inOwner->foundLostPairsCapacity; }
-inline void setPxgDynamicsMemoryConfigFoundLostPairsCapacity( PxgDynamicsMemoryConfig* inOwner, PxU32 inData) { inOwner->foundLostPairsCapacity = inData; }
-inline PxU32 getPxgDynamicsMemoryConfigFoundLostAggregatePairsCapacity( const PxgDynamicsMemoryConfig* inOwner ) { return inOwner->foundLostAggregatePairsCapacity; }
-inline void setPxgDynamicsMemoryConfigFoundLostAggregatePairsCapacity( PxgDynamicsMemoryConfig* inOwner, PxU32 inData) { inOwner->foundLostAggregatePairsCapacity = inData; }
-inline PxU32 getPxgDynamicsMemoryConfigTotalAggregatePairsCapacity( const PxgDynamicsMemoryConfig* inOwner ) { return inOwner->totalAggregatePairsCapacity; }
-inline void setPxgDynamicsMemoryConfigTotalAggregatePairsCapacity( PxgDynamicsMemoryConfig* inOwner, PxU32 inData) { inOwner->totalAggregatePairsCapacity = inData; }
-inline PxU32 getPxgDynamicsMemoryConfigCollisionStackSize( const PxgDynamicsMemoryConfig* inOwner ) { return inOwner->collisionStackSize; }
-inline void setPxgDynamicsMemoryConfigCollisionStackSize( PxgDynamicsMemoryConfig* inOwner, PxU32 inData) { inOwner->collisionStackSize = inData; }
-PX_PHYSX_CORE_API PxgDynamicsMemoryConfigGeneratedInfo::PxgDynamicsMemoryConfigGeneratedInfo()
-	: IsValid( "IsValid", getPxgDynamicsMemoryConfig_IsValid)
-	, TempBufferCapacity( "TempBufferCapacity", setPxgDynamicsMemoryConfigTempBufferCapacity, getPxgDynamicsMemoryConfigTempBufferCapacity )
-	, MaxRigidContactCount( "MaxRigidContactCount", setPxgDynamicsMemoryConfigMaxRigidContactCount, getPxgDynamicsMemoryConfigMaxRigidContactCount )
-	, MaxRigidPatchCount( "MaxRigidPatchCount", setPxgDynamicsMemoryConfigMaxRigidPatchCount, getPxgDynamicsMemoryConfigMaxRigidPatchCount )
-	, HeapCapacity( "HeapCapacity", setPxgDynamicsMemoryConfigHeapCapacity, getPxgDynamicsMemoryConfigHeapCapacity )
-	, FoundLostPairsCapacity( "FoundLostPairsCapacity", setPxgDynamicsMemoryConfigFoundLostPairsCapacity, getPxgDynamicsMemoryConfigFoundLostPairsCapacity )
-	, FoundLostAggregatePairsCapacity( "FoundLostAggregatePairsCapacity", setPxgDynamicsMemoryConfigFoundLostAggregatePairsCapacity, getPxgDynamicsMemoryConfigFoundLostAggregatePairsCapacity )
-	, TotalAggregatePairsCapacity( "TotalAggregatePairsCapacity", setPxgDynamicsMemoryConfigTotalAggregatePairsCapacity, getPxgDynamicsMemoryConfigTotalAggregatePairsCapacity )
-	, CollisionStackSize( "CollisionStackSize", setPxgDynamicsMemoryConfigCollisionStackSize, getPxgDynamicsMemoryConfigCollisionStackSize )
-{}
-PX_PHYSX_CORE_API PxgDynamicsMemoryConfigGeneratedValues::PxgDynamicsMemoryConfigGeneratedValues( const PxgDynamicsMemoryConfig* inSource )
-		:IsValid( getPxgDynamicsMemoryConfig_IsValid( inSource ) )
-		,TempBufferCapacity( inSource->tempBufferCapacity )
-		,MaxRigidContactCount( inSource->maxRigidContactCount )
-		,MaxRigidPatchCount( inSource->maxRigidPatchCount )
-		,HeapCapacity( inSource->heapCapacity )
-		,FoundLostPairsCapacity( inSource->foundLostPairsCapacity )
-		,FoundLostAggregatePairsCapacity( inSource->foundLostAggregatePairsCapacity )
-		,TotalAggregatePairsCapacity( inSource->totalAggregatePairsCapacity )
-		,CollisionStackSize( inSource->collisionStackSize )
 {
 	PX_UNUSED(inSource);
 }

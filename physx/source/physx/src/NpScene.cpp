@@ -161,7 +161,6 @@ NpScene::NpScene(const PxSceneDesc& desc, NpPhysics& physics) :
 	mWakeCounterResetValue	(desc.wakeCounterResetValue),
 	mPhysics				(physics)
 {
-	mGpuDynamicsConfig = desc.gpuDynamicsConfig;
 	mSceneQueriesStaticPrunerUpdate.setObject(this);
 	mSceneQueriesDynamicPrunerUpdate.setObject(this);
 
@@ -173,7 +172,6 @@ NpScene::NpScene(const PxSceneDesc& desc, NpPhysics& physics) :
 	mSceneAdvance.setObject(this);
 
 	mTaskManager = mScene.getTaskManagerPtr();
-	mCudaContextManager = mScene.getCudaContextManager();
 
 	mThreadReadWriteDepth = PxTlsAlloc();
 
@@ -759,19 +757,16 @@ static PX_FORCE_INLINE bool addRigidActorT(T& rigidActor, PxArray<T*>& rigidActo
 	PX_CHECK_SCENE_API_WRITE_FORBIDDEN_AND_RETURN_VAL(scene, "PxScene::addActor() not allowed while simulation is running. Call will be ignored.", false)
 
 #if PX_CHECKED
-	if (!scene->getScScene().isUsingGpuDynamics())
+	for (PxU32 i = 0; i < rigidActor.getShapeManager().getNbShapes(); ++i)
 	{
-		for (PxU32 i = 0; i < rigidActor.getShapeManager().getNbShapes(); ++i)
+		const NpShape* shape = rigidActor.getShapeManager().getShapes()[i];
+		const PxGeometryType::Enum t = shape->getGeometryType();
+		if (t == PxGeometryType::eTRIANGLEMESH)
 		{
-			const NpShape* shape = rigidActor.getShapeManager().getShapes()[i];
-			const PxGeometryType::Enum t = shape->getGeometryType();
-			if (t == PxGeometryType::eTRIANGLEMESH)
+			const PxTriangleMeshGeometry& triGeom = static_cast<const PxTriangleMeshGeometry&>(shape->getGeometry());				
+			if (triGeom.triangleMesh->getSDF() != NULL)
 			{
-				const PxTriangleMeshGeometry& triGeom = static_cast<const PxTriangleMeshGeometry&>(shape->getGeometry());				
-				if (triGeom.triangleMesh->getSDF() != NULL)
-				{
-					return outputError<PxErrorCode::eINVALID_OPERATION>(__LINE__, "PxScene::addRigidActor(): Rigid actors with SDFs are currently only supported with GPU-accelerated scenes!");
-				}
+				return outputError<PxErrorCode::eINVALID_OPERATION>(__LINE__, "PxScene::addRigidActor(): Rigid actors with SDFs are currently only supported with GPU-accelerated scenes!");
 			}
 		}
 	}
@@ -873,9 +868,6 @@ bool NpScene::addArticulation(PxArticulationReducedCoordinate& articulation)
 	PX_CHECK_SCENE_API_WRITE_FORBIDDEN_AND_RETURN_VAL(this, "PxScene::addArticulation() not allowed while simulation is running. Call will be ignored.", false);
 
 	PX_SIMD_GUARD;
-
-	if(this->getFlags() & PxSceneFlag::eENABLE_GPU_DYNAMICS && articulation.getConcreteType() != PxConcreteType::eARTICULATION_REDUCED_COORDINATE)
-		return outputError<PxErrorCode::eINVALID_OPERATION>(__LINE__, "PxScene::addArticulation(): Only Reduced coordinate articulations are currently supported when PxSceneFlag::eENABLE_GPU_DYNAMICS is set!");
 
 	if(getSimulationStage() != Sc::SimulationStage::eCOMPLETE && articulation.getConcreteType() == PxConcreteType::eARTICULATION_REDUCED_COORDINATE)
 		return outputError<PxErrorCode::eINVALID_OPERATION>(__LINE__, "PxScene::addArticulation(): this call is not allowed while the simulation is running. Call will be ignored!");
@@ -1546,12 +1538,6 @@ bool NpScene::addAggregate(PxAggregate& aggregate)
 			return outputError<PxErrorCode::eINVALID_OPERATION>(__LINE__, "PxScene::addAggregate(): Aggregate contains an actor with an invalid constraint!");
 	}
 #endif
-
-	if(mScene.isUsingGpuDynamicsOrBp())
-	{
-		if(np.getMaxNbShapesFast() == PX_MAX_U32)
-			return outputError<PxErrorCode::eINVALID_OPERATION>(__LINE__, "PxScene::addAggregate(): Aggregates cannot be added to GPU scene unless you provide a maxNbShapes!");
-	}
 
 	if(!np.getNpScene())
 	{
@@ -3219,35 +3205,6 @@ PxPvdSceneClient* NpScene::getScenePvdClient()
 #endif
 }
 
-void NpScene::copyArticulationData(void* jointData, void* index, PxArticulationGpuDataType::Enum dataType, const PxU32 nbCopyArticulations, void* copyEvent)
-{
-	PX_CHECK_SCENE_API_READ_FORBIDDEN(this, "PxScene::copyArticulationData() not allowed while simulation is running. Call will be ignored.");
-
-	if (dataType == PxArticulationGpuDataType::eJOINT_FORCE || dataType == PxArticulationGpuDataType::eLINK_FORCE ||
-		dataType == PxArticulationGpuDataType::eLINK_TORQUE)
-	{
-		outputError<PxErrorCode::eINVALID_OPERATION>(__LINE__, "PxScene::copyArticulationData, specified data is write only.");
-		return;
-	}
-
-	if ((mScene.getFlags() & PxSceneFlag::eSUPPRESS_READBACK) && mScene.isUsingGpuDynamicsOrBp())
-		mScene.getSimulationController()->copyArticulationData(jointData, index, dataType, nbCopyArticulations, copyEvent);
-}
-
-void NpScene::applyArticulationData(void* data, void* index, PxArticulationGpuDataType::Enum dataType, const PxU32 nbUpdatedArticulations, void* waitEvent, void* signalEvent)
-{
-	PX_CHECK_SCENE_API_WRITE_FORBIDDEN(this, "PxScene::applyArticulationData() not allowed while simulation is running. Call will be ignored.");
-	
-	if (!data || !index)
-	{
-		outputError<PxErrorCode::eINVALID_OPERATION>(__LINE__, "PxScene::applyArticulationData, data and/or index has to be valid pointer.");
-		return;
-	}
-
-	if ((mScene.getFlags() & PxSceneFlag::eSUPPRESS_READBACK) &&  mScene.isUsingGpuDynamicsOrBp())
-		mScene.getSimulationController()->applyArticulationData(data,index, dataType, nbUpdatedArticulations, waitEvent, signalEvent);
-}
-
 PxsSimulationController* NpScene::getSimulationController()
 {
 	return mScene.getSimulationController();
@@ -3914,7 +3871,6 @@ void NpScene::createInOmniPVD(const PxSceneDesc& desc)
 	OMNI_PVD_SET(scene, limitsMaxNbBroadPhaseOverlaps, static_cast<PxScene&>(*this), desc.limits.maxNbBroadPhaseOverlaps)
 
 	OMNI_PVD_SET(scene, hasCPUDispatcher, static_cast<PxScene&>(*this), getCpuDispatcher() ? true : false)
-	OMNI_PVD_SET(scene, hasCUDAContextManager, static_cast<PxScene&>(*this), getCudaContextManager()  ? true : false)
 	OMNI_PVD_SET(scene, hasSimulationEventCallback, static_cast<PxScene&>(*this), getSimulationEventCallback() ? true : false)
 	OMNI_PVD_SET(scene, hasContactModifyCallback, static_cast<PxScene&>(*this), getContactModifyCallback() ? true : false)
 	OMNI_PVD_SET(scene, hasCCDContactModifyCallback, static_cast<PxScene&>(*this), getCCDContactModifyCallback() ? true : false)
@@ -3923,10 +3879,6 @@ void NpScene::createInOmniPVD(const PxSceneDesc& desc)
 	
 	//TODO: add these too, currently we don't have getter functions to retrieve them:
 	OMNI_PVD_SET(scene, sanityBounds, static_cast<PxScene&>(*this), desc.sanityBounds)
-	OMNI_PVD_SET(scene, gpuDynamicsConfig, static_cast<PxScene&>(*this), desc.gpuDynamicsConfig)
-	OMNI_PVD_SET(scene, gpuMaxNumPartitions, static_cast<PxScene&>(*this), desc.gpuMaxNumPartitions)
-	OMNI_PVD_SET(scene, gpuMaxNumStaticPartitions, static_cast<PxScene&>(*this), desc.gpuMaxNumStaticPartitions)
-	OMNI_PVD_SET(scene, gpuComputeVersion, static_cast<PxScene&>(*this), desc.gpuComputeVersion)
 	OMNI_PVD_SET(scene, contactPairSlabSize, static_cast<PxScene&>(*this), desc.contactPairSlabSize)
 	OMNI_PVD_SET(scene, tolerancesScale, static_cast<PxScene&>(*this), desc.getTolerancesScale())
 }

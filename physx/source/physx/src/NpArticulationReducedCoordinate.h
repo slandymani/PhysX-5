@@ -191,8 +191,6 @@ namespace physx
 
 		virtual		PxSpatialVelocity				getLinkAcceleration(const PxU32 linkId);
 
-		virtual		PxU32							getGpuArticulationIndex();
-
 		virtual		const char*							getConcreteTypeName() const { return "PxArticulationReducedCoordinate"; }
 
 		virtual		PxArticulationSpatialTendon*		createSpatialTendon();

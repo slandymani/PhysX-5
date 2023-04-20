@@ -164,14 +164,6 @@ public:
 	virtual PxsContactManager**				getFoundPatchManagers() = 0;
 	virtual PxU32							getNbFoundPatchManagers() = 0;		
 
-
-	//GPU-specific buffers. Return null for CPU narrow phase
-
-	virtual PxsContactManagerOutput*		getGPUContactManagerOutputBase() = 0;
-	virtual PxReal*							getGPURestDistances() = 0;
-	virtual Sc::ShapeInteraction**			getGPUShapeInteractions() = 0;
-	virtual PxsTorsionalFrictionData*		getGPUTorsionalData() = 0;
-
 	virtual void							waitForContactsReady() {}
 		
 protected:

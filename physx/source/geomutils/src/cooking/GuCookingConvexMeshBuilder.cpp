@@ -49,7 +49,7 @@ PX_IMPLEMENT_OUTPUT_ERROR
 
 ///////////////////////////////////////////////////////////////////////////////
 
-ConvexMeshBuilder::ConvexMeshBuilder(const bool buildGRBData) : hullBuilder(&mHullData, buildGRBData), mSdfData(NULL), mBigConvexData(NULL), mMass(0.0f), mInertia(PxIdentity)
+ConvexMeshBuilder::ConvexMeshBuilder() : hullBuilder(&mHullData), mSdfData(NULL), mBigConvexData(NULL), mMass(0.0f), mInertia(PxIdentity)
 {
 }
 

@@ -139,7 +139,6 @@ namespace physx
 		PxBroadPhaseDesc(PxBroadPhaseType::Enum type = PxBroadPhaseType::eLAST) :
 			mType						(type),
 			mContextID					(0),
-			mContextManager				(NULL),
 			mDiscardStaticVsKinematic	(false),
 			mDiscardKinematicVsKinematic(false)
 		{}
@@ -147,8 +146,8 @@ namespace physx
 		PxBroadPhaseType::Enum	mType;							//!< Desired broadphase implementation
 		PxU64					mContextID;						//!< Context ID for profiler. See PxProfilerCallback.
 
-		bool					mDiscardStaticVsKinematic;		//!< Static-vs-kinematic filtering flag. Not supported by PxBroadPhaseType::eGPU.
-		bool					mDiscardKinematicVsKinematic;	//!< kinematic-vs-kinematic filtering flag. Not supported by PxBroadPhaseType::eGPU.
+		bool					mDiscardStaticVsKinematic;		//!< Static-vs-kinematic filtering flag.
+		bool					mDiscardKinematicVsKinematic;	//!< kinematic-vs-kinematic filtering flag.
 
 		PX_INLINE	bool		isValid()	const
 		{

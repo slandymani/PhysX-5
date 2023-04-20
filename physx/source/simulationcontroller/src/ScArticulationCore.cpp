@@ -257,11 +257,6 @@ PxSpatialVelocity Sc::ArticulationCore::getLinkAcceleration(const PxU32 linkId) 
 	return mSim ? mSim->getLinkAcceleration(linkId) : PxSpatialVelocity();
 }
 
-PxU32 Sc::ArticulationCore::getGpuArticulationIndex() const
-{
-	return mSim ? mCore.gpuRemapIndex : 0xffffffff;
-}
-
 void Sc::ArticulationCore::updateKinematic(PxArticulationKinematicFlags flags)
 {
 	PX_ASSERT(mSim);

@@ -1261,7 +1261,6 @@ void Sc::Scene::setFilterShaderData(const void* data, PxU32 dataSize)
 void Sc::Scene::setPublicFlags(PxSceneFlags flags)
 {
 	mPublicFlags = flags;
-	mDynamicsContext->setSuppressReadback(flags & PxSceneFlag::eSUPPRESS_READBACK);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1805,8 +1804,6 @@ void Sc::Scene::collideStep(PxBaseTask* continuation)
 	mStats->simStart();
 	mLLContext->beginUpdate();
 
-	mSimulationController->flushInsertions();
-
 	mPostNarrowPhase.setTaskManager(*continuation->getTaskManager());
 	mPostNarrowPhase.addReference();
 
@@ -1847,7 +1844,7 @@ void Sc::Scene::broadPhaseFirstPass(PxBaseTask* continuation)
 	
 	PxU32 maxAABBHandles = PxMax(mAABBManager->getChangedAABBMgActorHandleMap().getWordCount() * 32, getElementIDPool().getMaxID());
 	
-	mSimulationController->mergeChangedAABBMgHandle(maxAABBHandles, mPublicFlags & PxSceneFlag::eSUPPRESS_READBACK);
+	mSimulationController->mergeChangedAABBMgHandle(maxAABBHandles, mPublicFlags);
 }
 
 void Sc::Scene::broadPhaseSecondPass(PxBaseTask* continuation)
@@ -1863,8 +1860,6 @@ void Sc::Scene::broadPhaseSecondPass(PxBaseTask* continuation)
 
 void Sc::Scene::preIntegrate(PxBaseTask* continuation)
 {
-	if (!mCCDBp && isUsingGpuDynamicsOrBp())
-		mSimulationController->preIntegrateAndUpdateBound(continuation, mGravity, mDt);
 }
 
 void Sc::Scene::updateBroadPhase(PxBaseTask* continuation)
@@ -2030,10 +2025,6 @@ void Sc::Scene::preRigidBodyNarrowPhase(PxBaseTask* continuation)
 
 void Sc::Scene::updateBoundsAndShapes(PxBaseTask* /*continuation*/)
 {
-	//if the scene isn't use gpu dynamic and gpu broad phase and the user raise suppress readback flag,
-	//the sdk will refuse to create the scene.
-	const bool useDirectGpuApi = mPublicFlags & PxSceneFlag::eSUPPRESS_READBACK;
-	mSimulationController->updateBoundsAndShapes(*mAABBManager, mUseGpuBp, useDirectGpuApi);
 }
 
 void Sc::Scene::rigidBodyNarrowPhase(PxBaseTask* continuation)
@@ -2078,11 +2069,6 @@ void Sc::Scene::postNarrowPhase(PxBaseTask* /*continuation*/)
 
 	mHasContactDistanceChanged = false;
 	mLLContext->fetchUpdateContactManager(); //Sync on contact gen results!
-
-	if (!mCCDBp && isUsingGpuDynamicsOrBp())
-	{
-		mSimulationController->sortContacts();
-	}
 
 	releaseConstraints(false);
 
@@ -2705,8 +2691,6 @@ void Sc::Scene::updateSimulationController(PxBaseTask* continuation)
 	Bp::BoundsArray& boundArray = getBoundsArray();
 
 	PxBitMapPinned& changedAABBMgrActorHandles = mAABBManager->getChangedAABBMgActorHandleMap();
-
-	mSimulationController->gpuDmabackData(cache, boundArray, changedAABBMgrActorHandles, mPublicFlags & PxSceneFlag::eSUPPRESS_READBACK);
 
 	//for pxgdynamicscontext: copy solver body data to body core 
 	{
@@ -3588,20 +3572,6 @@ void Sc::Scene::kinematicsSetup(PxBaseTask* continuation)
 
 		task->setContinuation(continuation);
 		task->removeReference();
-	}
-
-	if((mPublicFlags & PxSceneFlag::eENABLE_GPU_DYNAMICS))
-	{
-		// PT: running this serially for now because it's unsafe: mNPhaseCore->updateDirtyInteractions() (called after this)
-		// can also call mSimulationController.updateDynamic() via BodySim::internalWakeUpBase
-		PxU32 nb = nbKinematics;
-		while(nb--)
-		{
-			Sc::BodyCore* b = *kinematics++;
-			Sc::BodySim* bodySim = b->getSim();
-			PX_ASSERT(!bodySim->getArticulation());
-			mSimulationController->updateDynamic(NULL, bodySim->getNodeIndex());
-		}
 	}
 }
 

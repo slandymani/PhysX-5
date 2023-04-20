@@ -420,38 +420,11 @@ public:
 
 	virtual bool  cookBVH(const PxBVHDesc& desc, PxOutputStream& stream) const = 0;
 
-
-	/**
-	\brief Backward compatibility helper. Cooks a bounding volume hierarchy. The results are written to the stream.
-
-	\param[in] desc		The BVH descriptor.
-	\param[in] stream	User stream to output the cooked data.
-	\return true on success.
-	@deprecated
-	*/
-	PX_DEPRECATED PX_FORCE_INLINE bool  cookBVHStructure(const PxBVHStructureDesc& desc, PxOutputStream& stream) const
-	{
-		return cookBVH(desc, stream);
-	}
-
 	virtual PxBVH*		createBVH(const PxBVHDesc& desc, PxInsertionCallback& insertionCallback) const = 0;
 
 	PX_FORCE_INLINE	PxBVH*	createBVH(const PxBVHDesc& desc) const
 	{
 		return createBVH(desc, const_cast<PxCooking&>(*this).getStandaloneInsertionCallback());
-	}
-
-	/**
-	\brief Backward compatibility helper. Cooks and creates a bounding volume hierarchy without going through a stream.
-
-	\param[in] desc		The BVH descriptor.
-	\param[in] insertionCallback	The insertion interface.
-	\return PxBVH pointer on success
-	@deprecated
-	*/
-	PX_DEPRECATED PX_FORCE_INLINE PxBVHStructure*	createBVHStructure(const PxBVHStructureDesc& desc, PxInsertionCallback& insertionCallback) const
-	{
-		return createBVH(desc, insertionCallback);
 	}
 
 	/**

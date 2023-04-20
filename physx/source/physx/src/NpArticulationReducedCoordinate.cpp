@@ -155,8 +155,6 @@ void NpArticulationReducedCoordinate::applyCache(PxArticulationCache& cache, con
 
 	PX_CHECK_AND_RETURN(cache.version == mCacheVersion, "PxArticulationReducedCoordinate::applyCache: cache is invalid, articulation configuration has changed! ");
 
-	PX_CHECK_AND_RETURN(!(getScene()->getFlags() & PxSceneFlag::eSUPPRESS_READBACK), "PxArticulationReducedCoordinate::applyCache : it is illegal to call this method if PxSceneFlag::eSUPPRESS_ARTICULATION_READBACK is enabled!");
-
 	//if we try to do a bulk op when sim is running, return with error
 	if (getNpScene()->getSimulationStage() != Sc::SimulationStage::eCOMPLETE)
 	{
@@ -165,27 +163,24 @@ void NpArticulationReducedCoordinate::applyCache(PxArticulationCache& cache, con
 		return;
 	}
 
-	if (!(getScene()->getFlags() & PxSceneFlag::eSUPPRESS_READBACK))
+	const bool forceWake = mCore.applyCache(cache, flags);
+
+	if (flags & (PxArticulationCacheFlag::ePOSITION | PxArticulationCacheFlag::eROOT_TRANSFORM))
 	{
-		const bool forceWake = mCore.applyCache(cache, flags);
+		const PxU32 linkCount = mArticulationLinks.size();
 
-		if (flags & (PxArticulationCacheFlag::ePOSITION | PxArticulationCacheFlag::eROOT_TRANSFORM))
+		//KS - the below code forces contact managers to be updated/cached data to be dropped and
+		//shape transforms to be updated.
+		for (PxU32 i = 0; i < linkCount; ++i)
 		{
-			const PxU32 linkCount = mArticulationLinks.size();
-
-			//KS - the below code forces contact managers to be updated/cached data to be dropped and
-			//shape transforms to be updated.
-			for (PxU32 i = 0; i < linkCount; ++i)
-			{
-				NpArticulationLink* link = mArticulationLinks[i];
-				//in the lowlevel articulation, we have already updated bodyCore's body2World
-				const PxTransform internalPose = link->getCore().getBody2World();
-				link->scSetBody2World(internalPose);
-			}
+			NpArticulationLink* link = mArticulationLinks[i];
+			//in the lowlevel articulation, we have already updated bodyCore's body2World
+			const PxTransform internalPose = link->getCore().getBody2World();
+			link->scSetBody2World(internalPose);
 		}
-
-		wakeUpInternal(forceWake, autowake);
 	}
+
+	wakeUpInternal(forceWake, autowake);
 }
 
 void NpArticulationReducedCoordinate::copyInternalStateToCache(PxArticulationCache& cache, const PxArticulationCacheFlags flags) const
@@ -504,16 +499,6 @@ PxSpatialVelocity NpArticulationReducedCoordinate::getLinkAcceleration(const PxU
 	PX_CHECK_SCENE_API_READ_FORBIDDEN_EXCEPT_COLLIDE_AND_RETURN_VAL(getNpScene(), "PxArticulationReducedCoordinate::getLinkAcceleration() not allowed while simulation is running, except in a split simulation during PxScene::collide() and up to PxScene::advance().", PxSpatialVelocity());
 
 	return mCore.getLinkAcceleration(linkId);
-}
-
-PxU32 NpArticulationReducedCoordinate::getGpuArticulationIndex()
-{
-	NP_READ_CHECK(getNpScene());
-	PX_CHECK_AND_RETURN_VAL(getNpScene(), "PxArticulationReducedCoordinate::getGpuArticulationIndex: Articulation must be in a scene.", 0xffffffff);
-	
-	if (getScene()->getFlags() & PxSceneFlag::eSUPPRESS_READBACK)
-		return mCore.getGpuArticulationIndex();
-	return 0xffffffff;
 }
 
 PxArticulationSpatialTendon* NpArticulationReducedCoordinate::createSpatialTendon()

@@ -148,7 +148,6 @@ public:
 	PX_FORCE_INLINE	const BpFilter&					getFilter()				const { return mFilter;				}
 
 	PX_FORCE_INLINE	bool							getStateChanged()		const { return mStateChanged;		}
-	PX_FORCE_INLINE	bool							getGpuStateChanged()	const { return mGpuStateChanged;	}
 
 #if PX_CHECKED
 	static bool isValid(const BroadPhaseUpdateData& updateData, const BroadPhase& bp, const bool skipBoundValidation, PxU64 contextID);

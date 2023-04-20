@@ -39,7 +39,7 @@ namespace physx
 	class ConvexPolygonsBuilder : public ConvexHullBuilder
 	{
 		public:
-														ConvexPolygonsBuilder(Gu::ConvexHullData* hull, const bool buildGRBData);
+														ConvexPolygonsBuilder(Gu::ConvexHullData* hull);
 														~ConvexPolygonsBuilder();
 
 						bool							computeHullPolygons(const PxU32& nbVerts,const PxVec3* verts, const PxU32& nbTriangles, const PxU32* triangles);

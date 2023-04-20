@@ -181,18 +181,18 @@ private:
 	} mGeometry;
 };
 
-	struct PxShapeCoreFlag
+struct PxShapeCoreFlag
+{
+	enum Enum
 	{
-		enum Enum
-		{
-			eOWNS_MATERIAL_IDX_MEMORY	= (1<<0),	// PT: for de-serialization to avoid deallocating material index list. Moved there from Sc::ShapeCore (since one byte was free).
-			eIS_EXCLUSIVE				= (1<<1),	// PT: shape's exclusive flag
-			eIDT_TRANSFORM				= (1<<2),	// PT: true if PxsShapeCore::transform is identity
-		};
+		eOWNS_MATERIAL_IDX_MEMORY	= (1<<0),	// PT: for de-serialization to avoid deallocating material index list. Moved there from Sc::ShapeCore (since one byte was free).
+		eIS_EXCLUSIVE				= (1<<1),	// PT: shape's exclusive flag
+		eIDT_TRANSFORM				= (1<<2),	// PT: true if PxsShapeCore::transform is identity
 	};
+};
 
-	typedef PxFlags<PxShapeCoreFlag::Enum,PxU8> PxShapeCoreFlags;
-	PX_FLAGS_OPERATORS(PxShapeCoreFlag::Enum,PxU8)
+typedef PxFlags<PxShapeCoreFlag::Enum,PxU8> PxShapeCoreFlags;
+PX_FLAGS_OPERATORS(PxShapeCoreFlag::Enum,PxU8)
 
 struct PxsShapeCore
 {

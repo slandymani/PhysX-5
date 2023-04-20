@@ -314,13 +314,6 @@ protected:
 	*/
 	PX_DEPRECATED PX_C_EXPORT PX_PHYSX_COMMON_API bool PX_CALL_CONV PxFindOverlap(PxReportCallback<PxGeomIndexPair>& callback, const PxBVH& bvh0, const PxBVH& bvh1);
 
-//! @cond
-	/**
-	 * @deprecated
-	 */
-	typedef PX_DEPRECATED PxBVH PxBVHStructure;
-//! @endcond
-
 #if !PX_DOXYGEN
 } // namespace physx
 #endif

@@ -268,10 +268,6 @@ class NpScene : public NpSceneAccessor, public PxUserAllocated
 
 	virtual         PxPvdSceneClient*				getScenePvdClient();
 
-	virtual			void							copyArticulationData(void* data, void* index, PxArticulationGpuDataType::Enum dataType, const PxU32 nbCopyArticulations, void* copyEvent);
-	virtual			void							applyArticulationData(void* data, void* index, PxArticulationGpuDataType::Enum dataType, const PxU32 nbUpdatedArticulations, void* waitEvent, void* signalEvent);
-	virtual			void							copyContactData(void* data, const PxU32 numContactPatches, void* numContactPairs, void* copyEvent);
-
 	virtual			PxSolverType::Enum				getSolverType()	const;
 
 	// NpSceneAccessor
@@ -462,8 +458,6 @@ class NpScene : public NpSceneAccessor, public PxUserAllocated
 													}
 
 					void							updateConstants(const PxArray<NpConstraint*>& constraints);
-
-					virtual		PxgDynamicsMemoryConfig getGpuDynamicsConfig() const { return mGpuDynamicsConfig; }
 private:
 					bool							checkResultsInternal(bool block);
 					bool							checkCollisionInternal(bool block);
@@ -617,8 +611,6 @@ private:
 					Vd::PvdSceneClient			mScenePvdClient;
 #endif
 					PxReal						mWakeCounterResetValue;
-
-					PxgDynamicsMemoryConfig		mGpuDynamicsConfig;
 
 					NpPhysics&					mPhysics;
 };

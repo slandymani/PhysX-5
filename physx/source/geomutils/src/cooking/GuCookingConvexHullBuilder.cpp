@@ -60,7 +60,7 @@ PX_IMPLEMENT_OUTPUT_ERROR
 ///////////////////////////////////////////////////////////////////////////////
 
 // default constructor 
-ConvexHullBuilder::ConvexHullBuilder(ConvexHullData* hull, const bool buildGRBData) : 
+ConvexHullBuilder::ConvexHullBuilder(ConvexHullData* hull) : 
 	mHullDataHullVertices		(NULL),
 	mHullDataPolygons			(NULL),
 	mHullDataVertexData8		(NULL),
@@ -68,8 +68,7 @@ ConvexHullBuilder::ConvexHullBuilder(ConvexHullData* hull, const bool buildGRBDa
 	mHullDataFacesByVertices8	(NULL),
 	mEdgeData16					(NULL),
 	mEdges						(NULL),
-	mHull						(hull),
-	mBuildGRBData				(buildGRBData)
+	mHull						(hull)
 {
 }
 
@@ -348,7 +347,7 @@ bool ConvexHullBuilder::save(PxOutputStream& stream, bool platformMismatch) cons
 	// Export figures
 
 	//embed grb flag into mNbEdges
-	PxU16 hasGRBData = PxU16(mBuildGRBData);
+	PxU16 hasGRBData = 0;
 	hasGRBData = PxU16(hasGRBData << 15);
 	PX_ASSERT(mHull->mNbEdges <( (1 << 15) - 1));
 	const PxU16 nbEdges = PxU16(mHull->mNbEdges | hasGRBData);
@@ -383,9 +382,6 @@ bool ConvexHullBuilder::save(PxOutputStream& stream, bool platformMismatch) cons
 	stream.write(mHullDataFacesByEdges8, PxU32(mHull->mNbEdges*2));
 	stream.write(mHullDataFacesByVertices8, PxU32(mHull->mNbHullVertices*3));
 
-	if (mBuildGRBData)
-		writeWordBuffer(mEdges, PxU32(mHull->mNbEdges * 2), platformMismatch, stream);
-
 	return true;
 }
 
@@ -394,7 +390,7 @@ bool ConvexHullBuilder::copy(ConvexHullData& hullData, PxU32& mNb)
 {
 	// set the numbers
 	hullData.mNbHullVertices = mHull->mNbHullVertices;
-	PxU16 hasGRBData = PxU16(mBuildGRBData);
+	PxU16 hasGRBData = 0;
 	hasGRBData = PxU16(hasGRBData << 15);
 	PX_ASSERT(mHull->mNbEdges <((1 << 15) - 1));	
 	hullData.mNbEdges = PxU16(mHull->mNbEdges | hasGRBData);;
@@ -435,8 +431,6 @@ bool ConvexHullBuilder::copy(ConvexHullData& hullData, PxU32& mNb)
 	PxMemCopy(hullData.mPolygons, mHullDataPolygons , hullData.mNbPolygons*sizeof(HullPolygonData));
 	PxMemCopy(dataVertexData8, mHullDataVertexData8, nb);
 	PxMemCopy(dataFacesByEdges8,mHullDataFacesByEdges8, PxU32(mHull->mNbEdges * 2));
-	if (mBuildGRBData)
-		PxMemCopy(dataEdges, mEdges, PxU32(mHull->mNbEdges * 2) * sizeof(PxU16));
 	PxMemCopy(dataFacesByVertices8, mHullDataFacesByVertices8, PxU32(mHull->mNbHullVertices * 3));	
 	return true;
 }

@@ -266,6 +266,15 @@ public:
 	virtual PxBVH* createBVH(PxInputStream& stream) = 0;
 
 	/**
+	\brief Return the number of bounding volume hierarchies that currently exist.
+
+	\return Number of bounding volume hierarchies.
+
+	@see PxBVH getBVHs()
+	*/
+	virtual PxU32 getNbBVHs() const = 0;
+
+	/**
 	\brief Writes the array of bounding volume hierarchy pointers to a user buffer.
 
 	Returns the number of pointers written.

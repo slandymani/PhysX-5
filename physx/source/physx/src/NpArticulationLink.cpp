@@ -204,11 +204,6 @@ void NpArticulationLink::setCMassLocalPose(const PxTransform& pose)
 
 	PX_CHECK_SCENE_API_WRITE_FORBIDDEN(getNpScene(), "PxArticulationLink::setCMassLocalPose() not allowed while simulation is running. Call will be ignored.")
 
-	if (getNpScene() && getNpScene()->getFlags() & PxSceneFlag::eSUPPRESS_READBACK)
-	{
-		PxGetFoundation().error(PxErrorCode::eINVALID_OPERATION, __FILE__, __LINE__, "PxArticulationLink::setCMassLocalPose() : it is illegal to call this method if PxSceneFlag::eSUPPRESS_ARTICULATION_READBACK is enabled!");
-	}
-
 	const PxTransform p = pose.getNormalized();
 	const PxTransform oldpose = mCore.getBody2Actor();
 	const PxTransform comShift = p.transformInv(oldpose);

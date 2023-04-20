@@ -47,7 +47,6 @@ PX_IMPLEMENT_OUTPUT_ERROR
 
 static PX_FORCE_INLINE PxConstraintFlags scGetFlags(const ConstraintCore& core)
 {
-//	return core.getFlags() & (~(PxConstraintFlag::eBROKEN | PxConstraintFlag::eGPU_COMPATIBLE));
 	return core.getFlags() & (~(PxConstraintFlag::eGPU_COMPATIBLE));
 }
 

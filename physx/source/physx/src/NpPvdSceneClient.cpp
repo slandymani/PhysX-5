@@ -683,68 +683,6 @@ void PvdSceneClient::releasePvdInstance(const PxsMaterialCore* materialCore)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-void PvdSceneClient::createPvdInstance(const PxsPBDMaterialCore* /*materialCore*/)
-{
-//	PX_ASSERT(0);
-}
-
-void PvdSceneClient::updatePvdProperties(const PxsPBDMaterialCore* /*materialCore*/)
-{
-//	PX_ASSERT(0);
-}
-
-void PvdSceneClient::releasePvdInstance(const PxsPBDMaterialCore* /*materialCore*/)
-{
-//	PX_ASSERT(0);
-}
-
-void PvdSceneClient::createPvdInstance(const PxsFLIPMaterialCore* /*materialCore*/)
-{
-//	PX_ASSERT(0);
-}
-
-void PvdSceneClient::updatePvdProperties(const PxsFLIPMaterialCore* /*materialCore*/)
-{
-//	PX_ASSERT(0);
-}
-
-void PvdSceneClient::releasePvdInstance(const PxsFLIPMaterialCore* /*materialCore*/)
-{
-//	PX_ASSERT(0);
-}
-
-void PvdSceneClient::createPvdInstance(const PxsMPMMaterialCore* /*materialCore*/)
-{
-//	PX_ASSERT(0);
-}
-
-void PvdSceneClient::updatePvdProperties(const PxsMPMMaterialCore* /*materialCore*/)
-{
-//	PX_ASSERT(0);
-}
-
-void PvdSceneClient::releasePvdInstance(const PxsMPMMaterialCore* /*materialCore*/)
-{
-//	PX_ASSERT(0);
-}
-
-void PvdSceneClient::createPvdInstance(const PxsCustomMaterialCore* /*materialCore*/)
-{
-//	PX_ASSERT(0);
-}
-
-void PvdSceneClient::updatePvdProperties(const PxsCustomMaterialCore* /*materialCore*/)
-{
-//	PX_ASSERT(0);
-}
-
-void PvdSceneClient::releasePvdInstance(const PxsCustomMaterialCore* /*materialCore*/)
-{
-//	PX_ASSERT(0);
-}
-
-///////////////////////////////////////////////////////////////////////////////
-
 void PvdSceneClient::createPvdInstance(const NpShape* npShape, PxActor& owner)
 {
 	if(checkPvdDebugFlag())

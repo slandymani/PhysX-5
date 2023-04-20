@@ -116,13 +116,6 @@ static ConvexHullLib* createHullLib(PxConvexMeshDesc& desc, const PxCookingParam
 		const PxU16 gpuMaxVertsLimit = 64;
 		const PxU16 gpuMaxFacesLimit = 64;
 
-		// GRB supports 64 verts max
-		if(desc.flags & PxConvexFlag::eGPU_COMPATIBLE)
-		{
-			desc.vertexLimit = PxMin(desc.vertexLimit, gpuMaxVertsLimit);
-			desc.polygonLimit = PxMin(desc.polygonLimit, gpuMaxFacesLimit);
-		}
-
 		return PX_NEW(QuickHullConvexHullLib) (desc, params);
 	}
 	return NULL;
@@ -136,7 +129,7 @@ bool immediateCooking::cookConvexMesh(const PxCookingParams& params, const PxCon
     PxConvexMeshDesc desc = desc_;
 	ConvexHullLib* hullLib = createHullLib(desc, params);
 
-	ConvexMeshBuilder meshBuilder(params.buildGPUData);
+	ConvexMeshBuilder meshBuilder;
 	if(!cookConvexMeshInternal(params, desc, meshBuilder, hullLib, condition))
 	{
 		PX_DELETE(hullLib);
@@ -166,7 +159,7 @@ PxConvexMesh* immediateCooking::createConvexMesh(const PxCookingParams& params, 
 	ConvexHullLib* hullLib = createHullLib(desc, params);
 
 	// cook the mesh
-	ConvexMeshBuilder meshBuilder(params.buildGPUData);
+	ConvexMeshBuilder meshBuilder;
 	if(!cookConvexMeshInternal(params, desc, meshBuilder, hullLib, condition))
 	{
 		PX_DELETE(hullLib);		
@@ -194,7 +187,7 @@ PxConvexMesh* immediateCooking::createConvexMesh(const PxCookingParams& params, 
 
 bool immediateCooking::validateConvexMesh(const PxCookingParams& params, const PxConvexMeshDesc& desc)
 {
-	ConvexMeshBuilder mesh(params.buildGPUData);
+	ConvexMeshBuilder mesh;
 	return mesh.build(desc, params.gaussMapLimit, true);
 }
 
@@ -225,7 +218,7 @@ bool immediateCooking::computeHullPolygons(const PxCookingParams& params, const 
 		immediateCooking::gatherStrided(mesh.triangles.data, topology, mesh.triangles.count, sizeof(PxU32) * 3, mesh.triangles.stride);
 	}
 
-	ConvexMeshBuilder meshBuilder(params.buildGPUData);
+	ConvexMeshBuilder meshBuilder;
 	if(!meshBuilder.computeHullPolygons(mesh.points.count, geometry, mesh.triangles.count, topology, inCallback, nbVerts, vertices, nbIndices, indices, nbPolygons, hullPolygons))
 		return false;
 

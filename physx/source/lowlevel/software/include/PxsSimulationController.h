@@ -133,7 +133,6 @@ namespace physx
 			PxBaseTask* continuation, IG::IslandSim& islandSim, const float dt) = 0;
 		
 		virtual void mergeChangedAABBMgHandle(const PxU32 maxAABBMgHandles, const bool suppressedReadback) = 0;
-		virtual void gpuDmabackData(PxsTransformCache& cache, Bp::BoundsArray& boundArray, PxBitMapPinned&  changedAABBMgrHandles, bool suppressReadback) = 0;
 		virtual void updateScBodyAndShapeSim(PxsTransformCache& cache, Bp::BoundsArray& boundArray, PxBaseTask* continuation) = 0;
 		virtual PxU32* getActiveBodies() = 0;
 		virtual PxU32* getDeactiveBodies() = 0;
@@ -152,10 +151,6 @@ namespace physx
 		virtual void	reserve(const PxU32 nbBodies) = 0;
 
 		virtual PxU32   getArticulationRemapIndex(const PxU32 nodeIndex) = 0;
-
-		virtual void	copyArticulationData(void* data, void* index, PxArticulationGpuDataType::Enum dataType, const PxU32 nbCopyArticulations, void* copyEvent) = 0;
-		virtual void	applyArticulationData(void* data, void* index, PxArticulationGpuDataType::Enum dataType, const PxU32 nbUpdatedArticulations, 
-			void* waitEvent, void* signalEvent) = 0;
 
 	protected:
 		PxsSimulationControllerCallback* mCallback;

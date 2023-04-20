@@ -48,7 +48,7 @@ namespace physx
 	class ConvexMeshBuilder
 	{
 	public:
-									ConvexMeshBuilder(const bool buildGRBData);
+									ConvexMeshBuilder();
 									~ConvexMeshBuilder();
 
 				// loads the computed or given convex hull from descriptor. 

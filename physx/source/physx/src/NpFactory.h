@@ -37,6 +37,7 @@
 #include "PxPhysXConfig.h"
 #include "PxShape.h"
 #include "PxAggregate.h"
+#include "PxvGeometry.h"
 
 namespace physx
 {

@@ -623,7 +623,6 @@ void PvdMetaDataBinding::sendAllProperties(PvdDataStream& inStream, const PxScen
 		theDesc.frictionCorrelationDistance		= inScene.getFrictionCorrelationDistance();
 		theDesc.flags							= inScene.getFlags();
 		theDesc.cpuDispatcher					= inScene.getCpuDispatcher();
-		theDesc.cudaContextManager				= inScene.getCudaContextManager();
 		theDesc.staticStructure					= inScene.getStaticStructure();
 		theDesc.dynamicStructure				= inScene.getDynamicStructure();
 		theDesc.dynamicTreeRebuildRateHint		= inScene.getDynamicTreeRebuildRateHint();
@@ -642,12 +641,7 @@ void PvdMetaDataBinding::sendAllProperties(PvdDataStream& inStream, const PxScen
 		theDesc.ccdMaxSeparation				= inScene.getCCDMaxSeparation();
 		// theDesc.simulationOrder				= inScene.getSimulationOrder();
 		theDesc.wakeCounterResetValue			= inScene.getWakeCounterResetValue();
-
-		theDesc.gpuDynamicsConfig				= inScene.getGpuDynamicsConfig();
 //		PxBounds3 SanityBounds;
-//		PxgDynamicsMemoryConfig GpuDynamicsConfig;
-//		PxU32 GpuMaxNumPartitions;
-//		PxU32 GpuComputeVersion;
 //		PxReal BroadPhaseInflation;
 //		PxU32 ContactPairSlabSize;
 	}
@@ -794,24 +788,6 @@ void PvdMetaDataBinding::sendAllProperties(PvdDataStream& inStream, const PxMate
 void PvdMetaDataBinding::destroyInstance(PvdDataStream& inStream, const PxMaterial& inMaterial, const PxPhysics& ownerPhysics)
 {
 	removePhysicsGroupProperty(inStream, "Materials", inMaterial, ownerPhysics);
-}
-
-void PvdMetaDataBinding::createInstance(PvdDataStream& inStream, const PxPBDMaterial& inMaterial, const PxPhysics& ownerPhysics)
-{
-	inStream.createInstance(&inMaterial);
-	sendAllProperties(inStream, inMaterial);
-	addPhysicsGroupProperty(inStream, "PBDMaterials", inMaterial, ownerPhysics);
-}
-
-void PvdMetaDataBinding::sendAllProperties(PvdDataStream& /*inStream*/, const PxPBDMaterial& /*inMaterial*/)
-{
-	/*PxMaterialGeneratedValues values(&inMaterial);
-	inStream.setPropertyMessage(&inMaterial, values);*/
-}
-
-void PvdMetaDataBinding::destroyInstance(PvdDataStream& /*inStream*/, const PxPBDMaterial& /*inMaterial*/, const PxPhysics& /*ownerPhysics*/)
-{
-	//removePhysicsGroupProperty(inStream, "Materials", inMaterial, ownerPhysics);
 }
 
 void PvdMetaDataBinding::sendAllProperties(PvdDataStream& inStream, const PxHeightField& inData)
@@ -1726,7 +1702,6 @@ void PvdMetaDataBinding::sendSceneQueries(PvdDataStream& inStream, const PxScene
 			case PxGeometryType::ePLANE:
 			case PxGeometryType::eTRIANGLEMESH:
 			case PxGeometryType::eHEIGHTFIELD:
-			case PxGeometryType::eMESH:
 			case PxGeometryType::eCUSTOM:
 			case PxGeometryType::eGEOMETRY_COUNT:
 			case PxGeometryType::eINVALID:

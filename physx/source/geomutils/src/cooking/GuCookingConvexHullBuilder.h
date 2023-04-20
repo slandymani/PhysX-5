@@ -48,7 +48,7 @@ namespace physx
 	class ConvexHullBuilder : public PxUserAllocated
 	{
 		public:
-												ConvexHullBuilder(Gu::ConvexHullData* hull, const bool buildGRBData);
+												ConvexHullBuilder(Gu::ConvexHullData* hull);
 												~ConvexHullBuilder();
 
 					bool						init(PxU32 nbVerts, const PxVec3* verts, const PxU32* indices, const PxU32 nbIndices, const PxU32 nbPolygons, 
@@ -78,7 +78,6 @@ namespace physx
 					PxU16*						mEdges;			//!< Edge to vertex mapping
 
 					Gu::ConvexHullData*			mHull;
-					bool						mBuildGRBData;
 	};
 }
 

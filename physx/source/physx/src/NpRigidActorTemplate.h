@@ -221,7 +221,6 @@ bool NpRigidActorTemplate<APIClass>::attachShape(PxShape& shape)
 	NP_WRITE_CHECK(npScene);
 	NpShape& npShape = static_cast<NpShape&>(shape);
 	PX_CHECK_AND_RETURN_VAL(!static_cast<NpShape&>(shape).isExclusive() || shape.getActor()==NULL, "PxRigidActor::attachShape: shape must be shared or unowned", false);
-	PX_CHECK_AND_RETURN_VAL(!(npShape.getCore().getCore().mShapeCoreFlags & PxShapeCoreFlag::eSOFT_BODY_SHAPE), "PxRigidActor::attachShape() not allowed to attach a soft body shape to a rigid actor", false);
 
 	PX_CHECK_SCENE_API_WRITE_FORBIDDEN_AND_RETURN_VAL(npScene, "PxRigidActor::attachShape() not allowed while simulation is running. Call will be ignored.", false);
 

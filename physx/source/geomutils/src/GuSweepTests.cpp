@@ -645,64 +645,54 @@ static bool sweepConvex_CustomGeom(GU_CONVEX_SWEEP_FUNC_PARAMS)
 Gu::GeomSweepFuncs gGeomSweepFuncs =
 {
 	{
-		sweepCapsule_SphereGeom,
-		sweepCapsule_PlaneGeom,
-		sweepCapsule_CapsuleGeom,
-		sweepCapsule_BoxGeom,
-		sweepCapsule_ConvexGeom,
-		sweepCapsule_InvalidGeom,
-		sweepCapsule_InvalidGeom,
-		sweepCapsule_MeshGeom,
-		sweepCapsule_HeightfieldUnregistered,
-		sweepCapsule_CustomGeom
+		sweepCapsule_SphereGeom, //PxGeometryType::eSPHERE
+		sweepCapsule_PlaneGeom, //PxGeometryType::ePLANE
+		sweepCapsule_CapsuleGeom, //PxGeometryType::eCAPSULE
+		sweepCapsule_BoxGeom, //PxGeometryType::eBOX
+		sweepCapsule_ConvexGeom, //PxGeometryType::eCONVEXMESH
+		sweepCapsule_MeshGeom, //PxGeometryType::eTRIANGLEMESH
+		sweepCapsule_HeightfieldUnregistered, //PxGeometryType::eHEIGHTFIELD
+		sweepCapsule_CustomGeom //PxGeometryType::eCUSTOM
 	},
 	{
-		sweepCapsule_SphereGeom,
-		sweepCapsule_PlaneGeom,
-		sweepCapsule_CapsuleGeom,
-		sweepCapsule_BoxGeom_Precise,
-		sweepCapsule_ConvexGeom,
-		sweepCapsule_InvalidGeom,
-		sweepCapsule_InvalidGeom,
-		sweepCapsule_MeshGeom ,
-		sweepCapsule_HeightfieldUnregistered,
-		sweepCapsule_CustomGeom
+		sweepCapsule_SphereGeom, //PxGeometryType::eSPHERE
+		sweepCapsule_PlaneGeom, //PxGeometryType::ePLANE
+		sweepCapsule_CapsuleGeom, //PxGeometryType::eCAPSULE
+		sweepCapsule_BoxGeom_Precise, //PxGeometryType::eBOX
+		sweepCapsule_ConvexGeom, //PxGeometryType::eCONVEXMESH
+		sweepCapsule_MeshGeom , //PxGeometryType::eTRIANGLEMESH
+		sweepCapsule_HeightfieldUnregistered, //PxGeometryType::eHEIGHTFIELD
+		sweepCapsule_CustomGeom //PxGeometryType::eCUSTOM
 	},
 	{
-		sweepBox_SphereGeom,
-		sweepBox_PlaneGeom,
-		sweepBox_CapsuleGeom,
-		sweepBox_BoxGeom,
-		sweepBox_ConvexGeom,
-		sweepBox_InvalidGeom,
-		sweepBox_InvalidGeom,
-		sweepBox_MeshGeom,		
-		sweepBox_HeightfieldUnregistered,
-		sweepBox_CustomGeom
+		sweepBox_SphereGeom, //PxGeometryType::eSPHERE
+		sweepBox_PlaneGeom, //PxGeometryType::ePLANE
+		sweepBox_CapsuleGeom, //PxGeometryType::eCAPSULE
+		sweepBox_BoxGeom, //PxGeometryType::eBOX
+		sweepBox_ConvexGeom, //PxGeometryType::eCONVEXMESH
+		sweepBox_MeshGeom, //PxGeometryType::eTRIANGLEMESH
+		sweepBox_HeightfieldUnregistered, //PxGeometryType::eHEIGHTFIELD
+		sweepBox_CustomGeom //PxGeometryType::eCUSTOM
 	},
 	{
-		sweepBox_SphereGeom_Precise,
-		sweepBox_PlaneGeom,
-		sweepBox_CapsuleGeom_Precise,
-		sweepBox_BoxGeom_Precise,
-		sweepBox_ConvexGeom,
-		sweepBox_InvalidGeom,
-		sweepBox_InvalidGeom,
-		sweepBox_MeshGeom,
-		sweepBox_HeightfieldUnregistered,
-		sweepBox_CustomGeom
+		sweepBox_SphereGeom_Precise, //PxGeometryType::eSPHERE
+		sweepBox_PlaneGeom, //PxGeometryType::ePLANE
+		sweepBox_CapsuleGeom_Precise, //PxGeometryType::eCAPSULE
+		sweepBox_BoxGeom_Precise, //PxGeometryType::eBOX
+		sweepBox_ConvexGeom, //PxGeometryType::eCONVEXMESH
+		sweepBox_MeshGeom, //PxGeometryType::eTRIANGLEMESH
+		sweepBox_HeightfieldUnregistered, //PxGeometryType::eHEIGHTFIELD
+		sweepBox_CustomGeom //PxGeometryType::eCUSTOM
 	},
 	{
-		sweepConvex_SphereGeom,		// 0
-		sweepConvex_PlaneGeom,		// 1
-		sweepConvex_CapsuleGeom,	// 2
-		sweepConvex_BoxGeom,		// 3
-		sweepConvex_ConvexGeom,		// 4
-		sweepConvex_InvalidGeom,	// 5
-		sweepConvex_InvalidGeom,	// 6
-		sweepConvex_MeshGeom,		// 7			
-		sweepConvex_HeightfieldUnregistered,	// 8
-		sweepConvex_CustomGeom		// 10
+		sweepConvex_SphereGeom,		//PxGeometryType::eSPHERE
+		sweepConvex_PlaneGeom,		//PxGeometryType::ePLANE
+		sweepConvex_CapsuleGeom,	//PxGeometryType::eCAPSULE
+		sweepConvex_BoxGeom,		//PxGeometryType::eBOX
+		sweepConvex_ConvexGeom,		//PxGeometryType::eCONVEXMESH
+		sweepConvex_MeshGeom,		//PxGeometryType::eTRIANGLEMESH
+		sweepConvex_HeightfieldUnregistered, //PxGeometryType::eHEIGHTFIELD
+		sweepConvex_CustomGeom		//PxGeometryType::eCUSTOM
 	}
 };
 

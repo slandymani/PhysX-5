@@ -94,7 +94,7 @@ void TriangleMeshBuilder::remapTopology(const PxU32* order)
 		mMeshData.mMaterialIndices = newMat;
 	}
 
-	if(!mParams.suppressTriangleMeshRemapTable || mParams.buildGPUData)
+	if(!mParams.suppressTriangleMeshRemapTable)
 	{
 		PxU32* newMap = PX_ALLOCATE(PxU32, mMeshData.mNbTriangles, "mFaceRemap");
 		for(PxU32 i=0;i<mMeshData.mNbTriangles;i++)
@@ -148,7 +148,7 @@ bool TriangleMeshBuilder::cleanMesh(bool validate, PxTriangleMeshCookingResult::
 				mMeshData.mMaterialIndices = tmp;
 			}
 
-			if (!mParams.suppressTriangleMeshRemapTable || mParams.buildGPUData)
+			if (!mParams.suppressTriangleMeshRemapTable)
 			{
 				mMeshData.mFaceRemap = PX_ALLOCATE(PxU32, newNbTris, "mFaceRemap");
 				PxMemCopy(mMeshData.mFaceRemap, cleaner.mRemap, newNbTris*sizeof(PxU32));
@@ -403,14 +403,6 @@ void TriangleMeshBuilder::createVertMapping()
 
 void TriangleMeshBuilder::recordTriangleIndices()
 {
-	if (mParams.buildGPUData)
-	{
-		PX_ASSERT(!(mMeshData.mFlags & PxTriangleMeshFlag::e16_BIT_INDICES));
-		PX_ASSERT(mMeshData.mGRB_primIndices);
-
-		//copy the BV4 triangle indices to GPU triangle indices buffer
-		PxMemCopy(mMeshData.mGRB_primIndices, mMeshData.mTriangles, sizeof(IndTri32) *mMeshData.mNbTriangles);
-	}
 }
 
 void TriangleMeshBuilder::createGRBData()
@@ -443,34 +435,6 @@ void TriangleMeshBuilder::createGRBData()
 void TriangleMeshBuilder::createGRBMidPhaseAndData(const PxU32 originalTriangleCount)
 {
 	PX_UNUSED(originalTriangleCount);
-	if (mParams.buildGPUData)
-	{
-		PX_ASSERT(!(mMeshData.mFlags & PxTriangleMeshFlag::e16_BIT_INDICES));
-
-		BV32Tree* bv32Tree = PX_NEW(BV32Tree);
-		mMeshData.mGRB_BV32Tree = bv32Tree;
-
-		BV32TriangleMeshBuilder::createMidPhaseStructure(mParams, mMeshData, *bv32Tree);
-		
-		createGRBData();
-
-		if (mParams.meshPreprocessParams & PxMeshPreprocessingFlag::eENABLE_VERT_MAPPING || mParams.buildGPUData)
-		{
-			createVertMapping();
-		}
-
-#if BV32_VALIDATE
-		IndTri32* grbTriIndices = reinterpret_cast<IndTri32*>(mMeshData.mGRB_primIndices);
-		IndTri32* cpuTriIndices = reinterpret_cast<IndTri32*>(mMeshData.mTriangles);
-		//map CPU remap triangle index to GPU remap triangle index
-		for (PxU32 i = 0; i < mMeshData.mNbTriangles; ++i)
-		{
-			PX_ASSERT(grbTriIndices[i].mRef[0] == cpuTriIndices[mMeshData.mGRB_faceRemap[i]].mRef[0]);
-			PX_ASSERT(grbTriIndices[i].mRef[1] == cpuTriIndices[mMeshData.mGRB_faceRemap[i]].mRef[1]);
-			PX_ASSERT(grbTriIndices[i].mRef[2] == cpuTriIndices[mMeshData.mGRB_faceRemap[i]].mRef[2]);
-		}
-#endif
-	}
 }
 
 bool TriangleMeshBuilder::loadFromDescInternal(PxTriangleMeshDesc& desc, PxTriangleMeshCookingResult::Enum* condition, bool validateMesh)
@@ -612,7 +576,6 @@ bool TriangleMeshBuilder::save(PxOutputStream& stream, bool platformMismatch, co
 	if(mMeshData.mMaterialIndices)	serialFlags |= IMSF_MATERIALS;
 	if(mMeshData.mFaceRemap)		serialFlags |= IMSF_FACE_REMAP;
 	if(mMeshData.mAdjacencies)		serialFlags |= IMSF_ADJACENCIES;
-	if (params.buildGPUData)		serialFlags |= IMSF_GRB_DATA;
 	if (mMeshData.mGRB_faceRemapInverse) serialFlags |= IMSF_GRB_INV_REMAP;
 	// Compute serialization flags for indices
 	PxU32 maxIndex=0;
@@ -636,7 +599,7 @@ bool TriangleMeshBuilder::save(PxOutputStream& stream, bool platformMismatch, co
 	if (maxIndex <= 0xFFFF && !force32)
 		serialFlags |= (maxIndex <= 0xFF ? IMSF_8BIT_INDICES : IMSF_16BIT_INDICES);
 
-	bool enableVertexMapping = (params.buildGPUData || (params.meshPreprocessParams & PxMeshPreprocessingFlag::eENABLE_VERT_MAPPING));
+	bool enableVertexMapping = (params.meshPreprocessParams & PxMeshPreprocessingFlag::eENABLE_VERT_MAPPING);
 	if (enableVertexMapping)
 		serialFlags |= IMSF_VERT_MAPPING;
 
@@ -700,52 +663,6 @@ bool TriangleMeshBuilder::save(PxOutputStream& stream, bool platformMismatch, co
 	else
 		writeDword(0, platformMismatch, stream);
 
-	// GRB write -----------------------------------------------------------------
-	if (params.buildGPUData)
-	{
-		const PxU32* indices = reinterpret_cast<PxU32*>(mMeshData.mGRB_primIndices);
-		if (serialFlags & IMSF_8BIT_INDICES)
-		{
-			for (PxU32 i = 0; i<mMeshData.mNbTriangles * 3; i++)
-			{
-				PxI8 data = PxI8(indices[i]);
-				stream.write(&data, sizeof(PxU8));
-			}
-		}
-		else if (serialFlags & IMSF_16BIT_INDICES)
-		{
-			for (PxU32 i = 0; i<mMeshData.mNbTriangles * 3; i++)
-				writeWord(PxTo16(indices[i]), platformMismatch, stream);
-		}
-		else
-			writeIntBuffer(indices, mMeshData.mNbTriangles * 3, platformMismatch, stream);
-
-		//writeIntBuffer(reinterpret_cast<PxU32*>(mMeshData.mGRB_triIndices), , mMeshData.mNbTriangles*3, platformMismatch, stream);
-
-		//writeIntBuffer(reinterpret_cast<PxU32 *>(mMeshData.mGRB_triIndices), mMeshData.mNbTriangles*4, platformMismatch, stream);
-
-		writeIntBuffer(reinterpret_cast<PxU32 *>(mMeshData.mGRB_primAdjacencies), mMeshData.mNbTriangles*4, platformMismatch, stream);
-		writeIntBuffer(mMeshData.mGRB_faceRemap, mMeshData.mNbTriangles, platformMismatch, stream);
-		if(mMeshData.mGRB_faceRemapInverse)
-			writeIntBuffer(mMeshData.mGRB_faceRemapInverse, mMeshData.mNbTriangles, platformMismatch, stream);
-
-		//Export GPU midphase structure
-		BV32Tree* bv32Tree = mMeshData.mGRB_BV32Tree;
-		BV32TriangleMeshBuilder::saveMidPhaseStructure(bv32Tree, stream, platformMismatch);
-
-		//Export vertex mapping
-		if (enableVertexMapping)
-		{
-			writeDword(mMeshData.mNbTrianglesReferences, platformMismatch, stream);
-
-			stream.write(mMeshData.mAccumulatedTrianglesRef, mMeshData.mNbVertices * sizeof(PxU32));
-
-			stream.write(mMeshData.mTrianglesReferences, mMeshData.mNbTrianglesReferences * sizeof(PxU32));
-		}
-	}
-
-	// End of GRB write ----------------------------------------------------------
-
 	// Export sdf values
 	if (enableSdf)
 	{
@@ -798,7 +715,7 @@ bool TriangleMeshBuilder::importMesh(const PxTriangleMeshDesc& desc,const PxCook
 	//this is where the mesh data gets copied from user mem to our mem
 
 	PxVec3* verts = mMeshData.allocateVertices(desc.points.count);
-	IndexedTriangle32* tris = reinterpret_cast<IndexedTriangle32*>(mMeshData.allocateTriangles(desc.triangles.count, true, PxU32(params.buildGPUData)));
+	IndexedTriangle32* tris = reinterpret_cast<IndexedTriangle32*>(mMeshData.allocateTriangles(desc.triangles.count, true, 0));
 
 	//copy, and compact to get rid of strides:
 	immediateCooking::gatherStrided(desc.points.data, verts, mMeshData.mNbVertices, sizeof(PxVec3), desc.points.stride);
@@ -1055,7 +972,7 @@ void BV4TriangleMeshBuilder::createMidPhaseStructure()
 			mMeshData.mMaterialIndices = newMat;
 		}
 
-		if (!mParams.suppressTriangleMeshRemapTable || mParams.buildGPUData)
+		if (!mParams.suppressTriangleMeshRemapTable)
 		{
 			PxU32* newMap = PX_ALLOCATE(PxU32, mMeshData.mNbTriangles, "mFaceRemap");
 			for(PxU32 i=0;i<mMeshData.mNbTriangles;i++)
@@ -1141,7 +1058,7 @@ void BV32TriangleMeshBuilder::createMidPhaseStructure(const PxCookingParams& par
 
 		const PxU32* order = meshInterface.getRemap();
 
-		if (!params.suppressTriangleMeshRemapTable || params.buildGPUData)
+		if (!params.suppressTriangleMeshRemapTable)
 		{
 			PxU32* newMap = PX_ALLOCATE(PxU32, meshData.mNbTriangles, "mGRB_faceRemap");
 			for (PxU32 i = 0; i<meshData.mNbTriangles; i++)

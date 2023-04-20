@@ -974,8 +974,8 @@ static bool extractHullPolygons(PxU32& nb_polygons, PxArray<PxU32>& polygon_data
 
 //////////////////////////////////////////////////////////////////////////
 
-ConvexPolygonsBuilder::ConvexPolygonsBuilder(ConvexHullData* hull, const bool buildGRBData)
-	: ConvexHullBuilder(hull, buildGRBData), mNbHullFaces(0), mFaces(NULL)
+ConvexPolygonsBuilder::ConvexPolygonsBuilder(ConvexHullData* hull)
+	: ConvexHullBuilder(hull), mNbHullFaces(0), mFaces(NULL)
 {
 }
 

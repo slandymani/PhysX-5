@@ -143,11 +143,6 @@ public:
 	virtual Sc::ShapeInteraction**			getShapeInteractions()	{ return mNarrowPhasePairs.mShapeInteractions.begin();	}
 	virtual PxReal*							getRestDistances()		{ return mNarrowPhasePairs.mRestDistances.begin();		}
 	virtual PxsTorsionalFrictionData*		getTorsionalData()		{ return mNarrowPhasePairs.mTorsionalProperties.begin(); }
-
-	virtual PxsContactManagerOutput*		getGPUContactManagerOutputBase()	{ return NULL; }
-	virtual PxReal*							getGPURestDistances()				{ return NULL; }
-	virtual Sc::ShapeInteraction**			getGPUShapeInteractions()			{ return NULL; }
-	virtual PxsTorsionalFrictionData*		getGPUTorsionalData()				{ return NULL; }
 	
 			PxArray<PxU32>					mRemovedContactManagers;
 			PxsContactManagers				mNarrowPhasePairs;

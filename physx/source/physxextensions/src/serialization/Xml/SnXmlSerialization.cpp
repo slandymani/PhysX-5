@@ -39,7 +39,6 @@
 #include "SnXmlMemoryAllocator.h"
 #include "SnXmlStringToType.h"
 #include "SnRepXCollection.h"
-#include "SnRepXUpgrader.h"
 #include "../SnSerializationRegistry.h"
 #include "CmCollection.h"
 
@@ -805,7 +804,6 @@ namespace physx { namespace Sn {
 
 		PxAllocatorCallback& allocator = *PxGetAllocatorCallback();
 		Sn::RepXCollection* theRepXCollection = Sn::create(sn, inputData, allocator, *collection);
-		theRepXCollection = &Sn::RepXUpgrader::upgradeCollection( *theRepXCollection );
 				
 		PxRepXInstantiationArgs args( sn.getPhysics(), &cooking, stringTable );  
 		if( !theRepXCollection->instantiateCollection(args, *collection) )

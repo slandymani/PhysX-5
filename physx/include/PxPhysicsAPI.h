@@ -159,7 +159,6 @@ Alternatively, one can instead directly #include a subset of the below files.
 #include "PxForceMode.h"
 #include "PxLockedData.h"
 #include "PxMaterial.h"
-#include "PxPBDMaterial.h"
 #include "PxPhysics.h"
 #include "PxPhysXConfig.h"
 #include "PxQueryFiltering.h"

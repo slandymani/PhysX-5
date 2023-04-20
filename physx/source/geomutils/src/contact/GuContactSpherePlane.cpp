@@ -28,6 +28,7 @@
 
 #include "geomutils/PxContactBuffer.h"
 #include "GuContactMethodImpl.h"
+#include "foundation/PxTransform.h"
 
 using namespace physx;
 
