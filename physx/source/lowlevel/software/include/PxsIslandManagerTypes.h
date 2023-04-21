@@ -120,8 +120,6 @@ struct PxsIndexedInteraction
 	\note If body0 is a static (eWORLD) then solverBody0 is PX_MAX_U32 or PX_MAX_U64, depending on the platform being 32- or 64-bit.
 
 	\note If body0 is an articulation then the articulation is found directly from Dy::getArticulation(articulation0)
-
-	\note If body0 is an soft body then the soft body is found directly from Dy::getSoftBody(softBody0)
 	*/
 	union
 	{
@@ -138,8 +136,6 @@ struct PxsIndexedInteraction
 	\note If body1 is a static (eWORLD) then solverBody1 is PX_MAX_U32 or PX_MAX_U64, depending on the platform being 32- or 64-bit.
 
 	\note If body1 is an articulation then the articulation is found directly from Dy::getArticulation(articulation1)
-	
-	\note If body0 is an soft body then the soft body is found directly from Dy::getSoftBody(softBody1)
 	*/
 	union
 	{

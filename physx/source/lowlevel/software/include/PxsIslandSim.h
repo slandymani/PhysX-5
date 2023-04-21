@@ -230,7 +230,7 @@ public:
 	PxU32 mActiveRefCount;
 	
 
-	//A node can correspond with either a rigid body or an articulation or softBody 
+	//A node can correspond with either a rigid body or an articulation
 	union
 	{
 		PxsRigidBody*							mRigidBody;

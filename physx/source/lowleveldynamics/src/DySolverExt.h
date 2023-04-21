@@ -62,8 +62,8 @@ public:
 
 	PxU32 mLinkIndex;
 
-	SolverExtBody(const void* bodyOrArticulationOrSoftBody, const void* bodyData, PxU32 linkIndex): 
-	  mBody(reinterpret_cast<const PxSolverBody*>(bodyOrArticulationOrSoftBody)),
+	SolverExtBody(const void* bodyOrArticulation, const void* bodyData, PxU32 linkIndex): 
+	  mBody(reinterpret_cast<const PxSolverBody*>(bodyOrArticulation)),
 	  mBodyData(reinterpret_cast<const PxSolverBodyData*>(bodyData)),
 		  mLinkIndex(linkIndex)
 	  {}
